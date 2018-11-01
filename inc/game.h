@@ -1,51 +1,52 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-namespace game {
+namespace timber {
 
-	template<typename T>
-	T createBuffer(const char* pathToFile)
-    {
-        T buffer;
-        buffer.loadFromFile(pathToFile);
-        return buffer;
-    }
-	
-	struct vec2
-	{
-		float x, y;
-	};
+class Rules;
 
-	class Drawing
-	{
-	public:
-		Drawing(
-			sf::Texture texture, bool is_active = false, 
-			vec2 position = { 0,0 },
-			vec2 speed = { 0,0 }
-		);
+class Game
+{
+private:
+    Game(sf::Window window, std::vector<Drawing> drawings, Rules rules);
+    Game() = delete; //disable possibility to create dummy game object
+    Game(const Game& other) = default;
+    Game& operator=(const Game& other) = default;
+    Game(Game&& other) = default;
+    Game& operator=(Game&& other) = default
+public:
+    static Game& createGame(sf::Window window, Rules rules);
+    //methods
+    float getTimeRemaining() const;
+    float getScore() const;
 
-		Drawing() = delete; //disable possibility to create object without texture
-		Drawing(const Drawing& other) = default;
-		Drawing& operator=(const Drawing& other) = default;
-		Drawing(Drawing&& other) = default;
-		Drawing& operator=(Drawing&& other) = default;
+    void setTimeRemaining(float newTimeRemaining);
+    void increaseScore(int scorePerChop);
 
-		virtual ~Drawing() = 0;
+    void restart();
+    void update();
+private:
+    sf::Window m_window;
+    std::vector<Drawing> m_drawings;
+    Rules rules;
 
-		void setPosition(vec2 position);
-		vec2 getPosition() const;
+    float m_timeRemaining;
+    int m_score;
+};
 
-		void setSpeed(vec2 speed);
-		vec2 getSpeed() const;
+class Rules 
+{
+public:
+    Rules(float timeOnStart, float timePerChop, float scorePerChop);
+    float getTimeOnStart() const;
+    float getTimePerChop() const;
+    float getScorePerChop() const;
 
-		bool isActive() const;
-		void setActiveness(bool is_active);
-	private:
-		sf::Sprite m_sprite;
-		vec2 m_speed{};
-		bool m_is_active;
-	};
+    void setTimePerChop(float newTimePerChop);
+private:
+    float m_timeOnStart;
+    float m_timePerChop;
+    float m_scorePerChop;
+};
 
-
-} //namespace game
+} //namespace timber

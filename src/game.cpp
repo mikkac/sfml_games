@@ -1,67 +1,80 @@
 #include "pch.h"
 #include "game.h"
 
-namespace game
+namespace timber
 {
-	template<typename T> //TODO enable if either Texture or Sound
-	T createBuffer(const char* pathToFile)
-	{
-		T buffer;
-		buffer.loadFromFile(pathToFile);
-		return buffer;
-	}
-    //Buffers -----------------------------------------------------------------------------------
-    sf::Texture textureBackground = createBuffer<sf::Texture>("res/graphics/background.png");
-    sf::Texture textureBee = createBuffer<sf::Texture>("res/graphics/bee.png");
-    sf::Texture textureCloud = createBuffer<sf::Texture>("res/graphics/cloud.png");
-    sf::Texture textureTree = createBuffer<sf::Texture>("res/graphics/tree.png");
-    sf::Texture textureBranch = createBuffer<sf::Texture>("res/graphics/branch.png");
-    sf::Texture textureLog = createBuffer<sf::Texture>("res/graphics/log.png");
-    sf::Texture textureAxe = createBuffer<sf::Texture>("res/graphics/axe.png");
-    sf::Texture texturePlayer = createBuffer<sf::Texture>("res/graphics/player.png");
-    sf::Texture textureGravestone = createBuffer<sf::Texture>("res/graphics/rip.png");
 
-    sf::SoundBuffer soundChop = createBuffer<sf::SoundBuffer>("res/sound/chop.wav");
-    sf::SoundBuffer soundDeath = createBuffer<sf::SoundBuffer>("res/sound/death.wav");
-    sf::SoundBuffer soundOutOfTime = createBuffer<sf::SoundBuffer>("res/sound/out_of_time.wav");
-    //-------------------------------------------------------------------------------------------
-    
-    //Constants --------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------------------
-	Drawing::Drawing(sf::Texture texture, bool is_active, vec2 position, vec2 speed) 
-		: m_is_active{ is_active }, m_speed{ speed }
-	{
-		m_sprite.setTexture(texture);
-		setPosition(position);
-	}
+Game::Game(sf::Window window, std::vector<Drawing> drawings,  Rules rules)
+    : m_window{ window },
+      m_drawings{ drawings },
+      m_rules{ rules },
+      m_score{ 0 };
+{
+    m_timeRemaining = rules.getTimeOnStart();
+}
 
-	void  Drawing::setPosition(vec2 position)
-	{
-		m_sprite.setPosition(position.x, position.y);
-	}
+Game& Game::createGame(sf::Window window, Rules rules)
+{
+    static Game game{ window, rules };
+    return game;
+}
 
-	vec2 Drawing::getPosition() const
-	{
-		return vec2{ m_sprite.getPosition().x, m_sprite.getPosition().y };
-	}
+float Game::getTimeRemaining() const
+{
+    return m_timeRemaining;
+}
 
-	void  Drawing::setSpeed(vec2 speed)
-	{
-		m_speed = speed;
-	}
+float Game::getScore() const
+{
+    return m_score;
+}
 
-	vec2 Drawing::getSpeed() const
-	{
-		return m_speed;
-	}
+float Game::setTimeRemaining(float newTimeRemaining)
+{
+    m_timeRemaining = newTimeRemaining;
+}
 
-	bool Drawing::isActive() const
-	{
-		return m_is_active;
-	}
+float Game::setScore(int newScore)
+{
+    m_score = newScore;
+}
 
-	void Drawing::setActiveness(bool is_active)
-	{
-		m_is_active = is_active;
-	}
-} //namespace game
+float Game::increaseScore(int scorePerChop)
+{
+    m_score = setScore(m_score + scorePerChop);
+}
+
+float Game::reset()
+{
+    m_timeRemaining = rules.getTimeOnStart();
+    m_score = 0;
+}
+
+Rules::Rules(float timeOnStart, float timePerChop, float scorePerChop)
+    : m_timeOnStart{ timeOnStart },
+      m_timePerChop{ timePerChop },
+      m_scorePerChop{ scorePerChop }
+{
+}
+
+float Rules::getTimeOnStart() const
+{
+    return m_timeOnStart;
+}
+
+float Rules::getTimePerChop() const
+{
+    return m_timePerChop;
+}
+
+float Rules::getScorePerChop() const
+{
+    return m_scorePerChop;
+}
+
+void Rules::setTimePerChop(float newTimePerChop)
+{
+    m_timePerChop = newTimePerChop;
+}
+
+} //namespace timber

@@ -3,11 +3,6 @@
 #include <cmath>
 #include <sstream>
 
-//Global constants
-constexpr int WIDTH{ 1920 };
-constexpr int HEIGHT{ 1080 };
-constexpr int NUM_BRANCHES{ 6 };
-
 enum class side { LEFT, RIGHT, NONE };
 side branchPositions[NUM_BRANCHES];
 
