@@ -1,21 +1,20 @@
-#include "pch.h"
 #include "game.h"
 
 namespace timber
 {
 
-Game::Game(sf::Window window, std::vector<Drawing> drawings,  Rules rules)
+Game::Game(sf::Window& window, Drawings drawings, Sounds sounds,  Rules rules)
     : m_window{ window },
       m_drawings{ drawings },
       m_rules{ rules },
-      m_score{ 0 };
+      m_score{ 0 }
 {
     m_timeRemaining = rules.getTimeOnStart();
 }
 
-Game& Game::createGame(sf::Window window, Rules rules)
+Game& Game::createGame(sf::Window& window, Drawings drawings, Sounds sounds, Rules rules)
 {
-    static Game game{ window, rules };
+    static Game game = Game(window, drawings, sounds, rules);
     return game;
 }
 
@@ -29,24 +28,24 @@ float Game::getScore() const
     return m_score;
 }
 
-float Game::setTimeRemaining(float newTimeRemaining)
+void Game::setTimeRemaining(float newTimeRemaining)
 {
     m_timeRemaining = newTimeRemaining;
 }
 
-float Game::setScore(int newScore)
+void Game::setScore(int newScore)
 {
     m_score = newScore;
 }
 
-float Game::increaseScore(int scorePerChop)
+void Game::increaseScore(int scorePerChop)
 {
-    m_score = setScore(m_score + scorePerChop);
+    setScore(m_score + scorePerChop);
 }
 
-float Game::reset()
+void Game::restart()
 {
-    m_timeRemaining = rules.getTimeOnStart();
+    m_timeRemaining = m_rules.getTimeOnStart();
     m_score = 0;
 }
 

@@ -1,3 +1,5 @@
+#include "drawing.h"
+
 namespace timber
 {
 

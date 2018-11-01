@@ -1,5 +1,6 @@
 #pragma once
-
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 namespace timber 
 {
 
@@ -16,6 +17,10 @@ struct vec2
     float x, y;
 };
 
+class Sound
+{
+
+};
 
 class Drawing
 {
