@@ -3,9 +3,7 @@
 
 namespace timber {
 
-using Drawings = std::vector<Drawing*>;
-using Sounds = std::vector<Sound*>;
-
+void handleInput(sf::Keyboard key);
 class Rules 
 {
 public:
@@ -16,41 +14,33 @@ public:
 
     void setTimePerChop(float newTimePerChop);
 private:
-    float m_timeOnStart;
-    float m_timePerChop;
-    float m_scorePerChop;
+    float mTimeOnStart;
+    float mTimePerChop;
+    float mScorePerChop;
 };
-
 
 class Game
 {
-private:
-    Game(sf::Window& window, Drawings drawings, Sounds sounds, Rules rules);
-    Game() = delete; //disable possibility to create dummy game object
-    Game(const Game& other) = default;
-    Game& operator=(const Game& other) = default;
-    Game(Game&& other) = default;
-    Game& operator=(Game&& other) = default;
 public:
-    static Game& createGame(sf::Window& window, Drawings drawings, Sounds sounds, Rules rules);
+    Game(Rules rules);
     //methods
+    bool isPaused() const;
+    void setPaused(bool isPaused);
+
     float getTimeRemaining() const;
     float getScore() const;
 
     void setTimeRemaining(float newTimeRemaining);
     void setScore(int newScore);
-    void increaseScore(int scorePerChop);
+    void increaseScore();
 
     void restart();
-    void update();
-private:
-    sf::Window& m_window;
-    Drawings m_drawings;
-    Sounds m_sounds;
-    Rules m_rules;
 
-    float m_timeRemaining;
-    int m_score;
+    Rules rules;
+private:
+    float mTimeRemaining;
+    int mScore;
+    bool mPaused;
 };
 
 } //namespace timber

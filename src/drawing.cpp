@@ -3,68 +3,270 @@
 namespace timber
 {
 
-//Buffers -----------------------------------------------------------------------------------
-sf::Texture textureBackground = createBuffer<sf::Texture>("res/graphics/background.png");
-sf::Texture textureBee = createBuffer<sf::Texture>("res/graphics/bee.png");
-sf::Texture textureCloud = createBuffer<sf::Texture>("res/graphics/cloud.png");
-sf::Texture textureTree = createBuffer<sf::Texture>("res/graphics/tree.png");
-sf::Texture textureBranch = createBuffer<sf::Texture>("res/graphics/branch.png");
-sf::Texture textureLog = createBuffer<sf::Texture>("res/graphics/log.png");
-sf::Texture textureAxe = createBuffer<sf::Texture>("res/graphics/axe.png");
-sf::Texture texturePlayer = createBuffer<sf::Texture>("res/graphics/player.png");
-sf::Texture textureGravestone = createBuffer<sf::Texture>("res/graphics/rip.png");
-
-sf::SoundBuffer soundChop = createBuffer<sf::SoundBuffer>("res/sound/chop.wav");
-sf::SoundBuffer soundDeath = createBuffer<sf::SoundBuffer>("res/sound/death.wav");
-sf::SoundBuffer soundOutOfTime = createBuffer<sf::SoundBuffer>("res/sound/out_of_time.wav");
-//-------------------------------------------------------------------------------------------
-
-//Constants --------------------------------------------------------------------------------
-constexpr int WIDTH{ 1920 };
-constexpr int HEIGHT{ 1080 };
-constexpr int HIDDEN_X { WIDTH + 300 };
-constexpr int HIDDEN_Y { HEIGHT + 300 };
-constexpr int NUM_BRANCHES{ 6 };
-constexpr int NUM_CLOUDS{ 5 };
-constexpr float AXE_POSITION_LEFT{ 700 };
-constexpr float AXE_POSITION_RIGHT{ 1075 };
-//------------------------------------------------------------------------------------------
-
-Drawing::Drawing(sf::Texture texture, bool is_active, vec2 position, vec2 speed) 
-    : m_is_active{ is_active }, m_speed{ speed }
+Drawing::Drawing(sf::RenderWindow& window, sf::Texture& texture, vec2 position) 
+    : mWindow{ window }
 {
-    m_sprite.setTexture(texture);
+    mSprite.setTexture(texture);
     setPosition(position);
 }
 
-void  Drawing::setPosition(vec2 position)
+void Drawing::draw()
 {
-    m_sprite.setPosition(position.x, position.y);
+    mWindow.draw(mSprite);
+}
+
+void Drawing::setOrigin(int x, int y)
+{
+    mSprite.setOrigin(x, y);
 }
 
 vec2 Drawing::getPosition() const
 {
-    return vec2{ m_sprite.getPosition().x, m_sprite.getPosition().y };
+    return vec2{ mSprite.getPosition().x, mSprite.getPosition().y };
 }
 
-void  Drawing::setSpeed(vec2 speed)
+void  Drawing::setPosition(vec2 position)
 {
-    m_speed = speed;
+    mSprite.setPosition(position.x, position.y);
 }
 
-vec2 Drawing::getSpeed() const
+Movable::Movable(vec2 speed)
+    : mSpeed{speed}
 {
-    return m_speed;
 }
 
-bool Drawing::isActive() const
+vec2 Movable::getSpeed() const
 {
-    return m_is_active;
+    return mSpeed;
 }
 
-void Drawing::setActiveness(bool is_active)
+void  Movable::setSpeed(vec2 speed)
 {
-    m_is_active = is_active;
+    mSpeed = speed;
 }
+
+Bee::Bee(sf::RenderWindow& window, sf::Texture& texture, vec2 position, vec2 speed)
+    : Drawing(window, texture, position), Movable(speed)
+{
+}
+
+void Bee::fly(float timeAsSeconds)
+{
+//Move the bee
+    if (!mIsActive)
+    {
+        //how fast is the bee
+        srand((int)time(0));
+        setSpeed(vec2{
+            (rand() % 100) + 300, 0 }
+        );
+        //how high is the bee
+        srand((int)time(0) * 10);
+        float height = rand() % 700;
+        setPosition(vec2{ 2000, height });
+        mIsActive = true;
+    }
+    else
+    {
+        setPosition(vec2{
+            getPosition().x - (getSpeed().x * timeAsSeconds),
+            getPosition().y}
+        );
+
+        if (getPosition().x < 0)
+            mIsActive = false;
+    }
+}
+
+Cloud::Cloud(sf::RenderWindow& window, sf::Texture& texture, vec2 position, vec2 speed)
+    : Drawing(window, texture, position), Movable(speed)
+{
+}
+
+void Cloud::fly(float timeAsSeconds)
+{
+    float cloudSpeed{};
+    if (!mIsActive)
+    {
+        //how fast is the cloud
+        srand((int)time(0) * 10);
+        cloudSpeed = (rand() % 100);
+
+        //how high is the cloud
+        srand((int)time(0) * 10);
+        float height = (rand() % 400);
+        setPosition(vec2{
+            rand() % 1000, height}
+        );
+        mIsActive = true;
+    }
+    else
+    {
+        setPosition(vec2{
+            getPosition().x + (cloudSpeed * timeAsSeconds),
+            getPosition().y}
+        );
+
+        if (getPosition().x > WIDTH || getPosition().x < 0)
+            mIsActive = false;
+    }
+}
+
+Log::Log(sf::RenderWindow& window, sf::Texture& texture, vec2 position, vec2 speed)
+    : Drawing(window, texture, position), Movable(speed)
+{
+}
+
+void Log::fly(float timeAsSeconds)
+{
+    if (mIsActive)
+    {
+        setPosition(vec2{
+            getPosition().x + (getSpeed().x * timeAsSeconds),
+            getPosition().y + (getSpeed().y * timeAsSeconds)}
+        );
+
+        //Has the log reached the right or left edge of screen?
+        if (getPosition().x < -100 || getPosition().x > WIDTH + 200)
+        {
+            //Set it up ready to be a whole new log next frame
+            mIsActive = false;
+            setPosition(vec2{ 810, 720 });
+        }
+    }
+}
+
+bool Log::isActive() const
+{
+    return mIsActive;
+}
+
+void Log::setActive(bool isActive)
+{
+    mIsActive = isActive;
+}
+
+Player::Player(sf::RenderWindow& window, sf::Texture& texturePlayerAlive, sf::Texture& texturePlayerDead, vec2 position)
+    : Drawing(window, texturePlayerAlive, position), mTextureDead{ texturePlayerDead }, mTextureAlive{ texturePlayerAlive }
+{ 
+}
+
+Side Player::getSide() const
+{
+    return mSide;
+}
+
+void Player::setSide(Side side)
+{
+    mSide = side;
+    switch (mSide)
+    {
+        case Side::LEFT:
+            setPosition(vec2{ 580, 720 });
+            break;
+        case Side::RIGHT:
+            setPosition(vec2{ 1200, 720 });
+            break;
+        case Side::NONE:
+            //Hide the branch
+            setPosition(vec2{ 
+                HIDDEN_X, 
+                getPosition().y }
+            );
+            break;
+        default:
+            break;
+    }
+}
+
+bool Player::isAlive() const
+{
+    return mIsAlive;
+}
+
+void Player::die()
+{
+    mIsAlive = false;
+    mSprite.setTexture(mTextureDead);
+}
+
+void Player::reset()
+{
+    mIsAlive = true;
+    mSprite.setTexture(mTextureAlive);
+}
+
+Axe::Axe(sf::RenderWindow& window, sf::Texture& texture, vec2 position)
+    : Drawing(window, texture, position)
+{
+}
+
+Side Axe::getSide() const
+{
+    return mSide;
+}
+
+void Axe::setSide(Side side)
+{
+    mSide = side;
+    switch (mSide)
+    {
+        case Side::LEFT:
+            setPosition(vec2{
+                AXE_POSITION_LEFT,
+                getPosition().y}
+			);
+            break;
+        case Side::RIGHT:
+            setPosition(vec2{
+                AXE_POSITION_RIGHT,
+                getPosition().y}
+			);
+            break;
+        case Side::NONE:
+            setPosition(vec2{ 
+                HIDDEN_X, 
+                getPosition().y }
+            );
+            break;
+        default:
+            break;
+    }
+}
+
+Branch::Branch(sf::RenderWindow& window, sf::Texture& texture, vec2 position)
+    : Drawing(window, texture, position)
+{
+}
+
+Side Branch::getSide() const
+{
+    return mSide;
+}
+
+void Branch::setSideAndHeight(Side side, float height)
+{
+    mSide = side;
+    switch (mSide)
+    {
+        case Side::LEFT:
+            //Move the branch to the left side and rotate
+            setPosition(vec2{ 610, height });
+            mSprite.setRotation(180);
+            break;
+        case Side::RIGHT:
+            //Move the branch to the right side and don't rotate
+            setPosition(vec2 { 1330, height });
+            mSprite.setRotation(0);
+            break;
+        case Side::NONE:
+            //Hide the branch
+            setPosition(vec2{ HIDDEN_X, height });
+            break;
+        default:
+            break;
+    }
+}
+
 
 } //namespace timber

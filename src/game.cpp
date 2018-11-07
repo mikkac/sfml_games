@@ -3,77 +3,80 @@
 namespace timber
 {
 
-Game::Game(sf::Window& window, Drawings drawings, Sounds sounds,  Rules rules)
-    : m_window{ window },
-      m_drawings{ drawings },
-      m_rules{ rules },
-      m_score{ 0 }
+// Game class' cstor and methods -------------------------------------------------------------------
+Game::Game(Rules rules)
+    : mScore{ 0 }, rules{ rules }
 {
-    m_timeRemaining = rules.getTimeOnStart();
+    mTimeRemaining = rules.getTimeOnStart();
 }
 
-Game& Game::createGame(sf::Window& window, Drawings drawings, Sounds sounds, Rules rules)
+bool Game::isPaused() const
 {
-    static Game game = Game(window, drawings, sounds, rules);
-    return game;
+    return mPaused;
+}
+
+void Game::setPaused(bool isPaused)
+{
+    mPaused = isPaused;
 }
 
 float Game::getTimeRemaining() const
 {
-    return m_timeRemaining;
+    return mTimeRemaining;
 }
 
 float Game::getScore() const
 {
-    return m_score;
+    return mScore;
 }
 
 void Game::setTimeRemaining(float newTimeRemaining)
 {
-    m_timeRemaining = newTimeRemaining;
+    mTimeRemaining = newTimeRemaining;
 }
 
 void Game::setScore(int newScore)
 {
-    m_score = newScore;
+    mScore = newScore;
 }
 
-void Game::increaseScore(int scorePerChop)
+void Game::increaseScore()
 {
-    setScore(m_score + scorePerChop);
+    setScore(mScore + rules.getScorePerChop());
 }
 
 void Game::restart()
 {
-    m_timeRemaining = m_rules.getTimeOnStart();
-    m_score = 0;
+    mTimeRemaining = rules.getTimeOnStart();
+    mScore = 0;
 }
 
+// Rules class' cstor and methods ------------------------------------------------------------------
 Rules::Rules(float timeOnStart, float timePerChop, float scorePerChop)
-    : m_timeOnStart{ timeOnStart },
-      m_timePerChop{ timePerChop },
-      m_scorePerChop{ scorePerChop }
+    : mTimeOnStart{ timeOnStart },
+      mTimePerChop{ timePerChop },
+      mScorePerChop{ scorePerChop }
 {
 }
 
 float Rules::getTimeOnStart() const
 {
-    return m_timeOnStart;
+    return mTimeOnStart;
 }
 
 float Rules::getTimePerChop() const
 {
-    return m_timePerChop;
+    return mTimePerChop;
 }
 
 float Rules::getScorePerChop() const
 {
-    return m_scorePerChop;
+    return mScorePerChop;
 }
 
 void Rules::setTimePerChop(float newTimePerChop)
 {
-    m_timePerChop = newTimePerChop;
+    mTimePerChop = newTimePerChop;
 }
 
 } //namespace timber
