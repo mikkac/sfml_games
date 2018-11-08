@@ -1,10 +1,10 @@
 #pragma once
 #include "drawing.h"
 
-namespace timber {
-
+namespace timber
+{
 void handleInput(sf::Keyboard key);
-class Rules 
+class Rules
 {
 public:
     Rules(float timeOnStart, float timePerChop, float scorePerChop);
@@ -13,6 +13,7 @@ public:
     float getScorePerChop() const;
 
     void setTimePerChop(float newTimePerChop);
+
 private:
     float mTimeOnStart;
     float mTimePerChop;
@@ -23,7 +24,7 @@ class Game
 {
 public:
     Game(Rules rules);
-    //methods
+    // methods
     bool isPaused() const;
     void setPaused(bool isPaused);
 
@@ -37,10 +38,11 @@ public:
     void restart();
 
     Rules rules;
+
 private:
     float mTimeRemaining;
     int mScore;
     bool mPaused;
 };
 
-} //namespace timber
+}  // namespace timber

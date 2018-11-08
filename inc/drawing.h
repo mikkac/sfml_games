@@ -1,16 +1,11 @@
 #pragma once
 #include "utils.h"
-namespace timber 
+namespace timber
 {
-
 class Drawing
 {
 public:
-    Drawing(
-        sf::RenderWindow& window,
-        sf::Texture& texture, 
-        vec2 position = { 0,0 }
-    );
+    Drawing(sf::RenderWindow& window, sf::Texture& texture, vec2 position = {0, 0});
 
     virtual ~Drawing() = default;
 
@@ -25,7 +20,7 @@ protected:
     sf::Sprite mSprite;
 };
 
-class Movable // movable means that object has some speed 
+class Movable  // movable means that object has some speed
 {
 public:
     Movable(vec2 speed = {0, 0});
@@ -34,61 +29,45 @@ public:
 
     vec2 getSpeed() const;
     void setSpeed(vec2 speed);
-    
+
     vec2 mSpeed{};
-    bool mIsActive{ false };
+    bool mIsActive{false};
 };
 
-class Bee: public Drawing, public Movable
+class Bee : public Drawing, public Movable
 {
 public:
-    Bee(
-        sf::RenderWindow& window,
-        sf::Texture& texture, 
-        vec2 position = { 0,0 },
-        vec2 speed = { 0,0 }
-    );
+    Bee(sf::RenderWindow& window, sf::Texture& texture, vec2 position = {0, 0},
+        vec2 speed = {0, 0});
 
     void fly(float timeAsSeconds);
 };
 
-class Cloud: public Drawing, public Movable
+class Cloud : public Drawing, public Movable
 {
 public:
-    Cloud(
-        sf::RenderWindow& window,
-        sf::Texture& texture,
-        vec2 position = { 0,0 },
-        vec2 speed = { 0,0 }
-    );
+    Cloud(sf::RenderWindow& window, sf::Texture& texture, vec2 position = {0, 0},
+          vec2 speed = {0, 0});
 
     void fly(float timeAsSeconds);
 };
 
-class Log: public Drawing, public Movable
+class Log : public Drawing, public Movable
 {
 public:
-    Log(
-        sf::RenderWindow& window,
-        sf::Texture& texture, 
-        vec2 position = { 0,0 },
-        vec2 speed = { 0,0 }
-    );
+    Log(sf::RenderWindow& window, sf::Texture& texture, vec2 position = {0, 0},
+        vec2 speed = {0, 0});
 
     void fly(float timeAsSeconds);
     bool isActive() const;
     void setActive(bool isActive);
 };
 
-class Player: public Drawing
+class Player : public Drawing
 {
 public:
-    Player(
-        sf::RenderWindow& window,
-        sf::Texture& texturePlayerAlive,
-        sf::Texture& texturePlayerDead,
-        vec2 position = {0, 0}
-    );
+    Player(sf::RenderWindow& window, sf::Texture& texturePlayerAlive,
+           sf::Texture& texturePlayerDead, vec2 position = {0, 0});
 
     Side getSide() const;
     void setSide(Side side);
@@ -104,38 +83,28 @@ private:
     bool mIsAlive;
 };
 
-class Axe: public Drawing
+class Axe : public Drawing
 {
 public:
-    Axe(
-        sf::RenderWindow& window,
-        sf::Texture& texture,
-        vec2 position = {0, 0}
-    );
+    Axe(sf::RenderWindow& window, sf::Texture& texture, vec2 position = {0, 0});
 
     Side getSide() const;
     void setSide(Side side);
-    
+
 private:
     Side mSide;
 };
 
-class Branch: public Drawing
+class Branch : public Drawing
 {
 public:
-    Branch(
-        sf::RenderWindow& window,
-        sf::Texture& texture,
-        vec2 position = {0, 0}
-    );
+    Branch(sf::RenderWindow& window, sf::Texture& texture, vec2 position = {0, 0});
 
     Side getSide() const;
     void setSideAndHeight(Side side, float height);
-    
+
 private:
     Side mSide;
 };
 
-
-
-} //namespace timber
+}  // namespace timber

@@ -2,10 +2,9 @@
 
 namespace timber
 {
-
-// Game class' cstor and methods -------------------------------------------------------------------
-Game::Game(Rules rules)
-    : mScore{ 0 }, rules{ rules }
+// Game class' cstor and methods
+// -------------------------------------------------------------------
+Game::Game(Rules rules) : mScore{0}, rules{rules}
 {
     mTimeRemaining = rules.getTimeOnStart();
 }
@@ -51,11 +50,10 @@ void Game::restart()
     mScore = 0;
 }
 
-// Rules class' cstor and methods ------------------------------------------------------------------
+// Rules class' cstor and methods
+// ------------------------------------------------------------------
 Rules::Rules(float timeOnStart, float timePerChop, float scorePerChop)
-    : mTimeOnStart{ timeOnStart },
-      mTimePerChop{ timePerChop },
-      mScorePerChop{ scorePerChop }
+    : mTimeOnStart{timeOnStart}, mTimePerChop{timePerChop}, mScorePerChop{scorePerChop}
 {
 }
 
@@ -79,4 +77,4 @@ void Rules::setTimePerChop(float newTimePerChop)
     mTimePerChop = newTimePerChop;
 }
 
-} //namespace timber
+}  // namespace timber
