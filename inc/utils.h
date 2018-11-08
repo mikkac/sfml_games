@@ -22,19 +22,6 @@ constexpr float AXE_POSITION_LEFT{700};
 constexpr float AXE_POSITION_RIGHT{1075};
 //------------------------------------------------------------------------------------------
 
-enum Objects
-{
-    BACKGROUND = 0,
-    TREE,
-    LOG,
-    BRANCH,
-    CLOUDS = 3 + NUM_BRANCHES,
-    BEE = 3 + NUM_BRANCHES + NUM_CLOUDS,
-    PLAYER,
-    GRAVESTONE,
-    AXE
-};
-
 enum class Side
 {
     NONE,

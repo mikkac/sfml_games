@@ -1,8 +1,5 @@
-// TODO flying log is not visible
-// TODO gravestone should be a bit lower in y axis
 // TODO weird behaviour of clouds
 // TODO refactor texts and rectangles
-// TODO why these buffers cannot be in utils.h
 // TODO refactor code in general- it looks like shit
 
 #include <cmath>
@@ -11,15 +8,6 @@
 #include "game.h"
 
 using namespace timber;
-enum class side
-{
-    LEFT,
-    RIGHT,
-    NONE
-};
-side branchPositions[NUM_BRANCHES];
-
-using namespace sf;
 
 // Buffers -----------------------------------------------------------------------------------
 sf::Texture textureBackground = createBuffer<sf::Texture>("res/graphics/background.png");
@@ -46,8 +34,8 @@ int main()
     Game game(rules);
 
     // Create window
-    VideoMode vm(WIDTH, HEIGHT);
-    RenderWindow window(vm, "Timber", Style::Fullscreen);
+    sf::VideoMode vm(WIDTH, HEIGHT);
+    sf::RenderWindow window(vm, "Timber", sf::Style::Fullscreen);
 
     // Create background
     Drawing background(window, textureBackground);
@@ -78,16 +66,14 @@ int main()
     Axe axe(window, textureAxe, vec2{700, 830});
 
     // Prepare flying log
-    Texture textureLog;
     Log log(window, textureLog, vec2{810, 720}, vec2{1000.f, -1500.f});
 
     // TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // Texts- score and startGame
-    unsigned int score{};
-    Text textMessage;
-    Text textScore;
+    sf::Text textMessage;
+    sf::Text textScore;
     // Load font
-    Font font;
+    sf::Font font;
     font.loadFromFile("res/fonts/KOMIKAP_.ttf");
     // Set the font to our texts
     textMessage.setFont(font);
@@ -98,28 +84,28 @@ int main()
     textScore.setString("Score: 0");
     textMessage.setCharacterSize(75);
     textScore.setCharacterSize(100);
-    textMessage.setFillColor(Color::White);
-    textScore.setFillColor(Color::White);
+    textMessage.setFillColor(sf::Color::White);
+    textScore.setFillColor(sf::Color::White);
 
     // Position of text
-    FloatRect textRect = textMessage.getLocalBounds();
+    sf::FloatRect textRect = textMessage.getLocalBounds();
     textMessage.setOrigin(textRect.left + textRect.width / 2.f,
                           textRect.top + textRect.height / 2.f);
 
     textMessage.setPosition(WIDTH / 2.f, HEIGHT / 2.f);
     textScore.setPosition(20.f, 20.f);
 
-    Clock clock;
+    sf::Clock clock;
 
     // Time bar
-    RectangleShape timeBar;
+    sf::RectangleShape timeBar;
     float timeBarStartWidth{400.f};
     float timeBarHeight{80.f};
-    timeBar.setSize(Vector2f(timeBarStartWidth, timeBarHeight));
-    timeBar.setFillColor(Color::Red);
+    timeBar.setSize(sf::Vector2f(timeBarStartWidth, timeBarHeight));
+    timeBar.setFillColor(sf::Color::Red);
     timeBar.setPosition(WIDTH / 2 - timeBarStartWidth / 2, 980);
 
-    Time gameTimeTotal{};
+    sf::Time gameTimeTotal{};
     float timeRemaining = 6.f;
     float timeBarWidthPerSecond = timeBarStartWidth / game.getTimeRemaining();
 
@@ -131,22 +117,22 @@ int main()
     game.setPaused(true);
     // TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // Prepare the sound
-    Sound soundChop;
+    sf::Sound soundChop;
     soundChop.setBuffer(soundBufferChop);
 
-    Sound soundDeath;
+    sf::Sound soundDeath;
     soundDeath.setBuffer(soundBufferDeath);
 
-    Sound soundOutOfTime;
+    sf::Sound soundOutOfTime;
     soundOutOfTime.setBuffer(soundBufferOutOfTime);
 
     while (window.isOpen())
     {
-        Event event;
+        sf::Event event;
 
         while (window.pollEvent(event))
         {
-            if (event.type == Event::KeyReleased && !game.isPaused())
+            if (event.type == sf::Event::KeyReleased && !game.isPaused())
             {
                 // Listen for key press again
                 acceptInput = true;
@@ -156,8 +142,8 @@ int main()
             }
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
-        if (Keyboard::isKeyPressed(Keyboard::Return))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
         {
             game.setPaused(false);
             // Reset the time and the score
@@ -177,7 +163,7 @@ int main()
         if (acceptInput)
         {
             // Handle pressing the right cursor key
-            if (Keyboard::isKeyPressed(Keyboard::Right))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             {
                 game.increaseScore();
 
@@ -207,7 +193,7 @@ int main()
             }
 
             // Handle pressing the left cursor key
-            if (Keyboard::isKeyPressed(Keyboard::Left))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             {
                 game.increaseScore();
 
@@ -239,13 +225,13 @@ int main()
 
         if (!game.isPaused())
         {
-            Time dt = clock.restart();
+            sf::Time dt = clock.restart();
 
             // Subtract from the amount of time remaining
             game.setTimeRemaining(game.getTimeRemaining() - dt.asSeconds());
             // Resize the time bar
             timeBar.setSize(
-                Vector2f(game.getTimeRemaining() * timeBarWidthPerSecond, timeBarHeight));
+                sf::Vector2f(game.getTimeRemaining() * timeBarWidthPerSecond, timeBarHeight));
 
             if (game.getTimeRemaining() <= 0.f)
             {
@@ -253,7 +239,7 @@ int main()
                 textMessage.setString("Out of time!");
 
                 // Reposition the text based on its new size
-                FloatRect textRect = textMessage.getLocalBounds();
+                sf::FloatRect textRect = textMessage.getLocalBounds();
                 textMessage.setOrigin(textRect.left + textRect.width / 2.f,
                                       textRect.top + textRect.height / 2.f);
 
@@ -292,7 +278,7 @@ int main()
                 textMessage.setString("SQUISHED!");
 
                 // Center it on the screen
-                FloatRect textRect = textMessage.getLocalBounds();
+                sf::FloatRect textRect = textMessage.getLocalBounds();
                 textMessage.setOrigin(textRect.left + textRect.width / 2.f,
                                       textRect.top + textRect.height / 2.f);
 

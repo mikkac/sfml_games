@@ -170,12 +170,14 @@ bool Player::isAlive() const
 void Player::die()
 {
     mIsAlive = false;
+    setPosition(vec2{getPosition().x, 800});
     mSprite.setTexture(mTextureDead);
 }
 
 void Player::reset()
 {
     mIsAlive = true;
+    setPosition(vec2{580, 720});
     mSprite.setTexture(mTextureAlive);
 }
 
