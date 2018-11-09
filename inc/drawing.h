@@ -104,4 +104,6 @@ private:
     Side mSide;
 };
 
+void updateBranches(std::vector<Branch>& branches);
+
 }  // namespace timber

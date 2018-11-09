@@ -223,4 +223,27 @@ void Branch::setSideAndHeight(Side side, float height)
     }
 }
 
+void updateBranches(std::vector<Branch> &branches)
+{
+    // Move all branches down one place
+    for (unsigned idx = NUM_BRANCHES - 1; idx > 0; --idx)
+    {
+        float height = idx * 150;
+        branches[idx].setSideAndHeight(branches[idx - 1].getSide(), height);
+    }
+    // Spawn new branch at position 0
+    switch (rand_num(2))
+    {
+        case 0:
+            branches[0].setSideAndHeight(Side::LEFT, 0);
+            break;
+        case 1:
+            branches[0].setSideAndHeight(Side::RIGHT, 0);
+            break;
+        default:
+            branches[0].setSideAndHeight(Side::NONE, 0);
+            break;
+    }
+}
+
 }  // namespace timber

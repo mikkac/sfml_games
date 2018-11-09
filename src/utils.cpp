@@ -15,6 +15,8 @@ sf::Texture textureGravestone = createBuffer<sf::Texture>("res/graphics/rip.png"
 sf::SoundBuffer soundBufferChop = createBuffer<sf::SoundBuffer>("res/sound/chop.wav");
 sf::SoundBuffer soundBufferDeath = createBuffer<sf::SoundBuffer>("res/sound/death.wav");
 sf::SoundBuffer soundBufferOutOfTime = createBuffer<sf::SoundBuffer>("res/sound/out_of_time.wav");
+
+sf::Font font = createBuffer<sf::Font>("res/fonts/KOMIKAP_.ttf");
 //-------------------------------------------------------------------------------------------
 
 // Rest of global variables ----------------------------------------------------------------

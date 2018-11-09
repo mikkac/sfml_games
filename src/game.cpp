@@ -4,7 +4,7 @@ namespace timber
 {
 // Game class' cstor and methods
 // -------------------------------------------------------------------
-Game::Game(Rules rules) : mScore{0}, rules{rules}
+Game::Game(Rules rules) : rules{rules}, mScore{0}
 {
     mTimeRemaining = rules.getTimeOnStart();
 }

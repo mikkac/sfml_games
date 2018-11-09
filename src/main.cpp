@@ -1,13 +1,10 @@
 // TODO refactor texts and rectangles
 
-#include <cmath>
-#include <memory>
 #include <sstream>
 #include "game.h"
+#include "text.h"
 
 using namespace timber;
-
-void updateBranches(std::vector<Branch>& branches, int seed);
 
 int main()
 {
@@ -33,7 +30,7 @@ int main()
     }
 
     std::vector<Cloud> clouds(NUM_CLOUDS,
-                              Cloud(window, textureCloud, vec2{HIDDEN_X, rand_num(300)}));
+                              Cloud(window, textureCloud, vec2{HIDDEN_X, float(rand_num(300))}));
 
     Bee bee(window, textureBee);
 
@@ -42,32 +39,40 @@ int main()
 
     Axe axe(window, textureAxe, vec2{700, 830});
 
+    // Prepare the sound
+    sf::Sound soundChop;
+    soundChop.setBuffer(soundBufferChop);
+
+    sf::Sound soundDeath;
+    soundDeath.setBuffer(soundBufferDeath);
+
+    sf::Sound soundOutOfTime;
+    soundOutOfTime.setBuffer(soundBufferOutOfTime);
+
     // TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // Texts- score and startGame
-    sf::Text textMessage;
-    sf::Text textScore;
-    // Load font
-    sf::Font font;
-    font.loadFromFile("res/fonts/KOMIKAP_.ttf");
-    // Set the font to our texts
-    textMessage.setFont(font);
-    textScore.setFont(font);
+    Text textMessage(window, "Press Enter to start", font, 100, sf::Color::White);
+    textMessage.center();
+    textMessage.setPosition(vec2{WIDTH / 2.f, HEIGHT / 2.f});
 
-    // Set rest of text properties
-    textMessage.setString("Press Enter to start");
-    textScore.setString("Score: 0");
-    textMessage.setCharacterSize(75);
-    textScore.setCharacterSize(100);
-    textMessage.setFillColor(sf::Color::White);
-    textScore.setFillColor(sf::Color::White);
+    Text textScore(window, "Score: 0", font, 100, sf::Color::White);
+    textScore.setPosition(vec2{20.f, 20.f});
+    // // Set the font to our texts
+    // textMessage.setFont(font);
+    // textScore.setFont(font);
 
-    // Position of text
-    sf::FloatRect textRect = textMessage.getLocalBounds();
-    textMessage.setOrigin(textRect.left + textRect.width / 2.f,
-                          textRect.top + textRect.height / 2.f);
+    // // Set rest of text properties
+    // textMessage.setString("Press Enter to start");
+    // textScore.setString("Score: 0");
+    // textMessage.setCharacterSize(75);
+    // textScore.setCharacterSize(100);
+    // textMessage.setFillColor(sf::Color::White);
+    // textScore.setFillColor(sf::Color::White);
 
-    textMessage.setPosition(WIDTH / 2.f, HEIGHT / 2.f);
-    textScore.setPosition(20.f, 20.f);
+    // // Position of text
+    // sf::FloatRect textRect = textMessage.getLocalBounds();
+    // textMessage.setOrigin(textRect.left + textRect.width / 2.f,
+    //                       textRect.top + textRect.height / 2.f);
 
     sf::Clock clock;
 
@@ -79,27 +84,13 @@ int main()
     timeBar.setFillColor(sf::Color::Red);
     timeBar.setPosition(WIDTH / 2 - timeBarStartWidth / 2, 980);
 
-    sf::Time gameTimeTotal{};
-    float timeRemaining = 6.f;
     float timeBarWidthPerSecond = timeBarStartWidth / game.getTimeRemaining();
 
-    // //Track whether the game is started
-    // bool isStarted{ false };
+    // TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     // Control the player input
     bool acceptInput{false};
     game.setPaused(true);
-    // TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // Prepare the sound
-    sf::Sound soundChop;
-    soundChop.setBuffer(soundBufferChop);
-
-    sf::Sound soundDeath;
-    soundDeath.setBuffer(soundBufferDeath);
-
-    sf::Sound soundOutOfTime;
-    soundOutOfTime.setBuffer(soundBufferOutOfTime);
-
     while (window.isOpen())
     {
         sf::Event event;
@@ -148,7 +139,7 @@ int main()
                 axe.setSide(Side::RIGHT);
                 player.setSide(Side::RIGHT);
 
-                updateBranches(branches, game.getScore());
+                updateBranches(branches);
 
                 log.setPosition(vec2{810, 720});
                 log.setSpeed(vec2{-5000, log.getSpeed().y});
@@ -160,7 +151,7 @@ int main()
                 // Update the score text
                 std::stringstream ss;
                 ss << "Score: " << game.getScore();
-                textScore.setString(ss.str());
+                textScore.setString(ss.str().c_str());
             }
 
             // Handle pressing the left cursor key
@@ -178,7 +169,7 @@ int main()
                 axe.setSide(Side::LEFT);
                 player.setSide(Side::LEFT);
 
-                updateBranches(branches, game.getScore());
+                updateBranches(branches);
 
                 log.setPosition(vec2{810, 720});
                 log.setSpeed(vec2{5000, log.getSpeed().y});
@@ -190,7 +181,7 @@ int main()
                 // Update the score text
                 std::stringstream ss;
                 ss << "Score: " << game.getScore();
-                textScore.setString(ss.str());
+                textScore.setString(ss.str().c_str());
             }
         }
 
@@ -208,15 +199,7 @@ int main()
             {
                 game.setPaused(true);
                 textMessage.setString("Out of time!");
-
-                // Reposition the text based on its new size
-                sf::FloatRect textRect = textMessage.getLocalBounds();
-                textMessage.setOrigin(textRect.left + textRect.width / 2.f,
-                                      textRect.top + textRect.height / 2.f);
-
-                textMessage.setPosition(WIDTH / 2.f, HEIGHT / 2.f);
-
-                // Play a OutOfTime sound
+                textMessage.center();
                 soundOutOfTime.play();
             }
             // Move the bee
@@ -247,13 +230,8 @@ int main()
 
                 // Change the text of the message
                 textMessage.setString("SQUISHED!");
-
-                // Center it on the screen
-                sf::FloatRect textRect = textMessage.getLocalBounds();
-                textMessage.setOrigin(textRect.left + textRect.width / 2.f,
-                                      textRect.top + textRect.height / 2.f);
-
-                textMessage.setPosition(WIDTH / 2.f, HEIGHT / 2.f);
+                textMessage.center();
+                textMessage.setPosition(vec2{WIDTH / 2.f, HEIGHT / 2.f});
 
                 // Play a death sound
                 soundDeath.play();
@@ -278,33 +256,12 @@ int main()
         log.draw();
         bee.draw();
         for (auto& cloud : clouds) cloud.draw();
-        if (game.isPaused()) window.draw(textMessage);
-        window.draw(textScore);
+        // if (game.isPaused()) window.draw(textMessage);
+        // window.draw(textScore);
+        if (game.isPaused()) textMessage.draw();
+        textScore.draw();
         window.draw(timeBar);
         window.display();
     }
     return 0;
-}
-
-void updateBranches(std::vector<Branch>& branches, int seed)
-{
-    // Move all branches down one place
-    for (unsigned idx = NUM_BRANCHES - 1; idx > 0; --idx)
-    {
-        float height = idx * 150;
-        branches[idx].setSideAndHeight(branches[idx - 1].getSide(), height);
-    }
-    // Spawn new branch at position 0
-    switch (rand_num(2))
-    {
-        case 0:
-            branches[0].setSideAndHeight(Side::LEFT, 0);
-            break;
-        case 1:
-            branches[0].setSideAndHeight(Side::RIGHT, 0);
-            break;
-        default:
-            branches[0].setSideAndHeight(Side::NONE, 0);
-            break;
-    }
 }

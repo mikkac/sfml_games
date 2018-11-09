@@ -30,6 +30,8 @@ extern sf::Texture textureGravestone;
 extern sf::SoundBuffer soundBufferChop;
 extern sf::SoundBuffer soundBufferDeath;
 extern sf::SoundBuffer soundBufferOutOfTime;
+
+extern sf::Font font;
 //------------------------------------------------------------------------------------------
 
 // Rest of global variables ----------------------------------------------------------------
