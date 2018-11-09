@@ -57,22 +57,6 @@ int main()
 
     Text textScore(window, "Score: 0", font, 100, sf::Color::White);
     textScore.setPosition(vec2{20.f, 20.f});
-    // // Set the font to our texts
-    // textMessage.setFont(font);
-    // textScore.setFont(font);
-
-    // // Set rest of text properties
-    // textMessage.setString("Press Enter to start");
-    // textScore.setString("Score: 0");
-    // textMessage.setCharacterSize(75);
-    // textScore.setCharacterSize(100);
-    // textMessage.setFillColor(sf::Color::White);
-    // textScore.setFillColor(sf::Color::White);
-
-    // // Position of text
-    // sf::FloatRect textRect = textMessage.getLocalBounds();
-    // textMessage.setOrigin(textRect.left + textRect.width / 2.f,
-    //                       textRect.top + textRect.height / 2.f);
 
     sf::Clock clock;
 
@@ -211,9 +195,6 @@ int main()
                 cloud.fly(dt.asSeconds());
             }
 
-            // //Update branch sprites
-            // updateBranches(branches, game.getScore());
-
             // Handle a flying log
             log.fly(dt.asSeconds());
 
@@ -256,8 +237,6 @@ int main()
         log.draw();
         bee.draw();
         for (auto& cloud : clouds) cloud.draw();
-        // if (game.isPaused()) window.draw(textMessage);
-        // window.draw(textScore);
         if (game.isPaused()) textMessage.draw();
         textScore.draw();
         window.draw(timeBar);
