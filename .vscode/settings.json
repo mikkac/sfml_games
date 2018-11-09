@@ -1,4 +1,7 @@
 {
     "editor.formatOnSave": true,
-    "clang-format.executable": "/home/miki/repos/.clang-format"
+    "clang-format.executable": "/home/miki/repos/.clang-format",
+    "files.associations": {
+        "initializer_list": "cpp"
+    }
 }

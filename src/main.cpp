@@ -1,6 +1,4 @@
-// TODO weird behaviour of clouds
 // TODO refactor texts and rectangles
-// TODO refactor code in general- it looks like shit
 
 #include <cmath>
 #include <memory>
@@ -8,22 +6,6 @@
 #include "game.h"
 
 using namespace timber;
-
-// Buffers -----------------------------------------------------------------------------------
-sf::Texture textureBackground = createBuffer<sf::Texture>("res/graphics/background.png");
-sf::Texture textureBee = createBuffer<sf::Texture>("res/graphics/bee.png");
-sf::Texture textureCloud = createBuffer<sf::Texture>("res/graphics/cloud.png");
-sf::Texture textureTree = createBuffer<sf::Texture>("res/graphics/tree.png");
-sf::Texture textureBranch = createBuffer<sf::Texture>("res/graphics/branch.png");
-sf::Texture textureLog = createBuffer<sf::Texture>("res/graphics/log.png");
-sf::Texture textureAxe = createBuffer<sf::Texture>("res/graphics/axe.png");
-sf::Texture texturePlayer = createBuffer<sf::Texture>("res/graphics/player.png");
-sf::Texture textureGravestone = createBuffer<sf::Texture>("res/graphics/rip.png");
-
-sf::SoundBuffer soundBufferChop = createBuffer<sf::SoundBuffer>("res/sound/chop.wav");
-sf::SoundBuffer soundBufferDeath = createBuffer<sf::SoundBuffer>("res/sound/death.wav");
-sf::SoundBuffer soundBufferOutOfTime = createBuffer<sf::SoundBuffer>("res/sound/out_of_time.wav");
-//-------------------------------------------------------------------------------------------
 
 void updateBranches(std::vector<Branch>& branches, int seed);
 
@@ -37,19 +19,12 @@ int main()
     sf::VideoMode vm(WIDTH, HEIGHT);
     sf::RenderWindow window(vm, "Timber", sf::Style::Fullscreen);
 
-    // Create background
+    // Create objects
     Drawing background(window, textureBackground);
     Drawing tree(window, textureTree, vec2{810, 0});
 
-    // //Create bee
-    Bee bee(window, textureBee);
+    Log log(window, textureLog, vec2{810, 720}, vec2{1000.f, -1500.f});
 
-    // Create clouds textures and sprites
-    std::vector<Cloud> clouds(NUM_CLOUDS,
-                              Cloud(window, textureCloud, vec2{HIDDEN_X, int(rand() % 300)}));
-
-    // Create tree
-    // Create branches
     std::vector<Branch> branches(NUM_BRANCHES,
                                  Branch(window, textureBranch, vec2{HIDDEN_X, HIDDEN_Y}));
     for (auto& branch : branches)
@@ -57,16 +32,15 @@ int main()
         branch.setOrigin(220, 20);
     }
 
-    // Prepare Player
+    std::vector<Cloud> clouds(NUM_CLOUDS,
+                              Cloud(window, textureCloud, vec2{HIDDEN_X, rand_num(300)}));
+
+    Bee bee(window, textureBee);
+
     Player player(window, texturePlayer, textureGravestone, vec2{580, 720});
-    // The Player starts on the left
     player.setSide(Side::LEFT);
 
-    // Prepare the axe
     Axe axe(window, textureAxe, vec2{700, 830});
-
-    // Prepare flying log
-    Log log(window, textureLog, vec2{810, 720}, vec2{1000.f, -1500.f});
 
     // TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // Texts- score and startGame
@@ -132,13 +106,10 @@ int main()
 
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::KeyReleased && !game.isPaused())
+            if (event.type == sf::Event::KeyReleased && not game.isPaused())
             {
-                // Listen for key press again
                 acceptInput = true;
-
-                // Hide the axe
-                axe.setPosition(vec2{HIDDEN_X, axe.getPosition().y});
+                axe.setPosition(vec2{HIDDEN_X, axe.getPosition().y});  // Hide the axe
             }
         }
 
@@ -149,7 +120,7 @@ int main()
             // Reset the time and the score
             game.restart();
 
-            if (!player.isAlive()) player.reset();
+            if (not player.isAlive()) player.reset();
             // Make all branches disappear
             for (unsigned idx = 0; idx < NUM_BRANCHES; ++idx)
                 branches[idx].setSideAndHeight(Side::NONE, HIDDEN_Y);
@@ -223,7 +194,7 @@ int main()
             }
         }
 
-        if (!game.isPaused())
+        if (not game.isPaused())
         {
             sf::Time dt = clock.restart();
 
@@ -288,7 +259,7 @@ int main()
                 soundDeath.play();
             }
 
-        }  // if(!isStarted)
+        }  // if(not game.isPaused())
 
         // clear everything from the last frame
         window.clear();
@@ -306,11 +277,7 @@ int main()
         axe.draw();
         log.draw();
         bee.draw();
-
-        for (auto& cloud : clouds)
-        {
-            cloud.draw();
-        }
+        for (auto& cloud : clouds) cloud.draw();
         if (game.isPaused()) window.draw(textMessage);
         window.draw(textScore);
         window.draw(timeBar);
@@ -328,9 +295,7 @@ void updateBranches(std::vector<Branch>& branches, int seed)
         branches[idx].setSideAndHeight(branches[idx - 1].getSide(), height);
     }
     // Spawn new branch at position 0
-    srand((int)time(0) + seed);
-    int random = rand() % 2;
-    switch (random)
+    switch (rand_num(2))
     {
         case 0:
             branches[0].setSideAndHeight(Side::LEFT, 0);

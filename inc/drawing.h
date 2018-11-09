@@ -2,16 +2,14 @@
 #include "utils.h"
 namespace timber
 {
-class Drawing
+class Drawing  // base class for all drawings
 {
 public:
     Drawing(sf::RenderWindow& window, sf::Texture& texture, vec2 position = {0, 0});
-
     virtual ~Drawing() = default;
 
     virtual void draw();
     void setOrigin(int x, int y);
-
     vec2 getPosition() const;
     void setPosition(vec2 position);
 
@@ -20,16 +18,16 @@ protected:
     sf::Sprite mSprite;
 };
 
-class Movable  // movable means that object has some speed
+class Movable  // component that allows object to move with some speed
 {
 public:
     Movable(vec2 speed = {0, 0});
-
     virtual ~Movable() = default;
 
     vec2 getSpeed() const;
     void setSpeed(vec2 speed);
 
+protected:
     vec2 mSpeed{};
     bool mIsActive{false};
 };
@@ -71,14 +69,13 @@ public:
 
     Side getSide() const;
     void setSide(Side side);
-
-    bool isAlive() const;
     void die();
     void reset();
+    bool isAlive() const;
 
 private:
-    sf::Texture& mTextureDead;
-    sf::Texture& mTextureAlive;
+    sf::Texture& mTextureDead;  // Need to hold this references to textures here in order to be able
+    sf::Texture& mTextureAlive;  // to change diplayed texture when player dies
     Side mSide;
     bool mIsAlive;
 };
