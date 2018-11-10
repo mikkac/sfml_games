@@ -1,7 +1,7 @@
 #include "text.h"
 namespace timber
 {
-Text::Text(sf::RenderWindow& window, const char* text, sf::Font& font, int charSize,
+Text::Text(sf::RenderWindow& window, const std::string& text, sf::Font& font, int charSize,
            sf::Color color)
     : mWindow{window}
 {
@@ -10,13 +10,15 @@ Text::Text(sf::RenderWindow& window, const char* text, sf::Font& font, int charS
     mText.setCharacterSize(charSize);
     mText.setFillColor(color);
 }
-void Text::setString(const char* text)
-{
-    mText.setString(text);
-}
+
 void Text::setPosition(vec2 position)
 {
     mText.setPosition(position.x, position.y);
+}
+
+void Text::setString(const std::string& text)
+{
+    mText.setString(text);
 }
 
 void Text::draw()

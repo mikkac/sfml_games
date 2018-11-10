@@ -1,4 +1,3 @@
-#include <sstream>
 #include "game.h"
 #include "rectangle.h"
 #include "text.h"
@@ -59,8 +58,10 @@ int main()
     textScore.setPosition(vec2{20.f, 20.f});
     Rectangle backgroundScore(window, vec2{570, 120}, vec2{12, 20}, /*sf::Color*/ {0, 0, 0, 100});
 
-    Text textFps(window, "FPS: ", font, 50, sf::Color::White);
-    textFps.setPosition(vec2{300.f, 300.f});
+    Text textFps(window, "FPS: ", font, 30, sf::Color::White);
+    textFps.setPosition(vec2{20.f, HEIGHT - 70.f});
+    Rectangle backgroundFps(window, vec2{250, 50}, vec2{12, HEIGHT - 75.f},
+                            /*sf::Color*/ {0, 0, 0, 100});
 
     sf::Clock clock;
 
@@ -75,6 +76,20 @@ int main()
     sf::Time one_sec;
     while (window.isOpen())  // Game loop
     {
+        sf::Time dt = clock.restart();
+
+        // Calculate fps
+        one_sec += dt;
+        if (one_sec.asMilliseconds() > 200)
+        {
+            auto fps = 1.f / dt.asSeconds();
+            // Update the score text
+            std::stringstream buffer;
+            buffer << "FPS: " << fps;
+            textFps.setString(buffer.str());
+            one_sec = sf::Time::Zero;
+        }
+
         sf::Event event;
 
         while (window.pollEvent(event))
@@ -129,9 +144,9 @@ int main()
                 acceptInput = false;
 
                 // Update the score text
-                std::stringstream ss;
-                ss << "Score: " << game.getScore();
-                textScore.setString(ss.str().c_str());
+                std::stringstream buffer;
+                buffer << "Score: " << game.getScore();
+                textScore.setString(buffer.str());
             }
 
             // Handle pressing the left cursor key
@@ -157,16 +172,14 @@ int main()
                 acceptInput = false;
 
                 // Update the score text
-                std::stringstream ss;
-                ss << "Score: " << game.getScore();
-                textScore.setString(ss.str().c_str());
+                std::stringstream buffer;
+                buffer << "Score: " << game.getScore();
+                textScore.setString(buffer.str());
             }
         }
 
         if (not game.isPaused())
         {
-            sf::Time dt = clock.restart();
-
             // Subtract from the amount of time remaining
             game.setTimeRemaining(game.getTimeRemaining() - dt.asSeconds());
 
@@ -225,6 +238,8 @@ int main()
         if (game.isPaused()) textMessage.draw();
         backgroundScore.draw();
         textScore.draw();
+        backgroundFps.draw();
+        textFps.draw();
         timeBar.draw();
 
         window.display();
