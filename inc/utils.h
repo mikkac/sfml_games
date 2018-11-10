@@ -23,6 +23,7 @@ extern sf::Texture textureBackground;
 extern sf::Texture textureBee;
 extern sf::Texture textureCloud;
 extern sf::Texture textureTree;
+extern sf::Texture textureBackgroundTree;
 extern sf::Texture textureBranch;
 extern sf::Texture textureLog;
 extern sf::Texture textureAxe;

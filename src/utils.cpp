@@ -6,6 +6,7 @@ sf::Texture textureBackground = createBuffer<sf::Texture>("res/graphics/backgrou
 sf::Texture textureBee = createBuffer<sf::Texture>("res/graphics/bee.png");
 sf::Texture textureCloud = createBuffer<sf::Texture>("res/graphics/cloud.png");
 sf::Texture textureTree = createBuffer<sf::Texture>("res/graphics/tree.png");
+sf::Texture textureBackgroundTree = createBuffer<sf::Texture>("res/graphics/tree2.png");
 sf::Texture textureBranch = createBuffer<sf::Texture>("res/graphics/branch.png");
 sf::Texture textureLog = createBuffer<sf::Texture>("res/graphics/log.png");
 sf::Texture textureAxe = createBuffer<sf::Texture>("res/graphics/axe.png");

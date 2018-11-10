@@ -19,14 +19,16 @@ int main()
     Drawing background(window, textureBackground);
     Drawing tree(window, textureTree, vec2{810, 0});
 
+    std::vector<Drawing> backgroundTrees{Drawing(window, textureBackgroundTree, vec2{250, 800}),
+                                         Drawing(window, textureBackgroundTree, vec2{700, 700}),
+                                         Drawing(window, textureBackgroundTree, vec2{1700, 750})};
+    for (auto& tree : backgroundTrees) tree.setOrigin(200, 800);
+
     Log log(window, textureLog, vec2{810, 720}, vec2{1000.f, -1500.f});
 
     std::vector<Branch> branches(NUM_BRANCHES,
                                  Branch(window, textureBranch, vec2{HIDDEN_X, HIDDEN_Y}));
-    for (auto& branch : branches)
-    {
-        branch.setOrigin(220, 20);
-    }
+    for (auto& branch : branches) branch.setOrigin(220, 20);
 
     std::vector<Cloud> clouds(NUM_CLOUDS,
                               Cloud(window, textureCloud, vec2{HIDDEN_X, float(rand_num(300))}));
@@ -55,18 +57,22 @@ int main()
 
     Text textScore(window, "Score: 0", font, 100, sf::Color::White);
     textScore.setPosition(vec2{20.f, 20.f});
+    Rectangle backgroundScore(window, vec2{570, 120}, vec2{12, 20}, /*sf::Color*/ {0, 0, 0, 100});
+
+    Text textFps(window, "FPS: ", font, 50, sf::Color::White);
+    textFps.setPosition(vec2{300.f, 300.f});
 
     sf::Clock clock;
 
     // Prepare time bar
     Rectangle timeBar(window, vec2{TIME_BAR_WIDTH, TIME_BAR_HEIGHT},
-                      vec2{WIDTH / 2 - TIME_BAR_WIDTH / 2, 980}, sf::Color::Red);
+                      vec2{WIDTH / 2 - TIME_BAR_WIDTH / 2, 980}, sf::Color::Green);
     float timeBarWidthPerSecond = TIME_BAR_WIDTH / game.getTimeRemaining();
 
     // Control the player input
     bool acceptInput{false};
     game.setPaused(true);
-
+    sf::Time one_sec;
     while (window.isOpen())  // Game loop
     {
         sf::Event event;
@@ -166,7 +172,10 @@ int main()
 
             // Resize the time bar
             timeBar.setSize(vec2{game.getTimeRemaining() * timeBarWidthPerSecond, TIME_BAR_HEIGHT});
-
+            if (game.getTimeRemaining() >= game.rules.getTimeOnStart())
+                updateTimeBarColor(timeBar, 1.0);
+            else
+                updateTimeBarColor(timeBar, game.getTimeRemaining() / game.rules.getTimeOnStart());
             if (game.getTimeRemaining() <= 0.f)
             {
                 game.setPaused(true);
@@ -205,6 +214,7 @@ int main()
         window.clear();
 
         background.draw();
+        for (auto& tree : backgroundTrees) tree.draw();
         for (auto& branch : branches) branch.draw();
         tree.draw();
         player.draw();
@@ -213,6 +223,7 @@ int main()
         bee.draw();
         for (auto& cloud : clouds) cloud.draw();
         if (game.isPaused()) textMessage.draw();
+        backgroundScore.draw();
         textScore.draw();
         timeBar.draw();
 
