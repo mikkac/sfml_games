@@ -14,6 +14,7 @@ set(GAME_SRC
     ${PROJECT_SOURCE_DIR}/src/game.cpp
     ${PROJECT_SOURCE_DIR}/src/drawing.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
+    ${PROJECT_SOURCE_DIR}/src/rectangle.cpp
     ${PROJECT_SOURCE_DIR}/src/utils.cpp
     ${PROJECT_SOURCE_DIR}/src/text.cpp
 )
@@ -31,12 +32,14 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/main.cpp
     ${PROJECT_SOURCE_DIR}/src/game.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
+    ${PROJECT_SOURCE_DIR}/src/rectangle.cpp
     ${PROJECT_SOURCE_DIR}/src/text.cpp
 )
 set(HDR
     ${PROJECT_SOURCE_DIR}/inc/drawing.h
     ${PROJECT_SOURCE_DIR}/inc/game.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
+    ${PROJECT_SOURCE_DIR}/inc/rectangle.h
     ${PROJECT_SOURCE_DIR}/inc/utils.h
     ${PROJECT_SOURCE_DIR}/inc/text.h
 ) 

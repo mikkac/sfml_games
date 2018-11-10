@@ -12,8 +12,10 @@ constexpr int HIDDEN_X{WIDTH + 300};
 constexpr int HIDDEN_Y{HEIGHT + 300};
 constexpr int NUM_BRANCHES{6};
 constexpr int NUM_CLOUDS{3};
-constexpr float AXE_POSITION_LEFT{700};
-constexpr float AXE_POSITION_RIGHT{1075};
+constexpr float AXE_POSITION_LEFT{700.f};
+constexpr float AXE_POSITION_RIGHT{1075.f};
+constexpr float TIME_BAR_WIDTH{400.f};
+constexpr float TIME_BAR_HEIGHT{80.f};
 //------------------------------------------------------------------------------------------
 
 // Buffers ---------------------------------------------------------------------------------

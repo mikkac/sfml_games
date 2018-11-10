@@ -1,7 +1,6 @@
-// TODO refactor texts and rectangles
-
 #include <sstream>
 #include "game.h"
+#include "rectangle.h"
 #include "text.h"
 
 using namespace timber;
@@ -49,8 +48,7 @@ int main()
     sf::Sound soundOutOfTime;
     soundOutOfTime.setBuffer(soundBufferOutOfTime);
 
-    // TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // Texts- score and startGame
+    // Prepare texts- score and startGame
     Text textMessage(window, "Press Enter to start", font, 100, sf::Color::White);
     textMessage.center();
     textMessage.setPosition(vec2{WIDTH / 2.f, HEIGHT / 2.f});
@@ -60,22 +58,16 @@ int main()
 
     sf::Clock clock;
 
-    // Time bar
-    sf::RectangleShape timeBar;
-    float timeBarStartWidth{400.f};
-    float timeBarHeight{80.f};
-    timeBar.setSize(sf::Vector2f(timeBarStartWidth, timeBarHeight));
-    timeBar.setFillColor(sf::Color::Red);
-    timeBar.setPosition(WIDTH / 2 - timeBarStartWidth / 2, 980);
-
-    float timeBarWidthPerSecond = timeBarStartWidth / game.getTimeRemaining();
-
-    // TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // Prepare time bar
+    Rectangle timeBar(window, vec2{TIME_BAR_WIDTH, TIME_BAR_HEIGHT},
+                      vec2{WIDTH / 2 - TIME_BAR_WIDTH / 2, 980}, sf::Color::Red);
+    float timeBarWidthPerSecond = TIME_BAR_WIDTH / game.getTimeRemaining();
 
     // Control the player input
     bool acceptInput{false};
     game.setPaused(true);
-    while (window.isOpen())
+
+    while (window.isOpen())  // Game loop
     {
         sf::Event event;
 
@@ -94,13 +86,13 @@ int main()
             game.setPaused(false);
             // Reset the time and the score
             game.restart();
+            timeBar.resetSize();
 
             if (not player.isAlive()) player.reset();
-            // Make all branches disappear
-            for (unsigned idx = 0; idx < NUM_BRANCHES; ++idx)
+
+            for (unsigned idx = 0; idx < NUM_BRANCHES; ++idx)  // Make all branches disappear
                 branches[idx].setSideAndHeight(Side::NONE, HIDDEN_Y);
 
-            // Move the player into position
             player.setPosition(vec2{580, 720});
 
             acceptInput = true;
@@ -112,8 +104,6 @@ int main()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             {
                 game.increaseScore();
-
-                // Play a chop sound
                 soundChop.play();
 
                 if (game.getTimeRemaining() <= game.rules.getTimeOnStart() && game.getScore() > 0)
@@ -142,8 +132,6 @@ int main()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             {
                 game.increaseScore();
-
-                // Play a chop sound
                 soundChop.play();
 
                 if (game.getTimeRemaining() <= game.rules.getTimeOnStart() && game.getScore() > 0)
@@ -175,9 +163,9 @@ int main()
 
             // Subtract from the amount of time remaining
             game.setTimeRemaining(game.getTimeRemaining() - dt.asSeconds());
+
             // Resize the time bar
-            timeBar.setSize(
-                sf::Vector2f(game.getTimeRemaining() * timeBarWidthPerSecond, timeBarHeight));
+            timeBar.setSize(vec2{game.getTimeRemaining() * timeBarWidthPerSecond, TIME_BAR_HEIGHT});
 
             if (game.getTimeRemaining() <= 0.f)
             {
@@ -186,17 +174,12 @@ int main()
                 textMessage.center();
                 soundOutOfTime.play();
             }
-            // Move the bee
-            bee.fly(dt.asSeconds());
 
-            // Manage the clouds
-            for (auto& cloud : clouds)
-            {
-                cloud.fly(dt.asSeconds());
-            }
+            bee.fly(dt.asSeconds());  // Move the bee
 
-            // Handle a flying log
-            log.fly(dt.asSeconds());
+            for (auto& cloud : clouds) cloud.fly(dt.asSeconds());  // Manage the clouds
+
+            log.fly(dt.asSeconds());  // Handle a flying log
 
             // Has the player been squished by a branch
             if (branches[NUM_BRANCHES - 1].getSide() == player.getSide())
@@ -207,30 +190,22 @@ int main()
 
                 // Draw the gravestone
                 player.die();
-                axe.setPosition(vec2{HIDDEN_X, axe.getPosition().y});
+                axe.setSide(Side::NONE);
 
                 // Change the text of the message
                 textMessage.setString("SQUISHED!");
                 textMessage.center();
                 textMessage.setPosition(vec2{WIDTH / 2.f, HEIGHT / 2.f});
 
-                // Play a death sound
                 soundDeath.play();
             }
 
         }  // if(not game.isPaused())
 
-        // clear everything from the last frame
         window.clear();
 
-        // draw, update scene
-
         background.draw();
-        for (auto& branch : branches)
-        {
-            branch.draw();
-        }
-
+        for (auto& branch : branches) branch.draw();
         tree.draw();
         player.draw();
         axe.draw();
@@ -239,7 +214,8 @@ int main()
         for (auto& cloud : clouds) cloud.draw();
         if (game.isPaused()) textMessage.draw();
         textScore.draw();
-        window.draw(timeBar);
+        timeBar.draw();
+
         window.display();
     }
     return 0;

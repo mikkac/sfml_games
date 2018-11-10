@@ -8,5 +8,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 function(add_clang_tool_targets target_name source_files header_files)
     add_custom_target("${target_name}-format" COMMAND ${CLANG_FORMAT} -i -style=file ${source_files} ${header_files})
-    add_custom_target("${target_name}-tidy" COMMAND ${CLANG_TIDY} -p build ${source_files} -header-filter="${CMAKE_SOURCE_DIR}/" )
+    add_custom_target("${target_name}-tidy" COMMAND ${CLANG_TIDY} -p build ${source_files} -header-filter=.*)
 endfunction()
