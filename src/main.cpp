@@ -32,7 +32,7 @@ int main()
     std::vector<Cloud> clouds(NUM_CLOUDS,
                               Cloud(window, textureCloud, vec2{HIDDEN_X, float(rand_num(300))}));
 
-    Bee bee(window, textureBee);
+    Bee bee(window, textureBee, vec2{HIDDEN_X, HIDDEN_Y});
 
     Player player(window, texturePlayer, textureGravestone, vec2{580, 720});
     player.setSide(Side::LEFT);
