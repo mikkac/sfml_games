@@ -1,3 +1,9 @@
+# Timber- clone of popular game
+This game was made when I was learning basics of game development and SFML library with book '_Beginning C++ Game Programming_' by _John Horton_
+
+![Play](samples/timber_play.png?raw=true)
+
+## How to run the game
 ### Prepare environment
 Install important libraries
 ```
@@ -39,3 +45,9 @@ cmake ..
 make Timber-format
 ```
 Unfortunately header files are not handled by clang format- I use plugin in Visual Studio Code to format the code.
+
+### Samples
+![Start](samples/timber_start.png?raw=true)
+![Play](samples/timber_play.png?raw=true)
+![Squished](samples/timber_squished.png?raw=true)
+![OOT](samples/timber_oot.png?raw=true)
