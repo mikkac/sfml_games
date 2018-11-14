@@ -17,16 +17,10 @@ public:
     void increaseHealth(int amount);
 
     // Move in a given direction
-    void moveUp();
-    void moveDown();
-    void moveLeft();
-    void moveRight();
-
-    // Stop moving in a given direction
-    void stopUp();
-    void stopDown();
-    void stopLeft();
-    void stopRight();
+    void moveUp(bool isMoving);
+    void moveDown(bool isMoving);
+    void moveLeft(bool isMoving);
+    void moveRight(bool isMoving);
 
     // Getters
     sf::FloatRect getPosition() const;
