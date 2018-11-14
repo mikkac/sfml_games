@@ -63,10 +63,27 @@ void Player::update(float elapsedTime, sf::Vector2i mousePosition)
     // Calculate the angle the player is facing
     float angle = (atan2(mousePosition.y - mScreenSpace.resolution.y / 2.f,
                          mousePosition.x - mScreenSpace.resolution.x / 2.f) *
-                   180) /
+                   180.0) /
                   3.1415;
 
     mSprite.setRotation(angle);
+}
+
+// Boosts -------------------------------------------------
+void Player::upgradeHealth()
+{
+    mHealth += static_cast<int>(START_HEALTH * 0.2f);
+}
+
+void Player::upgradeSpeed()
+{
+    mSpeed += static_cast<int>(START_SPEED * 0.2f);
+}
+
+void Player::increaseHealth(int amount)
+{
+    mHealth += amount;
+    if (mHealth > mMaxHealth) mHealth = mMaxHealth;
 }
 
 // Move ---------------------------------------------------

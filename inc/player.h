@@ -12,7 +12,7 @@ public:
     void update(float elapsedTime, sf::Vector2i mousePosition);
 
     // Boosts
-    void upgradeHealt();
+    void upgradeHealth();
     void upgradeSpeed();
     void increaseHealth(int amount);
 
