@@ -25,9 +25,12 @@ T createBuffer(const char* pathToFile)
     return buffer;
 }
 
-struct vec2
+enum class direction
 {
-    float x, y;
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
 };
 
 }  // namespace game

@@ -11,7 +11,9 @@ include_directories(${PROJECT_SOURCE_DIR}/inc)
 set(game_lib "game_lib")
 
 set(GAME_SRC
+    ${PROJECT_SOURCE_DIR}/src/player.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
+    ${PROJECT_SOURCE_DIR}/src/world.cpp
 )
  
 add_library(${game_lib} ${GAME_SRC})
@@ -24,10 +26,14 @@ target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-system sfml-audio sfml-
 #Clang-tidy and clang-format
 set(SRC
     ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/player.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
+    ${PROJECT_SOURCE_DIR}/src/world.cpp
 )
 set(HDR
+    ${PROJECT_SOURCE_DIR}/inc/player.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
+    ${PROJECT_SOURCE_DIR}/inc/world.h
 ) 
 add_clang_tool_targets(${PROJECT_NAME} ${SRC} ${HDR})
 
