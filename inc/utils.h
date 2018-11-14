@@ -25,12 +25,12 @@ T createBuffer(const char* pathToFile)
     return buffer;
 }
 
-enum class direction
+enum class State
 {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
+    PAUSE,
+    LEVEL_UP,
+    GAME_OVER,
+    PLAY
 };
 
 }  // namespace game
