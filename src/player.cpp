@@ -1,5 +1,5 @@
 #include "player.h"
-
+#include <cmath>
 namespace game
 {
 Player::Player()
@@ -36,6 +36,39 @@ bool Player::hit(sf::Time timeHit)
     else
         return false;
 }
+
+void Player::update(float elapsedTime, sf::Vector2i mousePosition)
+{
+    float shift = elapsedTime * mSpeed;
+    if (mKeyPressed.up) mPosition.y -= shift;
+    if (mKeyPressed.down) mPosition.y += shift;
+    if (mKeyPressed.left) mPosition.x -= shift;
+    if (mKeyPressed.right) mPosition.x += shift;
+
+    mSprite.setPosition(mPosition);
+
+    // Keep the player in the area
+    if (auto bound = mScreenSpace.arena.width - mScreenSpace.tileSize; mPosition.x > bound)
+        mPosition.x = bound;
+
+    if (auto bound = mScreenSpace.arena.left + mScreenSpace.tileSize; mPosition.x < bound)
+        mPosition.x = bound;
+
+    if (auto bound = mScreenSpace.arena.height - mScreenSpace.tileSize; mPosition.y > bound)
+        mPosition.x = bound;
+
+    if (auto bound = mScreenSpace.arena.top + mScreenSpace.tileSize; mPosition.x < bound)
+        mPosition.x = bound;
+
+    // Calculate the angle the player is facing
+    float angle = (atan2(mousePosition.y - mScreenSpace.resolution.y / 2.f,
+                         mousePosition.x - mScreenSpace.resolution.x / 2.f) *
+                   180) /
+                  3.1415;
+
+    mSprite.setRotation(angle);
+}
+
 // Move ---------------------------------------------------
 void Player::moveUp(bool isMoving)
 {
