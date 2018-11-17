@@ -9,4 +9,4 @@ sf::Texture tPlayer = createBuffer<sf::Texture>("res/graphics/player.png");
 Random rand_num;
 //------------------------------------------------------------------------------------------
 
-}  // namespace game
+} // namespace game

@@ -4,7 +4,7 @@ namespace game
 {
 class Random
 {
-public:
+  public:
     int operator()(int n);
 };
-}  // namespace game
+} // namespace game

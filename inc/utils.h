@@ -1,7 +1,7 @@
 #pragma once
+#include "random.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include "random.h"
 
 namespace game
 {
@@ -17,20 +17,13 @@ extern sf::Texture tPlayer;
 extern Random rand_num;
 //------------------------------------------------------------------------------------------
 
-template <typename T>
-T createBuffer(const char* pathToFile)
-{
+template<typename T>
+T createBuffer(const char* pathToFile) {
     T buffer;
     buffer.loadFromFile(pathToFile);
     return buffer;
 }
 
-enum class State
-{
-    PAUSE,
-    LEVEL_UP,
-    GAME_OVER,
-    PLAY
-};
+enum class State { PAUSE, LEVEL_UP, GAME_OVER, PLAY };
 
-}  // namespace game
+} // namespace game

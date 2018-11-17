@@ -4,7 +4,7 @@ namespace game
 {
 class Player
 {
-public:
+  public:
     Player();
     void spawn(const sf::Vector2f& resolution, const sf::IntRect& arena, int tileSize);
     void reset();
@@ -30,29 +30,27 @@ public:
     int getHealth() const;
     sf::Time getLastHitTime() const;
 
-private:
+  private:
     const float START_HEALTH{100.f};
     const float START_SPEED{200.f};
     sf::Vector2f mPosition;
     sf::Sprite mSprite;
     // sf::Texture mTexture;
-    struct
-    {
+    struct {
         bool up, down, left, right;
     } mKeyPressed;
 
     int mHealth{static_cast<int>(START_HEALTH)};
     int mMaxHealth{static_cast<int>(START_HEALTH)};
-    float mSpeed{START_SPEED};  // speed in pixels per second
+    float mSpeed{START_SPEED}; // speed in pixels per second
     sf::Time mLastHitTime;
 
     // Arena data
-    struct
-    {
+    struct {
         sf::Vector2f resolution;
         sf::IntRect arena;
         int tileSize;
     } mScreenSpace;
 };
 
-}  // namespace game
+} // namespace game
