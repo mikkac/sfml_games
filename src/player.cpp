@@ -1,121 +1,124 @@
 #include "player.h"
 #include <cmath>
+
+using namespace sf;
+
 namespace game
 {
 Player::Player() {
-    mSprite.setTexture(tPlayer);
-    mSprite.setOrigin(25, 25);
+    sprite_.setTexture(texture_player);
+    sprite_.setOrigin(25, 25);
 }
 
-void Player::spawn(const sf::Vector2f& resolution, const sf::IntRect& arena, int tileSize) {
-    mPosition.x = arena.width / 2.f;
-    mPosition.y = arena.height / 2.f;
+void Player::spawn(const Vector2f& resolution, const IntRect& arena, int tile_size) {
+    position_.x = arena.width / 2.f;
+    position_.y = arena.height / 2.f;
     int x{5};
-    mScreenSpace.resolution = resolution;
-    mScreenSpace.arena = arena;
-    mScreenSpace.tileSize = tileSize;
+    screen_.resolution = resolution;
+    screen_.arena = arena;
+    screen_.tile_size = tile_size;
 }
 
 void Player::reset() {
-    mHealth = static_cast<int>(START_HEALTH);
-    mMaxHealth = static_cast<int>(START_HEALTH);
-    mSpeed = START_SPEED;
+    health_ = static_cast<int>(kStartHealth);
+    max_health_ = static_cast<int>(kStartHealth);
+    speed_ = kStartSpeed;
 }
 
-bool Player::hit(sf::Time timeHit) {
-    if (timeHit.asMilliseconds() - mLastHitTime.asMilliseconds() > 200) {
-        mLastHitTime = timeHit;
-        mHealth -= 10;
+bool Player::hit(Time time_hit) {
+    if (time_hit.asMilliseconds() - last_hit_time_.asMilliseconds() > 200) {
+        last_hit_time_ = time_hit;
+        health_ -= 10;
         return true;
     } else
         return false;
 }
 
-void Player::update(float elapsedTime, sf::Vector2i mousePosition) {
-    float shift = elapsedTime * mSpeed;
-    if (mKeyPressed.up) mPosition.y -= shift;
-    if (mKeyPressed.down) mPosition.y += shift;
-    if (mKeyPressed.left) mPosition.x -= shift;
-    if (mKeyPressed.right) mPosition.x += shift;
+void Player::update(float elapsed_time, Vector2i mouse_pos) {
+    float shift = elapsed_time * speed_;
+    if (pressed_.up) position_.y -= shift;
+    if (pressed_.down) position_.y += shift;
+    if (pressed_.left) position_.x -= shift;
+    if (pressed_.right) position_.x += shift;
 
-    mSprite.setPosition(mPosition);
+    sprite_.setPosition(position_);
 
     // Keep the player in the area
-    if (auto bound = mScreenSpace.arena.width - mScreenSpace.tileSize; mPosition.x > bound)
-        mPosition.x = bound;
+    if (auto bound = screen_.arena.width - screen_.tile_size; position_.x > bound)
+        position_.x = bound;
 
-    if (auto bound = mScreenSpace.arena.left + mScreenSpace.tileSize; mPosition.x < bound)
-        mPosition.x = bound;
+    if (auto bound = screen_.arena.left + screen_.tile_size; position_.x < bound)
+        position_.x = bound;
 
-    if (auto bound = mScreenSpace.arena.height - mScreenSpace.tileSize; mPosition.y > bound)
-        mPosition.x = bound;
+    if (auto bound = screen_.arena.height - screen_.tile_size; position_.y > bound)
+        position_.x = bound;
 
-    if (auto bound = mScreenSpace.arena.top + mScreenSpace.tileSize; mPosition.x < bound)
-        mPosition.x = bound;
+    if (auto bound = screen_.arena.top + screen_.tile_size; position_.x < bound)
+        position_.x = bound;
 
     // Calculate the angle the player is facing
-    float angle = (atan2(mousePosition.y - mScreenSpace.resolution.y / 2.f,
-                         mousePosition.x - mScreenSpace.resolution.x / 2.f) *
-                   180.0) /
-                  3.1415;
+    float angle =
+        (atan2(mouse_pos.y - screen_.resolution.y / 2.f, mouse_pos.x - screen_.resolution.x / 2.f) *
+         180.0) /
+        3.1415;
 
-    mSprite.setRotation(angle);
+    sprite_.setRotation(angle);
 }
 
 // Boosts -------------------------------------------------
-void Player::upgradeHealth() {
-    mHealth += static_cast<int>(START_HEALTH * 0.2f);
+void Player::upgrade_health() {
+    health_ += static_cast<int>(kStartHealth * 0.2f);
 }
 
-void Player::upgradeSpeed() {
-    mSpeed += static_cast<int>(START_SPEED * 0.2f);
+void Player::upgrade_speed() {
+    speed_ += static_cast<int>(kStartSpeed * 0.2f);
 }
 
-void Player::increaseHealth(int amount) {
-    mHealth += amount;
-    if (mHealth > mMaxHealth) mHealth = mMaxHealth;
+void Player::increase_health(int amount) {
+    health_ += amount;
+    if (health_ > max_health_) health_ = max_health_;
 }
 
 // Move ---------------------------------------------------
-void Player::moveUp(bool isMoving) {
-    mKeyPressed.up = isMoving;
+void Player::move_up(bool is_moving) {
+    pressed_.up = is_moving;
 }
 
-void Player::moveDown(bool isMoving) {
-    mKeyPressed.down = isMoving;
+void Player::move_down(bool is_moving) {
+    pressed_.down = is_moving;
 }
 
-void Player::moveLeft(bool isMoving) {
-    mKeyPressed.left = isMoving;
+void Player::move_left(bool is_moving) {
+    pressed_.left = is_moving;
 }
 
-void Player::moveRight(bool isMoving) {
-    mKeyPressed.right = isMoving;
+void Player::move_right(bool is_moving) {
+    pressed_.right = is_moving;
 }
 
 // Getters ------------------------------------------------
-sf::FloatRect Player::getPosition() const {
-    return mSprite.getGlobalBounds();
+FloatRect Player::get_position() const {
+    return sprite_.getGlobalBounds();
 }
 
-sf::Vector2f Player::getCenter() const {
-    return mPosition;
+Vector2f Player::get_center() const {
+    return position_;
 }
 
-float Player::getRotation() const {
-    return mSprite.getRotation();
+float Player::get_rotation() const {
+    return sprite_.getRotation();
 }
 
-sf::Sprite Player::getSprite() const {
-    return mSprite;
+Sprite Player::get_sprite() const {
+    return sprite_;
 }
 
-int Player::getHealth() const {
-    return mHealth;
+int Player::get_health() const {
+    return health_;
 }
 
-sf::Time Player::getLastHitTime() const {
-    return mLastHitTime;
+Time Player::get_last_hit_time() const {
+    return last_hit_time_;
 }
 
 } // namespace game

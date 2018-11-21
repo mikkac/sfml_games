@@ -3,6 +3,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
+using namespace sf;
+
 namespace game
 {
 // Constants -------------------------------------------------------------------------------
@@ -10,7 +12,7 @@ namespace game
 //------------------------------------------------------------------------------------------
 
 // Buffers ---------------------------------------------------------------------------------
-extern sf::Texture tPlayer;
+extern Texture texture_player;
 //------------------------------------------------------------------------------------------
 
 // Rest of global variables ----------------------------------------------------------------
@@ -18,7 +20,7 @@ extern Random rand_num;
 //------------------------------------------------------------------------------------------
 
 template<typename T>
-T createBuffer(const char* pathToFile) {
+T create_buffer(const char* pathToFile) {
     T buffer;
     buffer.loadFromFile(pathToFile);
     return buffer;

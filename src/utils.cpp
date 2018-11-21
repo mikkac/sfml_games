@@ -2,7 +2,7 @@
 namespace game
 {
 // Buffers -----------------------------------------------------------------------------------
-sf::Texture tPlayer = createBuffer<sf::Texture>("res/graphics/player.png");
+Texture texture_player = create_buffer<Texture>("res/graphics/player.png");
 //-------------------------------------------------------------------------------------------
 
 // Rest of global variables ----------------------------------------------------------------

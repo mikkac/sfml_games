@@ -2,38 +2,39 @@
 #include "utils.h"
 using namespace game;
 
+using namespace sf;
+
 int main() {
     State state{State::GAME_OVER};
 
-    sf::Vector2f resolution;
-    resolution.x = sf::VideoMode::getDesktopMode().width;
-    resolution.y = sf::VideoMode::getDesktopMode().height;
+    Vector2f resolution;
+    resolution.x = VideoMode::getDesktopMode().width;
+    resolution.y = VideoMode::getDesktopMode().height;
 
-    sf::RenderWindow window(sf::VideoMode(resolution.x, resolution.y), "Mad Dead",
-                            sf::Style::Fullscreen);
-    sf::View viewMain(sf::FloatRect(0, 0, resolution.x, resolution.y));
+    RenderWindow window(VideoMode(resolution.x, resolution.y), "Mad Dead", Style::Fullscreen);
+    View view_main(FloatRect(0, 0, resolution.x, resolution.y));
 
-    sf::Clock clock;
-    sf::Time gameTimeTotal;
+    Clock clock;
+    Time game_time_total;
 
-    sf::Vector2f mouseWorldPosition;
-    sf::Vector2i mouseScreenPosition;
+    Vector2f mouse_world_pos;
+    Vector2i mouse_screen_pos;
 
     Player player;
 
-    sf::IntRect arena;
+    IntRect arena;
 
-    // viewMain.setCenter(player.getCenter());
+    // view_main.setCenter(player.get_center());
     while (window.isOpen()) // Game loop
     {
-        sf::Event event;
+        Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Return && state == State::PLAY) {
+            if (event.type == Event::KeyPressed) {
+                if (event.key.code == Keyboard::Return && state == State::PLAY) {
                     state = State::PAUSE;
-                } else if (event.key.code == sf::Keyboard::Return && state == State::GAME_OVER) {
+                } else if (event.key.code == Keyboard::Return && state == State::GAME_OVER) {
                     state = State::LEVEL_UP;
-                } else if (event.key.code == sf::Keyboard::Return && state == State::PAUSE) {
+                } else if (event.key.code == Keyboard::Return && state == State::PAUSE) {
                     state = State::PLAY;
                     clock.restart();
                 }
@@ -42,24 +43,24 @@ int main() {
             }
         } // end event polling
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
+        if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
 
         // Handle WSAD
         if (state == State::PLAY) {
-            player.moveUp(sf::Keyboard::isKeyPressed(sf::Keyboard::W));
-            player.moveDown(sf::Keyboard::isKeyPressed(sf::Keyboard::S));
-            player.moveLeft(sf::Keyboard::isKeyPressed(sf::Keyboard::A));
-            player.moveRight(sf::Keyboard::isKeyPressed(sf::Keyboard::D));
+            player.move_up(Keyboard::isKeyPressed(Keyboard::W));
+            player.move_down(Keyboard::isKeyPressed(Keyboard::S));
+            player.move_left(Keyboard::isKeyPressed(Keyboard::A));
+            player.move_right(Keyboard::isKeyPressed(Keyboard::D));
         }
 
         // Handle LEVEL_UP state
         if (state == State::LEVEL_UP) {
-            if (event.key.code == sf::Keyboard::Num1) state = State::PLAY;
-            if (event.key.code == sf::Keyboard::Num2) state = State::PLAY;
-            if (event.key.code == sf::Keyboard::Num3) state = State::PLAY;
-            if (event.key.code == sf::Keyboard::Num4) state = State::PLAY;
-            if (event.key.code == sf::Keyboard::Num5) state = State::PLAY;
-            if (event.key.code == sf::Keyboard::Num6) state = State::PLAY;
+            if (event.key.code == Keyboard::Num1) state = State::PLAY;
+            if (event.key.code == Keyboard::Num2) state = State::PLAY;
+            if (event.key.code == Keyboard::Num3) state = State::PLAY;
+            if (event.key.code == Keyboard::Num4) state = State::PLAY;
+            if (event.key.code == Keyboard::Num5) state = State::PLAY;
+            if (event.key.code == Keyboard::Num6) state = State::PLAY;
 
             if (state == State::PLAY) {
                 // Preapre the level
@@ -68,33 +69,33 @@ int main() {
                 arena.left = 0;
                 arena.top = 0;
 
-                int tileSize{50};
+                int tile_size{50};
 
-                player.spawn(resolution, arena, tileSize);
+                player.spawn(resolution, arena, tile_size);
                 clock.restart();
             }
         } // end LEVEL_UP
 
         // Update the frame
         if (state == State::PLAY) {
-            sf::Time dt = clock.restart();
-            gameTimeTotal += dt;
-            float dtAsSeconds = dt.asSeconds();
-            mouseScreenPosition = sf::Mouse::getPosition();
+            Time dt = clock.restart();
+            game_time_total += dt;
+            float dt_as_seconds = dt.asSeconds();
+            mouse_screen_pos = Mouse::getPosition();
 
             // Convert mouse postition to world coords
-            mouseWorldPosition = window.mapPixelToCoords(mouseScreenPosition, viewMain);
+            mouse_world_pos = window.mapPixelToCoords(mouse_screen_pos, view_main);
 
-            player.update(dtAsSeconds, mouseScreenPosition);
-            sf::Vector2f playerPosition(player.getCenter());
-            viewMain.setCenter(player.getCenter());
+            player.update(dt_as_seconds, mouse_screen_pos);
+            Vector2f player_pos(player.get_center());
+            view_main.setCenter(player.get_center());
         } // end updating the frame
 
         // Draw the scene
         if (state == State::PLAY) {
             window.clear();
-            window.setView(viewMain);
-            window.draw(player.getSprite());
+            window.setView(view_main);
+            window.draw(player.get_sprite());
         }
 
         if (state == State::LEVEL_UP) {}

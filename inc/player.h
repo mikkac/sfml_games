@@ -1,56 +1,59 @@
 #pragma once
 #include "utils.h"
+
+using namespace sf;
+
 namespace game
 {
 class Player
 {
   public:
     Player();
-    void spawn(const sf::Vector2f& resolution, const sf::IntRect& arena, int tileSize);
+    void spawn(const Vector2f& resolution, const IntRect& arena, int tile_size);
     void reset();
-    bool hit(sf::Time timeHit);
-    void update(float elapsedTime, sf::Vector2i mousePosition);
+    bool hit(Time time_hit);
+    void update(float elapsed_time, Vector2i mouse_pos);
 
     // Boosts
-    void upgradeHealth();
-    void upgradeSpeed();
-    void increaseHealth(int amount);
+    void upgrade_health();
+    void upgrade_speed();
+    void increase_health(int amount);
 
     // Move in a given direction
-    void moveUp(bool isMoving);
-    void moveDown(bool isMoving);
-    void moveLeft(bool isMoving);
-    void moveRight(bool isMoving);
+    void move_up(bool is_moving);
+    void move_down(bool is_moving);
+    void move_left(bool is_moving);
+    void move_right(bool is_moving);
 
     // Getters
-    sf::FloatRect getPosition() const;
-    sf::Vector2f getCenter() const;
-    float getRotation() const;
-    sf::Sprite getSprite() const;
-    int getHealth() const;
-    sf::Time getLastHitTime() const;
+    FloatRect get_position() const;
+    Vector2f get_center() const;
+    float get_rotation() const;
+    Sprite get_sprite() const;
+    int get_health() const;
+    Time get_last_hit_time() const;
 
   private:
-    const float START_HEALTH{100.f};
-    const float START_SPEED{200.f};
-    sf::Vector2f mPosition;
-    sf::Sprite mSprite;
-    // sf::Texture mTexture;
+    const float kStartHealth{100.f};
+    const float kStartSpeed{200.f};
+    Vector2f position_;
+    Sprite sprite_;
+    // Texture mTexture;
     struct {
         bool up, down, left, right;
-    } mKeyPressed;
+    } pressed_;
 
-    int mHealth{static_cast<int>(START_HEALTH)};
-    int mMaxHealth{static_cast<int>(START_HEALTH)};
-    float mSpeed{START_SPEED}; // speed in pixels per second
-    sf::Time mLastHitTime;
+    int health_{static_cast<int>(kStartHealth)};
+    int max_health_{static_cast<int>(kStartHealth)};
+    float speed_{kStartSpeed}; // speed in pixels per second
+    Time last_hit_time_;
 
     // Arena data
     struct {
-        sf::Vector2f resolution;
-        sf::IntRect arena;
-        int tileSize;
-    } mScreenSpace;
+        Vector2f resolution;
+        IntRect arena;
+        int tile_size;
+    } screen_;
 };
 
 } // namespace game
