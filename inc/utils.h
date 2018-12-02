@@ -26,6 +26,4 @@ T create_buffer(const char* pathToFile) {
     return buffer;
 }
 
-enum class State { PAUSE, LEVEL_UP, GAME_OVER, PLAY };
-
 } // namespace game

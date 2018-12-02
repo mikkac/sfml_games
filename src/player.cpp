@@ -10,10 +10,9 @@ Player::Player() {
     sprite_.setOrigin(25, 25);
 }
 
-void Player::spawn(const Vector2f& resolution, const IntRect& arena, int tile_size) {
+void Player::spawn(const Vector2u& resolution, const IntRect& arena, int tile_size) {
     position_.x = arena.width / 2.f;
     position_.y = arena.height / 2.f;
-    int x{5};
     screen_.resolution = resolution;
     screen_.arena = arena;
     screen_.tile_size = tile_size;
@@ -77,48 +76,6 @@ void Player::upgrade_speed() {
 void Player::increase_health(int amount) {
     health_ += amount;
     if (health_ > max_health_) health_ = max_health_;
-}
-
-// Move ---------------------------------------------------
-void Player::move_up(bool is_moving) {
-    pressed_.up = is_moving;
-}
-
-void Player::move_down(bool is_moving) {
-    pressed_.down = is_moving;
-}
-
-void Player::move_left(bool is_moving) {
-    pressed_.left = is_moving;
-}
-
-void Player::move_right(bool is_moving) {
-    pressed_.right = is_moving;
-}
-
-// Getters ------------------------------------------------
-FloatRect Player::get_position() const {
-    return sprite_.getGlobalBounds();
-}
-
-Vector2f Player::get_center() const {
-    return position_;
-}
-
-float Player::get_rotation() const {
-    return sprite_.getRotation();
-}
-
-Sprite Player::get_sprite() const {
-    return sprite_;
-}
-
-int Player::get_health() const {
-    return health_;
-}
-
-Time Player::get_last_hit_time() const {
-    return last_hit_time_;
 }
 
 } // namespace game

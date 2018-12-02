@@ -9,7 +9,7 @@ class Player
 {
   public:
     Player();
-    void spawn(const Vector2f& resolution, const IntRect& arena, int tile_size);
+    void spawn(const Vector2u& resolution, const IntRect& arena, int tile_size);
     void reset();
     bool hit(Time time_hit);
     void update(float elapsed_time, Vector2i mouse_pos);
@@ -20,18 +20,18 @@ class Player
     void increase_health(int amount);
 
     // Move in a given direction
-    void move_up(bool is_moving);
-    void move_down(bool is_moving);
-    void move_left(bool is_moving);
-    void move_right(bool is_moving);
+    void move_up(bool is_moving) { pressed_.up = is_moving; }
+    void move_down(bool is_moving) { pressed_.down = is_moving; }
+    void move_left(bool is_moving) { pressed_.left = is_moving; }
+    void move_right(bool is_moving) { pressed_.right = is_moving; }
 
     // Getters
-    FloatRect get_position() const;
-    Vector2f get_center() const;
-    float get_rotation() const;
-    Sprite get_sprite() const;
-    int get_health() const;
-    Time get_last_hit_time() const;
+    FloatRect get_position() const { return sprite_.getGlobalBounds(); }
+    Vector2f get_center() const { return position_; }
+    float get_rotation() const { return sprite_.getRotation(); }
+    Sprite get_sprite() const { return sprite_; }
+    int get_health() const { return health_; }
+    Time get_last_hit_time() const { return last_hit_time_; }
 
   private:
     const float kStartHealth{100.f};
@@ -50,10 +50,10 @@ class Player
 
     // Arena data
     struct {
-        Vector2f resolution;
+        Vector2u resolution;
         IntRect arena;
         int tile_size;
     } screen_;
-};
+}; // namespace game
 
 } // namespace game
