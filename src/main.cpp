@@ -2,6 +2,7 @@
 #include "player.h"
 #include "screen.h"
 #include "utils.h"
+#include "zombie_arena.h"
 using namespace game;
 
 using namespace sf;
@@ -14,9 +15,20 @@ int main() {
     Clock clock;
 
     Player player;
-
     IntRect arena;
 
+    // Create background
+    VertexArray background;
+
+    // unsigned idx{0};
+    // for (unsigned i = 0; i < 6; ++i) {
+    //     for (unsigned j = 0; j < 4; ++j) {
+    //         if (i == 5 and j == 3)
+    //             break; // tileset is 6x4 but tile in right bottom corner is missing
+    //         background[idx].texCoords = Vector2f(i * 59, j * 59);
+    //         ++idx;
+    //     }
+    // }
     // view_main.setCenter(player.get_center());
     while (screen.window.isOpen()) // Game loop
     {
@@ -57,12 +69,12 @@ int main() {
 
             if (game.play()) {
                 // Preapre the level
-                arena.width = 500;
-                arena.height = 500;
+                arena.width = 640;
+                arena.height = 640;
                 arena.left = 0;
                 arena.top = 0;
 
-                int tile_size{50};
+                int tile_size{create_background(background, arena)};
 
                 player.spawn(resolution, arena, tile_size);
                 clock.restart();
@@ -76,6 +88,7 @@ int main() {
         if (game.play()) {
             screen.window.clear();
             screen.window.setView(screen.main_view);
+            screen.window.draw(background, &texture_background);
             screen.window.draw(player.get_sprite());
         }
 

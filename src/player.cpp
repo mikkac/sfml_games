@@ -50,10 +50,10 @@ void Player::update(float elapsed_time, Vector2i mouse_pos) {
         position_.x = bound;
 
     if (auto bound = screen_.arena.height - screen_.tile_size; position_.y > bound)
-        position_.x = bound;
+        position_.y = bound;
 
-    if (auto bound = screen_.arena.top + screen_.tile_size; position_.x < bound)
-        position_.x = bound;
+    if (auto bound = screen_.arena.top + screen_.tile_size; position_.y < bound)
+        position_.y = bound;
 
     // Calculate the angle the player is facing
     float angle =

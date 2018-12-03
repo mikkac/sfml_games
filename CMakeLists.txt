@@ -16,6 +16,7 @@ set(GAME_SRC
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
     ${PROJECT_SOURCE_DIR}/src/utils.cpp
+    ${PROJECT_SOURCE_DIR}/src/zombie_arena.cpp
 )
  
 add_library(${game_lib} ${GAME_SRC})
@@ -33,6 +34,7 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
     ${PROJECT_SOURCE_DIR}/src/utils.cpp
+    ${PROJECT_SOURCE_DIR}/src/zombie_arena.cpp
 )
 set(HDR
     ${PROJECT_SOURCE_DIR}/inc/game.h
@@ -40,6 +42,7 @@ set(HDR
     ${PROJECT_SOURCE_DIR}/inc/random.h
     ${PROJECT_SOURCE_DIR}/inc/screen.h
     ${PROJECT_SOURCE_DIR}/inc/utils.h
+    ${PROJECT_SOURCE_DIR}/inc/zombie_arena.h
 ) 
 add_clang_tool_targets(${PROJECT_NAME} ${SRC} ${HDR})
 
