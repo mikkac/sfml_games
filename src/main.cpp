@@ -69,8 +69,8 @@ int main() {
 
             if (game.play()) {
                 // Preapre the level
-                arena.width = 640;
-                arena.height = 640;
+                arena.width = 1280;
+                arena.height = 1280;
                 arena.left = 0;
                 arena.top = 0;
 
