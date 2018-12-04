@@ -33,7 +33,7 @@ class Zombie
     Vector2f position_;
     int speed_;
     int health_;
-    bool alive_;
+    bool alive_{true};
 };
 
 class Bloater : public Zombie

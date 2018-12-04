@@ -69,7 +69,7 @@ int main() {
                 arena.top = 0;
                 int tile_size{create_background(background, arena)};
 
-                num_zombies = 10;
+                num_zombies = 1000;
                 for (auto& zombie : zombies) delete zombie;
                 zombies = create_horde(num_zombies, arena);
                 num_zombies_alive = num_zombies;
