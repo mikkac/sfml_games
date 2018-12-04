@@ -34,8 +34,8 @@ class Player
     Time get_last_hit_time() const { return last_hit_time_; }
 
   private:
-    const float kStartHealth{100.f};
-    const float kStartSpeed{200.f};
+    const int kStartHealth{100};
+    const int kStartSpeed{200};
     Vector2f position_;
     Sprite sprite_;
     // Texture mTexture;
@@ -45,7 +45,7 @@ class Player
 
     int health_{static_cast<int>(kStartHealth)};
     int max_health_{static_cast<int>(kStartHealth)};
-    float speed_{kStartSpeed}; // speed in pixels per second
+    int speed_{kStartSpeed}; // speed in pixels per second
     Time last_hit_time_;
 
     // Arena data
