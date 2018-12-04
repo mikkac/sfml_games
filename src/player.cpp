@@ -1,12 +1,11 @@
 #include "player.h"
+#include "texture_holder.h"
 #include <cmath>
-
 using namespace sf;
 
 namespace game
 {
-Player::Player() {
-    sprite_.setTexture(texture_player);
+Player::Player() : sprite_{Sprite(TextureHolder::get_texture("res/graphics/player.png"))} {
     sprite_.setOrigin(25, 25);
 }
 
