@@ -4,8 +4,8 @@
 namespace game
 {
 Zombie::Zombie(const std::string& path, const Vector2f& pos, int speed, int health)
-    : sprite_{Sprite(TextureHolder::get_texture("graphics/characters/crawler.png"))},
-      position_{pos}, speed_{speed * (rand_num(kMaxVarriance) + kOffset) / 100.f}, health_{health} {
+    : sprite_{Sprite(TextureHolder::get_texture(path))}, position_{pos},
+      speed_{speed * (rand_num(kMaxVarriance) + kOffset) / 100.f}, health_{health} {
     sprite_.setOrigin(25.f, 25.f);
     sprite_.setPosition(position_);
 }
@@ -35,22 +35,22 @@ void Zombie::update(float elapsed_time, Vector2f player_location) {
 }
 
 Bloater::Bloater(const Vector2f& pos)
-    : Zombie("graphics/characters/bloater.png", pos, kBloaterSpeed, kBloaterHealth) {}
+    : Zombie("res/graphics/bloater.png", pos, kBloaterSpeed, kBloaterHealth) {}
 
 Chaser::Chaser(const Vector2f& pos)
-    : Zombie("graphics/characters/chaser.png", pos, kChaserSpeed, kChaserHealth) {}
+    : Zombie("res/graphics/chaser.png", pos, kChaserSpeed, kChaserHealth) {}
 
 Crawler::Crawler(const Vector2f& pos)
-    : Zombie("graphics/characters/crawler.png", pos, kCrawlerSpeed, kCrawlerHealth) {}
+    : Zombie("res/graphics/crawler.png", pos, kCrawlerSpeed, kCrawlerHealth) {}
 
 std::vector<Zombie*> create_horde(unsigned num_of_zombies, IntRect arena) {
     std::vector<Zombie*> zombies{};
-    int min_y = arena.top + 20;
-    int max_y = arena.height - 20;
-    int min_x = arena.left + 20;
-    int max_x = arena.width - 20;
+    int min_y = arena.top + 60;
+    int max_y = arena.height - 60;
+    int min_x = arena.left + 60;
+    int max_x = arena.width - 60;
 
-    for (unsigned idx; idx < num_of_zombies; ++idx) {
+    for (unsigned idx = 0; idx < num_of_zombies; ++idx) {
         float x, y;
         int side{rand_num(3)};
         switch (side) {

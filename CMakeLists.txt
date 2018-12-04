@@ -17,6 +17,7 @@ set(GAME_SRC
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
     ${PROJECT_SOURCE_DIR}/src/utils.cpp
+    ${PROJECT_SOURCE_DIR}/src/zombie.cpp
     ${PROJECT_SOURCE_DIR}/src/zombie_arena.cpp
 )
  
@@ -36,6 +37,7 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
     ${PROJECT_SOURCE_DIR}/src/utils.cpp
+    ${PROJECT_SOURCE_DIR}/src/zombie.cpp
     ${PROJECT_SOURCE_DIR}/src/zombie_arena.cpp
 )
 set(HDR
@@ -45,6 +47,7 @@ set(HDR
     ${PROJECT_SOURCE_DIR}/inc/screen.h
     ${PROJECT_SOURCE_DIR}/inc/texture_holder.h
     ${PROJECT_SOURCE_DIR}/inc/utils.h
+    ${PROJECT_SOURCE_DIR}/inc/zombie.h
     ${PROJECT_SOURCE_DIR}/inc/zombie_arena.h
 ) 
 add_clang_tool_targets(${PROJECT_NAME} ${SRC} ${HDR})

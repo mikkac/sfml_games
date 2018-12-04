@@ -2,7 +2,7 @@
 
 namespace game
 {
-void Game::update(Clock& clock, Screen& screen, Player& player) {
+void Game::update(Clock& clock, Screen& screen, Player& player, std::vector<Zombie*>& zombies) {
     Time dt = clock.restart();
     game_time_total_ += dt;
     mouse_screen_pos_ = Mouse::getPosition();
@@ -12,5 +12,9 @@ void Game::update(Clock& clock, Screen& screen, Player& player) {
 
     player.update(dt.asSeconds(), mouse_screen_pos_);
     screen.main_view.setCenter(player.get_center());
+
+    for (auto& zombie : zombies) {
+        if (zombie->is_alive()) zombie->update(dt.asSeconds(), player.get_center());
+    }
 }
 } // namespace game

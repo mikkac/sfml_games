@@ -1,6 +1,7 @@
 #pragma once
 #include "player.h"
 #include "screen.h"
+#include "zombie.h"
 #include <SFML/Graphics.hpp>
 
 using namespace sf;
@@ -20,7 +21,7 @@ class Game
     bool game_over() const { return state_ == State::GAME_OVER; }
     bool play() const { return state_ == State::PLAY; }
 
-    void update(Clock& clock, Screen& screen, Player& player);
+    void update(Clock& clock, Screen& screen, Player& player, std::vector<Zombie*>& zombies);
 
   private:
     State state_;

@@ -1,7 +1,9 @@
 #include "game.h"
 #include "player.h"
 #include "screen.h"
+#include "texture_holder.h"
 #include "utils.h"
+#include "zombie.h"
 #include "zombie_arena.h"
 using namespace game;
 
@@ -13,23 +15,15 @@ int main() {
     Screen screen{resolution, "Mad Dead"};
     Game game{};
     Clock clock;
-
-    Player player;
-    IntRect arena;
-
-    // Create background
+    TextureHolder holder;
     VertexArray background;
+    IntRect arena;
+    Player player;
 
-    // unsigned idx{0};
-    // for (unsigned i = 0; i < 6; ++i) {
-    //     for (unsigned j = 0; j < 4; ++j) {
-    //         if (i == 5 and j == 3)
-    //             break; // tileset is 6x4 but tile in right bottom corner is missing
-    //         background[idx].texCoords = Vector2f(i * 59, j * 59);
-    //         ++idx;
-    //     }
-    // }
-    // view_main.setCenter(player.get_center());
+    unsigned num_zombies{};
+    unsigned num_zombies_alive{};
+    std::vector<Zombie*> zombies;
+
     while (screen.window.isOpen()) // Game loop
     {
         Event event;
@@ -73,8 +67,12 @@ int main() {
                 arena.height = 1280;
                 arena.left = 0;
                 arena.top = 0;
-
                 int tile_size{create_background(background, arena)};
+
+                num_zombies = 10;
+                for (auto& zombie : zombies) delete zombie;
+                zombies = create_horde(num_zombies, arena);
+                num_zombies_alive = num_zombies;
 
                 player.spawn(resolution, arena, tile_size);
                 clock.restart();
@@ -82,13 +80,14 @@ int main() {
         } // end LEVEL_UP
 
         // Update the frame
-        if (game.play()) game.update(clock, screen, player);
+        if (game.play()) game.update(clock, screen, player, zombies);
 
         // Draw the scene
         if (game.play()) {
             screen.window.clear();
             screen.window.setView(screen.main_view);
             screen.window.draw(background, &texture_background);
+            for (auto& zombie : zombies) screen.window.draw(zombie->get_sprite());
             screen.window.draw(player.get_sprite());
         }
 
@@ -97,5 +96,6 @@ int main() {
         if (game.game_over()) {}
         screen.window.display();
     }
+    for (auto& zombie : zombies) delete zombie;
     return 0;
 }
