@@ -17,6 +17,7 @@ int main() {
     Clock clock;
     TextureHolder holder;
     VertexArray background;
+    Texture texture_background{TextureHolder::get_texture("res/graphics/background_64x64.png")};
     IntRect arena;
     Player player;
 

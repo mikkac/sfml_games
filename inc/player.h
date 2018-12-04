@@ -40,7 +40,7 @@ class Player
     Sprite sprite_;
     // Texture mTexture;
     struct {
-        bool up, down, left, right;
+        bool up{}, down{}, left{}, right{};
     } pressed_;
 
     int health_{static_cast<int>(kStartHealth)};
