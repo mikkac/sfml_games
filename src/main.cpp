@@ -1,3 +1,4 @@
+#include "bullet.h"
 #include "game.h"
 #include "player.h"
 #include "screen.h"
@@ -25,6 +26,14 @@ int main() {
     unsigned num_zombies_alive{};
     std::vector<Zombie*> zombies;
 
+    std::vector<Bullet> bullets;
+    int current_bullet{0};
+    int bullets_spare{24};
+    int bullets_in_clip{6};
+    int clip_size{6};
+    float fire_rate{1.f};
+    Time last_pressed;
+
     while (screen.window.isOpen()) // Game loop
     {
         Event event;
@@ -39,7 +48,20 @@ int main() {
                     clock.restart();
                 }
 
-                if (game.play()) {}
+                if (game.play()) {
+                    // Reloading
+                    if (event.key.code == Keyboard::R) {
+                        if (bullets_spare >= clip_size) {
+                            bullets_in_clip = clip_size;
+                            bullets_spare -= clip_size;
+                        } else if (bullets_spare > 0) {
+                            bullets_in_clip = bullets_spare;
+                            bullets_spare = 0;
+                        } else {
+                            // More here soon
+                        }
+                    }
+                }
             }
         } // end event polling
 
