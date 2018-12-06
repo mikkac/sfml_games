@@ -13,6 +13,7 @@ set(game_lib "game_lib")
 set(GAME_SRC
     ${PROJECT_SOURCE_DIR}/src/bullet.cpp
     ${PROJECT_SOURCE_DIR}/src/game.cpp
+    ${PROJECT_SOURCE_DIR}/src/pickup.cpp
     ${PROJECT_SOURCE_DIR}/src/player.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
@@ -34,6 +35,7 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/bullet.cpp
     ${PROJECT_SOURCE_DIR}/src/game.cpp
     ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/pickup.cpp
     ${PROJECT_SOURCE_DIR}/src/player.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
@@ -45,6 +47,7 @@ set(SRC
 set(HDR
     ${PROJECT_SOURCE_DIR}/inc/bullet.h
     ${PROJECT_SOURCE_DIR}/inc/game.h
+    ${PROJECT_SOURCE_DIR}/inc/pickup.h
     ${PROJECT_SOURCE_DIR}/inc/player.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
     ${PROJECT_SOURCE_DIR}/inc/screen.h
