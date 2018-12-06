@@ -1,5 +1,6 @@
 #pragma once
 #include "random.h"
+#include "texture_holder.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -8,7 +9,7 @@ using namespace sf;
 namespace game
 {
 // Buffers ---------------------------------------------------------------------------------
-extern Texture texture_background;
+extern TextureHolder holder;
 //------------------------------------------------------------------------------------------
 
 // Rest of global variables ----------------------------------------------------------------

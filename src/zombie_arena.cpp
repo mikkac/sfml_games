@@ -3,8 +3,8 @@
 namespace game
 {
 int create_background(VertexArray& vert_arr, IntRect arena) {
-    const int kTileSize{64};
-    const int kTileTypes{4};
+    const int kTileSize{50};
+    const int kTileTypes{3};
     const int kVertsInQuad{4};
 
     unsigned world_width{static_cast<unsigned>(arena.width / kTileSize)};   // num of tiles
@@ -30,13 +30,16 @@ int create_background(VertexArray& vert_arr, IntRect arena) {
 
             if (h == 0 || h == world_height - 1 || w == 0 || w == world_width - 1) {
                 // Use the wall texture
-                vert_arr[current_vertex + 0].texCoords = Vector2f(0, kTileSize);
-                vert_arr[current_vertex + 1].texCoords = Vector2f(kTileSize, kTileSize);
-                vert_arr[current_vertex + 2].texCoords = Vector2f(kTileSize, kTileSize * 2);
-                vert_arr[current_vertex + 3].texCoords = Vector2f(0, kTileSize * 2);
+                vert_arr[current_vertex + 0].texCoords = Vector2f(0, kTileTypes * kTileSize);
+                vert_arr[current_vertex + 1].texCoords =
+                    Vector2f(kTileSize, kTileTypes * kTileSize);
+                vert_arr[current_vertex + 2].texCoords =
+                    Vector2f(kTileSize, kTileSize + kTileTypes * kTileSize);
+                vert_arr[current_vertex + 3].texCoords =
+                    Vector2f(0, kTileSize + kTileTypes * kTileSize);
             } else {
                 // Use a random floor texture
-                int random = rand_num(3);
+                int random = rand_num(2);
                 int vert_offset{random * kTileSize};
 
                 vert_arr[current_vertex + 0].texCoords = Vector2f(0, 0 + vert_offset);

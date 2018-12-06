@@ -15,11 +15,12 @@ int main() {
     Vector2u resolution{VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height};
 
     Screen screen{resolution, "Mad Dead"};
+    screen.window.setMouseCursorVisible(false); // Hide the mouse pointer
     Game game{};
     Clock clock;
-    TextureHolder holder;
+
     VertexArray background;
-    Texture texture_background{TextureHolder::get_texture("res/graphics/background_64x64.png")};
+    Texture texture_background{holder.get_texture("res/graphics/background_sheet.png")};
     IntRect arena;
     Player player;
 
@@ -27,12 +28,12 @@ int main() {
     unsigned num_zombies_alive{};
     std::vector<Zombie*> zombies;
 
-    Bullet bullets[1000];
+    Bullet bullets[5];
     int current_bullet{0};
-    int bullets_spare{2400};
-    int bullets_in_clip{600};
-    int clip_size{600};
-    float fire_rate{100.f};
+    int bullets_spare{24};
+    int bullets_in_clip{6};
+    int clip_size{6};
+    float fire_rate{3.f};
     Time last_pressed{Time::Zero};
 
     while (screen.window.isOpen()) // Game loop
@@ -80,7 +81,7 @@ int main() {
                         1000.f / fire_rate &&
                     bullets_in_clip > 0) {
                     bullets[current_bullet].shoot(player.get_center(), game.get_mouse_world_pos());
-                    if (++current_bullet > 99) current_bullet = 0;
+                    if (++current_bullet > 4) current_bullet = 0;
                     last_pressed = game.get_time_total();
                     --bullets_in_clip;
                 }
@@ -98,13 +99,13 @@ int main() {
 
             if (game.play()) {
                 // Preapre the level
-                arena.width = 1280;
-                arena.height = 1280;
+                arena.width = 1000;
+                arena.height = 1000;
                 arena.left = 0;
                 arena.top = 0;
                 int tile_size{create_background(background, arena)};
 
-                num_zombies = 1000;
+                num_zombies = 20;
                 for (auto& zombie : zombies) delete zombie;
                 zombies = create_horde(num_zombies, arena);
                 num_zombies_alive = num_zombies;
@@ -123,10 +124,11 @@ int main() {
             screen.window.setView(screen.main_view);
             screen.window.draw(background, &texture_background);
             for (auto& zombie : zombies) screen.window.draw(zombie->get_sprite());
-            for (unsigned idx = 0; idx < 100; ++idx)
+            for (unsigned idx = 0; idx < 5; ++idx)
                 if (bullets[idx].is_flying()) screen.window.draw(bullets[idx].get_shape());
 
             screen.window.draw(player.get_sprite());
+            screen.window.draw(screen.crosshair);
         }
 
         if (game.level_up()) {}

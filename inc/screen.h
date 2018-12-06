@@ -13,5 +13,6 @@ struct Screen {
     RenderWindow window;
     Vector2u resolution;
     View main_view;
+    Sprite crosshair;
 };
 } // namespace game
