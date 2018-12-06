@@ -1,5 +1,6 @@
 #pragma once
 #include "bullet.h"
+#include "pickup.h"
 #include "player.h"
 #include "screen.h"
 #include "zombie.h"
@@ -21,7 +22,7 @@ class Game
     bool game_over() const { return state_ == State::GAME_OVER; }
     bool play() const { return state_ == State::PLAY; }
     void update(Clock& clock, Screen& screen, Player& player, std::vector<Zombie*>& zombies,
-                Bullet* bullets);
+                Bullet* bullets, std::vector<Pickup*>& pickups);
 
     const State& get_state() const { return state_; }
     Time get_time_total() const { return game_time_total_; }

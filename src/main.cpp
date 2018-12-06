@@ -1,5 +1,6 @@
 #include "bullet.h"
 #include "game.h"
+#include "pickup.h"
 #include "player.h"
 #include "screen.h"
 #include "texture_holder.h"
@@ -21,7 +22,7 @@ int main() {
 
     VertexArray background;
     Texture texture_background{holder.get_texture("res/graphics/background_sheet.png")};
-    IntRect arena;
+    IntRect arena{0, 0, 1000, 1000};
     Player player;
 
     unsigned num_zombies{};
@@ -35,6 +36,10 @@ int main() {
     int clip_size{6};
     float fire_rate{3.f};
     Time last_pressed{Time::Zero};
+
+    std::vector<Pickup*> pickups;
+    pickups.push_back(new HealthPickup(arena));
+    pickups.push_back(new AmmoPickup(arena));
 
     while (screen.window.isOpen()) // Game loop
     {
@@ -99,10 +104,6 @@ int main() {
 
             if (game.play()) {
                 // Preapre the level
-                arena.width = 1000;
-                arena.height = 1000;
-                arena.left = 0;
-                arena.top = 0;
                 int tile_size{create_background(background, arena)};
 
                 num_zombies = 20;
@@ -116,7 +117,7 @@ int main() {
         } // end LEVEL_UP
 
         // Update the frame
-        if (game.play()) game.update(clock, screen, player, zombies, bullets);
+        if (game.play()) game.update(clock, screen, player, zombies, bullets, pickups);
 
         // Draw the scene
         if (game.play()) {
@@ -124,6 +125,10 @@ int main() {
             screen.window.setView(screen.main_view);
             screen.window.draw(background, &texture_background);
             for (auto& zombie : zombies) screen.window.draw(zombie->get_sprite());
+
+            for (auto& pickup : pickups)
+                if (pickup->is_spawned()) screen.window.draw(pickup->get_sprite());
+
             for (unsigned idx = 0; idx < 5; ++idx)
                 if (bullets[idx].is_flying()) screen.window.draw(bullets[idx].get_shape());
 
