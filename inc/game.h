@@ -1,4 +1,5 @@
 #pragma once
+#include "bullet.h"
 #include "player.h"
 #include "screen.h"
 #include "zombie.h"
@@ -14,14 +15,17 @@ class Game
 {
   public:
     Game() : state_{State::GAME_OVER} {}
-    const State& get_state() const { return state_; }
     void set_state(State state) { state_ = state; }
     bool pause() const { return state_ == State::PAUSE; }
     bool level_up() const { return state_ == State::LEVEL_UP; }
     bool game_over() const { return state_ == State::GAME_OVER; }
     bool play() const { return state_ == State::PLAY; }
+    void update(Clock& clock, Screen& screen, Player& player, std::vector<Zombie*>& zombies,
+                Bullet* bullets);
 
-    void update(Clock& clock, Screen& screen, Player& player, std::vector<Zombie*>& zombies);
+    const State& get_state() const { return state_; }
+    Time get_time_total() const { return game_time_total_; }
+    Vector2f get_mouse_world_pos() const { return mouse_world_pos_; }
 
   private:
     State state_;

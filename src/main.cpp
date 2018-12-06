@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "zombie.h"
 #include "zombie_arena.h"
+
 using namespace game;
 
 using namespace sf;
@@ -26,13 +27,13 @@ int main() {
     unsigned num_zombies_alive{};
     std::vector<Zombie*> zombies;
 
-    std::vector<Bullet> bullets;
+    Bullet bullets[1000];
     int current_bullet{0};
-    int bullets_spare{24};
-    int bullets_in_clip{6};
-    int clip_size{6};
-    float fire_rate{1.f};
-    Time last_pressed;
+    int bullets_spare{2400};
+    int bullets_in_clip{600};
+    int clip_size{600};
+    float fire_rate{100.f};
+    Time last_pressed{Time::Zero};
 
     while (screen.window.isOpen()) // Game loop
     {
@@ -73,6 +74,17 @@ int main() {
             player.move_down(Keyboard::isKeyPressed(Keyboard::S));
             player.move_left(Keyboard::isKeyPressed(Keyboard::A));
             player.move_right(Keyboard::isKeyPressed(Keyboard::D));
+
+            if (Mouse::isButtonPressed(Mouse::Left)) {
+                if (game.get_time_total().asMilliseconds() - last_pressed.asMilliseconds() >
+                        1000.f / fire_rate &&
+                    bullets_in_clip > 0) {
+                    bullets[current_bullet].shoot(player.get_center(), game.get_mouse_world_pos());
+                    if (++current_bullet > 99) current_bullet = 0;
+                    last_pressed = game.get_time_total();
+                    --bullets_in_clip;
+                }
+            }
         }
 
         // Handle LEVEL_UP state
@@ -103,7 +115,7 @@ int main() {
         } // end LEVEL_UP
 
         // Update the frame
-        if (game.play()) game.update(clock, screen, player, zombies);
+        if (game.play()) game.update(clock, screen, player, zombies, bullets);
 
         // Draw the scene
         if (game.play()) {
@@ -111,6 +123,9 @@ int main() {
             screen.window.setView(screen.main_view);
             screen.window.draw(background, &texture_background);
             for (auto& zombie : zombies) screen.window.draw(zombie->get_sprite());
+            for (unsigned idx = 0; idx < 100; ++idx)
+                if (bullets[idx].is_flying()) screen.window.draw(bullets[idx].get_shape());
+
             screen.window.draw(player.get_sprite());
         }
 
