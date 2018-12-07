@@ -21,17 +21,19 @@ class Pickup
     bool is_spawned() const { return spawned_; }
     FloatRect get_position() const { return sprite_.getGlobalBounds(); }
     Sprite get_sprite() const { return sprite_; }
+    PickupType get_type() const { return type_; }
 
-  private:
+  protected:
     void set_arena(IntRect arena);
     void randomise_location();
 
-  private:
+  protected:
     const float kStartWaitTime{10.f};
     const float kStartSecondsToLive{5.f};
 
     Sprite sprite_;
     IntRect arena_;
+    PickupType type_;
     int value_{};
     bool spawned_{false};
     float sec_since_spawn{};
@@ -44,7 +46,9 @@ class HealthPickup : public Pickup
 {
   public:
     HealthPickup(const IntRect& arena)
-        : Pickup("res/graphics/health_pickup.png", kHealthStartValue, arena) {}
+        : Pickup("res/graphics/health_pickup.png", kHealthStartValue, arena) {
+        type_ = PickupType::HEALTH;
+    }
     void upgrade() { Pickup::upgrade(PickupType::HEALTH); }
 
   private:
@@ -54,7 +58,9 @@ class AmmoPickup : public Pickup
 {
   public:
     AmmoPickup(const IntRect& arena)
-        : Pickup("res/graphics/ammo_pickup.png", kAmmoStartValue, arena) {}
+        : Pickup("res/graphics/ammo_pickup.png", kAmmoStartValue, arena) {
+        type_ = PickupType::AMMO;
+    }
     void upgrade() { Pickup::upgrade(PickupType::AMMO); }
 
   private:

@@ -3,7 +3,7 @@
 namespace game
 {
 void Game::update(Clock& clock, Screen& screen, Player& player, Horde& horde, Weapon& weapon,
-                  std::vector<Pickup*>& pickups) {
+                  std::array<Pickup*, 2>& pickups) {
     Time dt = clock.restart();
     game_time_total_ += dt;
     mouse_screen_pos_ = Mouse::getPosition();
@@ -23,22 +23,51 @@ void Game::update(Clock& clock, Screen& screen, Player& player, Horde& horde, We
     for (auto& bullet : weapon.bullets)
         if (bullet.is_flying()) bullet.update(dt_as_sec);
 
-    for (auto& pickup : pickups) pickup->update(dt_as_sec);
+    for (auto& pickup : pickups)
+        if (pickup) pickup->update(dt_as_sec);
+
+    detect_collision(weapon, horde);
+    detect_collision(player, horde);
+    for (auto& pickup : pickups) detect_collision(player, pickup, weapon);
 }
 
-void Game::detect_collision(Bullet* bullets, std::vector<Zombie*>& zombies) {
-    if (not bullets) return;
-    for (unsigned idx = 0; idx < kBulletsArraySize; ++idx) {
-        for (auto& zombie : zombies) {
-            if (bullets[idx].is_flying() && zombie->is_alive()) {
-                if (bullets[idx].get_position().intersects(zombie->get_position())) {
-                    bullets[idx].stop();
+void Game::detect_collision(Weapon& weapon, Horde& horde) {
+    for (auto& bullet : weapon.bullets) {
+        // Was any zombie shot
+        for (auto& zombie : horde.zombies) {
+            if (zombie && zombie->is_alive() && bullet.is_flying()) {
+                if (bullet.get_position().intersects(zombie->get_position())) {
+                    bullet.stop();
                     if (zombie->hit()) {
                         score_ += 10;
-                        // NEED TO CREATE HORDE CLASS
+                        if (score_ >= high_score_) high_score_ = score_;
+                        if (--(horde.num_zombies_alive) == 0) set_state(State::LEVEL_UP);
                     }
                 }
             }
+        }
+    }
+}
+
+void Game::detect_collision(Player& player, Horde& horde) {
+    // Was player touched by zombie
+    for (auto& zombie : horde.zombies) {
+        if (zombie && zombie->is_alive() &&
+            player.get_position().intersects(zombie->get_position())) {
+            if (player.hit(game_time_total_)) { /*More here later*/
+            }
+            if (player.get_health() <= 0) set_state(State::GAME_OVER);
+        }
+    }
+}
+
+void Game::detect_collision(Player& player, Pickup* pickup, Weapon& weapon) {
+    if (not pickup) return;
+    // Has the player touched the pickup
+    if (pickup->is_spawned() && player.get_position().intersects(pickup->get_position())) {
+        switch (pickup->get_type()) {
+            case PickupType::HEALTH: player.increase_health(pickup->got_it()); break;
+            case PickupType::AMMO: weapon.bullets_spare += pickup->got_it(); break;
         }
     }
 }

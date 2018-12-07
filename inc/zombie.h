@@ -65,9 +65,7 @@ class Horde
 
   public:
     Zombies zombies{nullptr};
-
-  private:
-    unsigned num_zombies_{};
-    unsigned num_zombies_alive_{};
+    unsigned num_zombies{};
+    unsigned num_zombies_alive{};
 };
 } // namespace game

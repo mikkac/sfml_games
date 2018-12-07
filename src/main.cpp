@@ -27,9 +27,9 @@ int main() {
     Weapon weapon{24, 6, 3.f};
     Horde horde;
 
-    std::vector<Pickup*> pickups;
-    pickups.push_back(new HealthPickup(arena));
-    pickups.push_back(new AmmoPickup(arena));
+    std::array<Pickup*, 2> pickups;
+    pickups[0] = new HealthPickup(arena);
+    pickups[1] = new AmmoPickup(arena);
 
     int score{};
     int high_score{};

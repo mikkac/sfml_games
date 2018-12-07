@@ -13,7 +13,7 @@ Zombie::Zombie(const std::string& path, const Vector2f& pos, int speed, int heal
 bool Zombie::hit() {
     if (--health_ <= 0) {
         alive_ = false;
-        sprite_.setTexture(TextureHolder::get_texture("graphics/blood1.png"));
+        sprite_.setTexture(TextureHolder::get_texture("res/graphics/blood.png"));
         return true;
     }
     return false;
@@ -47,15 +47,15 @@ void Horde::create_horde(unsigned num_of_zombies, const IntRect& arena) {
     for (auto& zombie : zombies)
         if (zombie) delete zombie;
 
-    num_zombies_ = num_of_zombies;
-    num_zombies_alive_ = num_of_zombies;
+    num_zombies = num_of_zombies;
+    num_zombies_alive = num_of_zombies;
 
     int min_y = arena.top + 50;
     int max_y = arena.height - 50;
     int min_x = arena.left + 50;
     int max_x = arena.width - 50;
 
-    for (unsigned idx = 0; idx < num_zombies_; ++idx) {
+    for (unsigned idx = 0; idx < num_zombies; ++idx) {
         float x, y;
         int side{rand_num(3)};
         switch (side) {

@@ -22,9 +22,11 @@ class Game
     bool game_over() const { return state_ == State::GAME_OVER; }
     bool play() const { return state_ == State::PLAY; }
     void update(Clock& clock, Screen& screen, Player& player, Horde& horde, Weapon& weapon,
-                std::vector<Pickup*>& pickups);
+                std::array<Pickup*, 2>& pickups);
 
-    void detect_collision(Bullet* bullets, std::vector<Zombie*>& zombies);
+    void detect_collision(Weapon& weapon, Horde& horde);
+    void detect_collision(Player& player, Horde& horde);
+    void detect_collision(Player& player, Pickup* pickup, Weapon& weapon);
 
     const State& get_state() const { return state_; }
     Time get_time_total() const { return game_time_total_; }
