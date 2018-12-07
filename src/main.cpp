@@ -99,8 +99,13 @@ int main() {
             screen.window.clear();
             screen.window.setView(screen.main_view);
             screen.window.draw(background, &texture_background);
+
+            // first draw blood stains to avoid invalid overlaping of textures
             for (auto& zombie : horde.zombies)
-                if (zombie) screen.window.draw(zombie->get_sprite());
+                if (zombie && not zombie->is_alive()) screen.window.draw(zombie->get_sprite());
+            // then draw alive zombies
+            for (auto& zombie : horde.zombies)
+                if (zombie && zombie->is_alive()) screen.window.draw(zombie->get_sprite());
 
             for (auto& pickup : pickups)
                 if (pickup->is_spawned()) screen.window.draw(pickup->get_sprite());
