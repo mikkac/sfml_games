@@ -24,22 +24,14 @@ int main() {
     Texture texture_background{holder.get_texture("res/graphics/background_sheet.png")};
     IntRect arena{0, 0, 1000, 1000};
     Player player;
-
-    unsigned num_zombies{};
-    unsigned num_zombies_alive{};
-    std::vector<Zombie*> zombies;
-
-    Bullet bullets[5];
-    int current_bullet{0};
-    int bullets_spare{24};
-    int bullets_in_clip{6};
-    int clip_size{6};
-    float fire_rate{3.f};
-    Time last_pressed{Time::Zero};
+    Weapon weapon{24, 6, 3.f};
 
     std::vector<Pickup*> pickups;
     pickups.push_back(new HealthPickup(arena));
     pickups.push_back(new AmmoPickup(arena));
+
+    int score{};
+    int high_score{};
 
     while (screen.window.isOpen()) // Game loop
     {
@@ -57,17 +49,7 @@ int main() {
 
                 if (game.play()) {
                     // Reloading
-                    if (event.key.code == Keyboard::R) {
-                        if (bullets_spare >= clip_size) {
-                            bullets_in_clip = clip_size;
-                            bullets_spare -= clip_size;
-                        } else if (bullets_spare > 0) {
-                            bullets_in_clip = bullets_spare;
-                            bullets_spare = 0;
-                        } else {
-                            // More here soon
-                        }
-                    }
+                    if (event.key.code == Keyboard::R) { weapon.reload(); }
                 }
             }
         } // end event polling
@@ -82,14 +64,8 @@ int main() {
             player.move_right(Keyboard::isKeyPressed(Keyboard::D));
 
             if (Mouse::isButtonPressed(Mouse::Left)) {
-                if (game.get_time_total().asMilliseconds() - last_pressed.asMilliseconds() >
-                        1000.f / fire_rate &&
-                    bullets_in_clip > 0) {
-                    bullets[current_bullet].shoot(player.get_center(), game.get_mouse_world_pos());
-                    if (++current_bullet > 4) current_bullet = 0;
-                    last_pressed = game.get_time_total();
-                    --bullets_in_clip;
-                }
+                weapon.shoot(player.get_center(), game.get_mouse_world_pos(),
+                             game.get_time_total());
             }
         }
 
@@ -117,7 +93,7 @@ int main() {
         } // end LEVEL_UP
 
         // Update the frame
-        if (game.play()) game.update(clock, screen, player, zombies, bullets, pickups);
+        if (game.play()) game.update(clock, screen, player, zombies, weapon, pickups);
 
         // Draw the scene
         if (game.play()) {
@@ -129,8 +105,8 @@ int main() {
             for (auto& pickup : pickups)
                 if (pickup->is_spawned()) screen.window.draw(pickup->get_sprite());
 
-            for (unsigned idx = 0; idx < 5; ++idx)
-                if (bullets[idx].is_flying()) screen.window.draw(bullets[idx].get_shape());
+            for (auto& bullet : weapon.bullets)
+                if (bullet.is_flying()) screen.window.draw(bullet.get_shape());
 
             screen.window.draw(player.get_sprite());
             screen.window.draw(screen.crosshair);

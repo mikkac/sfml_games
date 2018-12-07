@@ -33,4 +33,26 @@ void Bullet::update(float elapsed_time) {
         position_.y > max_.y)
         flying_ = false;
 }
+
+void Weapon::reload() {
+    if (bullets_spare_ >= clip_size_) {
+        bullets_in_clip_ = clip_size_;
+        bullets_spare_ -= clip_size_;
+    } else if (bullets_spare_ > 0) {
+        bullets_in_clip_ = bullets_spare_;
+        bullets_spare_ = 0;
+    } else {
+        // More here soon
+    }
+}
+
+void Weapon::shoot(const Vector2f& start_pos, const Vector2f& target_pos, Time game_total_time) {
+    if (game_total_time.asMilliseconds() - last_pressed_.asMilliseconds() > 1000.f / fire_rate_ &&
+        bullets_in_clip_ > 0) {
+        bullets[current_bullet_].shoot(start_pos, target_pos);
+        if (++current_bullet_ > kBulletsArraySize - 1) current_bullet_ = 0;
+        last_pressed_ = game_total_time;
+        --bullets_in_clip_;
+    }
+}
 } // namespace game

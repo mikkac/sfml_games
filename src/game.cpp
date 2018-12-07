@@ -3,7 +3,7 @@
 namespace game
 {
 void Game::update(Clock& clock, Screen& screen, Player& player, std::vector<Zombie*>& zombies,
-                  Bullet* bullets, std::vector<Pickup*>& pickups) {
+                  Weapon& weapon, std::vector<Pickup*>& pickups) {
     Time dt = clock.restart();
     game_time_total_ += dt;
     mouse_screen_pos_ = Mouse::getPosition();
@@ -20,9 +20,26 @@ void Game::update(Clock& clock, Screen& screen, Player& player, std::vector<Zomb
     for (auto& zombie : zombies)
         if (zombie->is_alive()) zombie->update(dt_as_sec, player.get_center());
 
-    for (unsigned idx = 0; idx < 5; ++idx)
-        if (bullets[idx].is_flying()) bullets[idx].update(dt_as_sec);
+    for (auto& bullet : weapon.bullets)
+        if (bullet.is_flying()) bullet.update(dt_as_sec);
 
     for (auto& pickup : pickups) pickup->update(dt_as_sec);
+}
+
+void Game::detect_collision(Bullet* bullets, std::vector<Zombie*>& zombies) {
+    if (not bullets) return;
+    for (unsigned idx = 0; idx < kBulletsArraySize; ++idx) {
+        for (auto& zombie : zombies) {
+            if (bullets[idx].is_flying() && zombie->is_alive()) {
+                if (bullets[idx].get_position().intersects(zombie->get_position())) {
+                    bullets[idx].stop();
+                    if (zombie->hit()) {
+                        score_ += 10;
+                        // NEED TO CREATE HORDE CLASS
+                    }
+                }
+            }
+        }
+    }
 }
 } // namespace game

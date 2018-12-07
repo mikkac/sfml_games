@@ -1,9 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <array>
+
 namespace game
 {
 using namespace sf;
 
+const unsigned kBulletsArraySize{5};
 class Bullet
 {
   public:
@@ -23,5 +26,27 @@ class Bullet
     Vector2f distance_{}; // pixels per frame
     Vector2f min_{};
     Vector2f max_{};
+};
+
+class Weapon
+{
+    using Bullets = std::array<Bullet, kBulletsArraySize>;
+
+  public:
+    Weapon(int bullets_spare, int clip_size, float fire_rate)
+        : bullets_spare_{bullets_spare}, clip_size_{clip_size}, fire_rate_{fire_rate} {}
+    void reload();
+    void shoot(const Vector2f& start_pos, const Vector2f& target_pos, Time game_total_time);
+
+  public:
+    Bullets bullets; // too many external functions need access to bullets to make it private
+
+  private:
+    int current_bullet_{0};
+    int bullets_spare_{24};
+    int bullets_in_clip_{6};
+    int clip_size_{6};
+    float fire_rate_{3.f};
+    Time last_pressed_{Time::Zero};
 };
 } // namespace game

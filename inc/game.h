@@ -22,7 +22,9 @@ class Game
     bool game_over() const { return state_ == State::GAME_OVER; }
     bool play() const { return state_ == State::PLAY; }
     void update(Clock& clock, Screen& screen, Player& player, std::vector<Zombie*>& zombies,
-                Bullet* bullets, std::vector<Pickup*>& pickups);
+                Weapon& weapon, std::vector<Pickup*>& pickups);
+
+    void detect_collision(Bullet* bullets, std::vector<Zombie*>& zombies);
 
     const State& get_state() const { return state_; }
     Time get_time_total() const { return game_time_total_; }
@@ -33,5 +35,7 @@ class Game
     Vector2f mouse_world_pos_{};
     Vector2i mouse_screen_pos_{};
     Time game_time_total_;
+    int score_{};
+    int high_score_{};
 };
 } // namespace game
