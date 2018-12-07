@@ -16,7 +16,7 @@ bool Zombie::hit() {
         sprite_.setTexture(TextureHolder::get_texture("graphics/blood1.png"));
         return true;
     }
-    return false; // TODO is bool needed in this method????
+    return false;
 }
 
 void Zombie::update(float elapsed_time, Vector2f player_location) {
@@ -43,14 +43,19 @@ Chaser::Chaser(const Vector2f& pos)
 Crawler::Crawler(const Vector2f& pos)
     : Zombie("res/graphics/crawler.png", pos, kCrawlerSpeed, kCrawlerHealth) {}
 
-std::vector<Zombie*> create_horde(unsigned num_of_zombies, IntRect arena) {
-    std::vector<Zombie*> zombies{};
-    int min_y = arena.top + 60;
-    int max_y = arena.height - 60;
-    int min_x = arena.left + 60;
-    int max_x = arena.width - 60;
+void Horde::create_horde(unsigned num_of_zombies, const IntRect& arena) {
+    for (auto& zombie : zombies)
+        if (zombie) delete zombie;
 
-    for (unsigned idx = 0; idx < num_of_zombies; ++idx) {
+    num_zombies_ = num_of_zombies;
+    num_zombies_alive_ = num_of_zombies;
+
+    int min_y = arena.top + 50;
+    int max_y = arena.height - 50;
+    int min_x = arena.left + 50;
+    int max_x = arena.width - 50;
+
+    for (unsigned idx = 0; idx < num_zombies_; ++idx) {
         float x, y;
         int side{rand_num(3)};
         switch (side) {
@@ -80,6 +85,10 @@ std::vector<Zombie*> create_horde(unsigned num_of_zombies, IntRect arena) {
             case 2: zombies.push_back(new Crawler(Vector2f(x, y))); break;
         }
     }
-    return zombies;
+}
+
+Horde::~Horde() {
+    for (auto& zombie : zombies)
+        if (zombie) delete zombie;
 }
 } // namespace game

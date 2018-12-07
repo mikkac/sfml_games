@@ -2,8 +2,8 @@
 
 namespace game
 {
-void Game::update(Clock& clock, Screen& screen, Player& player, std::vector<Zombie*>& zombies,
-                  Weapon& weapon, std::vector<Pickup*>& pickups) {
+void Game::update(Clock& clock, Screen& screen, Player& player, Horde& horde, Weapon& weapon,
+                  std::vector<Pickup*>& pickups) {
     Time dt = clock.restart();
     game_time_total_ += dt;
     mouse_screen_pos_ = Mouse::getPosition();
@@ -17,8 +17,8 @@ void Game::update(Clock& clock, Screen& screen, Player& player, std::vector<Zomb
     player.update(dt_as_sec, mouse_screen_pos_);
     screen.main_view.setCenter(player.get_center());
 
-    for (auto& zombie : zombies)
-        if (zombie->is_alive()) zombie->update(dt_as_sec, player.get_center());
+    for (auto& zombie : horde.zombies)
+        if (zombie && zombie->is_alive()) zombie->update(dt_as_sec, player.get_center());
 
     for (auto& bullet : weapon.bullets)
         if (bullet.is_flying()) bullet.update(dt_as_sec);

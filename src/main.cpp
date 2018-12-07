@@ -25,6 +25,7 @@ int main() {
     IntRect arena{0, 0, 1000, 1000};
     Player player;
     Weapon weapon{24, 6, 3.f};
+    Horde horde;
 
     std::vector<Pickup*> pickups;
     pickups.push_back(new HealthPickup(arena));
@@ -82,10 +83,8 @@ int main() {
                 // Preapre the level
                 int tile_size{create_background(background, arena)};
 
-                num_zombies = 20;
-                for (auto& zombie : zombies) delete zombie;
-                zombies = create_horde(num_zombies, arena);
-                num_zombies_alive = num_zombies;
+                unsigned num_zombies = 20;
+                horde.create_horde(num_zombies, arena);
 
                 player.spawn(resolution, arena, tile_size);
                 clock.restart();
@@ -93,14 +92,15 @@ int main() {
         } // end LEVEL_UP
 
         // Update the frame
-        if (game.play()) game.update(clock, screen, player, zombies, weapon, pickups);
+        if (game.play()) game.update(clock, screen, player, horde, weapon, pickups);
 
         // Draw the scene
         if (game.play()) {
             screen.window.clear();
             screen.window.setView(screen.main_view);
             screen.window.draw(background, &texture_background);
-            for (auto& zombie : zombies) screen.window.draw(zombie->get_sprite());
+            for (auto& zombie : horde.zombies)
+                if (zombie) screen.window.draw(zombie->get_sprite());
 
             for (auto& pickup : pickups)
                 if (pickup->is_spawned()) screen.window.draw(pickup->get_sprite());
@@ -116,7 +116,6 @@ int main() {
         if (game.pause()) {}
         if (game.game_over()) {}
         screen.window.display();
-    }
-    for (auto& zombie : zombies) delete zombie;
+    };
     return 0;
 }

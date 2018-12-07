@@ -54,6 +54,20 @@ class Crawler : public Zombie
     Crawler(const Vector2f& pos);
 };
 
-std::vector<Zombie*> create_horde(unsigned num_of_zombies, IntRect arena);
+class Horde
+{
+    using Zombies = std::vector<Zombie*>;
 
+  public:
+    Horde() = default;
+    void create_horde(unsigned num_of_zombies, const IntRect& arena);
+    ~Horde();
+
+  public:
+    Zombies zombies{nullptr};
+
+  private:
+    unsigned num_zombies_{};
+    unsigned num_zombies_alive_{};
+};
 } // namespace game

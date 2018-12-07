@@ -21,8 +21,8 @@ class Game
     bool level_up() const { return state_ == State::LEVEL_UP; }
     bool game_over() const { return state_ == State::GAME_OVER; }
     bool play() const { return state_ == State::PLAY; }
-    void update(Clock& clock, Screen& screen, Player& player, std::vector<Zombie*>& zombies,
-                Weapon& weapon, std::vector<Pickup*>& pickups);
+    void update(Clock& clock, Screen& screen, Player& player, Horde& horde, Weapon& weapon,
+                std::vector<Pickup*>& pickups);
 
     void detect_collision(Bullet* bullets, std::vector<Zombie*>& zombies);
 
