@@ -44,8 +44,12 @@ Crawler::Crawler(const Vector2f& pos)
     : Zombie("res/graphics/crawler.png", pos, kCrawlerSpeed, kCrawlerHealth) {}
 
 void Horde::create_horde(unsigned num_of_zombies, const IntRect& arena) {
-    for (auto& zombie : zombies)
-        if (zombie) delete zombie;
+    for (auto& zombie : zombies) {
+        if (zombie) {
+            delete zombie;
+            zombie = nullptr;
+        }
+    }
 
     num_zombies = num_of_zombies;
     num_zombies_alive = num_of_zombies;
@@ -88,7 +92,11 @@ void Horde::create_horde(unsigned num_of_zombies, const IntRect& arena) {
 }
 
 Horde::~Horde() {
-    for (auto& zombie : zombies)
-        if (zombie) delete zombie;
+    for (auto& zombie : zombies) {
+        if (zombie) {
+            delete zombie;
+            zombie = nullptr;
+        }
+    }
 }
 } // namespace game

@@ -22,6 +22,7 @@ class Zombie
 {
   public:
     Zombie(const std::string& path, const Vector2f& pos, int speed, int health);
+    virtual ~Zombie() = default;
     bool hit();
     void update(float elapsed_time, Vector2f player_location);
     bool is_alive() const { return alive_; }

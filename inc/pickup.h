@@ -15,6 +15,7 @@ class Pickup
 {
   public:
     Pickup(const std::string& path, int value, const IntRect& arena);
+    virtual ~Pickup() = default;
     void update(float elapsed_time);
     void upgrade(PickupType type);
     int got_it();

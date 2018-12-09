@@ -21,7 +21,6 @@ int main() {
     Clock clock;
 
     VertexArray background;
-    Texture texture_background{holder.get_texture("res/graphics/background_sheet.png")};
     IntRect arena{0, 0, 1000, 1000};
     Player player;
     Weapon weapon{24, 6, 3.f};
@@ -30,9 +29,6 @@ int main() {
     std::array<Pickup*, 2> pickups;
     pickups[0] = new HealthPickup(arena);
     pickups[1] = new AmmoPickup(arena);
-
-    int score{};
-    int high_score{};
 
     while (screen.window.isOpen()) // Game loop
     {
@@ -83,7 +79,7 @@ int main() {
                 // Preapre the level
                 int tile_size{create_background(background, arena)};
 
-                unsigned num_zombies = 20;
+                unsigned num_zombies = 2;
                 horde.create_horde(num_zombies, arena);
 
                 player.spawn(resolution, arena, tile_size);
@@ -122,5 +118,11 @@ int main() {
         if (game.game_over()) {}
         screen.window.display();
     };
+    for (auto& pickup : pickups) {
+        if (pickup) {
+            delete pickup;
+            pickup = nullptr;
+        }
+    }
     return 0;
 }
