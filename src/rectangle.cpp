@@ -1,5 +1,5 @@
 #include "rectangle.h"
-namespace timber
+namespace game
 {
 Rectangle::Rectangle(const Vector2f& size, const Vector2f& position, Color color)
     : start_size_{size} {
@@ -20,4 +20,4 @@ void Rectangle::reset_size() {
     set_size(start_size_);
 }
 
-} // namespace timber
+} // namespace game

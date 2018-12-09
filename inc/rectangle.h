@@ -1,6 +1,6 @@
 #pragma once
 #include "utils.h"
-namespace timber
+namespace game
 {
 using namespace sf;
 
@@ -17,4 +17,4 @@ class Rectangle
     RectangleShape shape_;
 };
 
-} // namespace timber
+} // namespace game

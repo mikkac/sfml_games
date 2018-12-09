@@ -1,5 +1,5 @@
 #include "text.h"
-namespace timber
+namespace game
 {
 Text::Text(const std::string& text, Font& font, int char_size, Color color) {
     text_.setFont(font);
@@ -21,4 +21,4 @@ void Text::center() {
     text_.setOrigin(text_rect.left + text_rect.width / 2.f, text_rect.top + text_rect.height / 2.f);
 }
 
-} // namespace timber
+} // namespace game

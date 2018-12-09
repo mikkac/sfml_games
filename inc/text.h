@@ -2,7 +2,7 @@
 #include "utils.h"
 #include <SFML/Graphics.hpp>
 #include <sstream>
-namespace timber
+namespace game
 {
 using namespace sf;
 
@@ -18,4 +18,4 @@ class Text
     sf::Text text_;
 };
 
-} // namespace timber
+} // namespace game
