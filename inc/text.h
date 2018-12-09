@@ -6,10 +6,10 @@ namespace game
 {
 using namespace sf;
 
-class Text
+class TextWrapper
 {
   public:
-    Text(const std::string& text, Font& font, int char_size, Color color);
+    TextWrapper(const std::string& text, Font& font, int char_size, Color color);
     void set_position(const Vector2f& position);
     void set_string(const std::string& text);
     void center();
