@@ -2,7 +2,9 @@
 #include "game.h"
 #include "pickup.h"
 #include "player.h"
+#include "rectangle.h"
 #include "screen.h"
+#include "text.h"
 #include "texture_holder.h"
 #include "utils.h"
 #include "zombie.h"
@@ -29,6 +31,57 @@ int main() {
     std::array<Pickup*, 2> pickups;
     pickups[0] = new HealthPickup(arena);
     pickups[1] = new AmmoPickup(arena);
+
+    // Create HUD
+    Sprite sprite_game_over{Sprite(holder.get_texture("res/graphics/background.png"))};
+    sprite_game_over.setPosition(0.f, 0.f);
+
+    View view_hud(FloatRect(0.f, 0.f, resolution.x, resolution.y));
+
+    Sprite sprite_ammo_icon{Sprite(holder.get_texture("res/graphics/ammo_icon.png"))};
+    sprite_ammo_icon.setPosition(20.f, 980.f);
+
+    Font font;
+    font.loadFromFile("res/fonts/zombiecontrol.ttf");
+
+    TextWrapper text_paused{"Press Enter \n to continue", font, 155, Color::White};
+    text_paused.set_position(Vector2f(400.f, 400.f));
+
+    TextWrapper text_game_over{"Press Enter to play", font, 125, Color::White};
+    text_game_over.set_position(Vector2f(250.f, 850.f));
+
+    std::string level_up{
+        " 1- Increased rate of fire\n\
+        2- Increased clip size (next reload)\n\
+        3- Increased max health\n\
+        4- Increased run speed\n\
+        5- More and better health pickups\n\
+        6- More and better ammo pickups"};
+    TextWrapper text_level_up{level_up, font, 80, Color::White};
+    text_level_up.set_position(Vector2f(150.f, 250.f));
+
+    TextWrapper text_ammo{"", font, 55, Color::White};
+    text_ammo.set_position(Vector2f(200.f, 980.f));
+
+    TextWrapper text_score{"", font, 55, Color::White};
+    text_score.set_position(Vector2f(20.f, 0.f));
+
+    std::stringstream stream;
+    stream << "High Score: " << game.get_high_score();
+    TextWrapper text_high_score{stream.str(), font, 55, Color::White};
+    text_high_score.set_position(Vector2f(1400.f, 0.f));
+
+    TextWrapper text_zombies_remaining{"Zombies: 100", font, 55, Color::White};
+    text_zombies_remaining.set_position(Vector2f(1500.f, 980.f));
+
+    TextWrapper text_wave_number{"Wave: 0", font, 55, Color::White};
+    text_wave_number.set_position(Vector2f(1250.f, 980.f));
+
+    Rectangle health_bar{Vector2f(player.get_health() * 3.f, 50.f), Vector2f(450.f, 980.f),
+                         Color::Red};
+
+    unsigned frames_since_last_hud_update{};
+    unsigned fps_measurement_frame_interval{1000};
 
     while (screen.window.isOpen()) // Game loop
     {

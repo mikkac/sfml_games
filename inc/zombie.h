@@ -68,5 +68,6 @@ class Horde
     Zombies zombies{nullptr};
     unsigned num_zombies{};
     unsigned num_zombies_alive{};
+    unsigned wave_number{};
 };
 } // namespace game
