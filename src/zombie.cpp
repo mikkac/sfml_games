@@ -50,9 +50,11 @@ void Horde::create_horde(unsigned num_of_zombies, const IntRect& arena) {
             zombie = nullptr;
         }
     }
+    zombies.clear();
 
     num_zombies = num_of_zombies;
     num_zombies_alive = num_of_zombies;
+    ++wave_number;
 
     int min_y = arena.top + 50;
     int max_y = arena.height - 50;

@@ -31,6 +31,7 @@ class Game
     const State& get_state() const { return state_; }
     Time get_time_total() const { return game_time_total_; }
     Vector2f get_mouse_world_pos() const { return mouse_world_pos_; }
+    int get_score() const { return score_; }
     int get_high_score() const { return high_score_; }
 
   private:

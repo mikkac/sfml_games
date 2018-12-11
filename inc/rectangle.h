@@ -11,6 +11,7 @@ class Rectangle
     void set_size(const Vector2f& size);
     void set_color(sf::Color color);
     void reset_size();
+    RectangleShape get_shape() const { return shape_; }
 
   private:
     Vector2f start_size_;

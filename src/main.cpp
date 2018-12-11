@@ -4,7 +4,7 @@
 #include "player.h"
 #include "rectangle.h"
 #include "screen.h"
-#include "text.h"
+#include "text_wrapper.h"
 #include "texture_holder.h"
 #include "utils.h"
 #include "zombie.h"
@@ -51,12 +51,12 @@ int main() {
     text_game_over.set_position(Vector2f(250.f, 850.f));
 
     std::string level_up{
-        " 1- Increased rate of fire\n\
-        2- Increased clip size (next reload)\n\
-        3- Increased max health\n\
-        4- Increased run speed\n\
-        5- More and better health pickups\n\
-        6- More and better ammo pickups"};
+        "\n1- Increase rate of fire\
+        \n2- Increase clip size (next reload)\
+        \n3- Increase max health\
+        \n4- Increase run speed\
+        \n5- More and better health pickups\
+        \n6- More and better ammo pickups"};
     TextWrapper text_level_up{level_up, font, 80, Color::White};
     text_level_up.set_position(Vector2f(150.f, 250.f));
 
@@ -101,6 +101,8 @@ int main() {
                     // Reloading
                     if (event.key.code == Keyboard::R) { weapon.reload(); }
                 }
+            } else {
+                continue;
             }
         } // end event polling
 
@@ -141,8 +143,35 @@ int main() {
         } // end LEVEL_UP
 
         // Update the frame
-        if (game.play()) game.update(clock, screen, player, horde, weapon, pickups);
+        if (game.play()) {
+            game.update(clock, screen, player, horde, weapon, pickups);
+            health_bar.set_size(Vector2f(player.get_health() * 3.f, 50.f));
+            ++frames_since_last_hud_update;
+            if (frames_since_last_hud_update > fps_measurement_frame_interval) {
+                std::stringstream stream_ammo;
+                std::stringstream stream_score;
+                std::stringstream stream_high_score;
+                std::stringstream stream_wave;
+                std::stringstream stream_zombies_alive;
 
+                stream_ammo << weapon.bullets_in_clip << "/" << weapon.bullets_spare;
+                text_ammo.set_string(stream_ammo.str());
+
+                stream_score << "Score: " << game.get_score();
+                text_score.set_string(stream_score.str());
+
+                stream_high_score << "High score: " << game.get_high_score();
+                text_high_score.set_string(stream_high_score.str());
+
+                stream_wave << "Wave: " << horde.wave_number;
+                text_wave_number.set_string(stream_wave.str());
+
+                stream_zombies_alive << "Zombies: " << horde.num_zombies_alive;
+                text_zombies_remaining.set_string(stream_zombies_alive.str());
+
+                frames_since_last_hud_update = 0;
+            }
+        }
         // Draw the scene
         if (game.play()) {
             screen.window.clear();
@@ -164,11 +193,28 @@ int main() {
 
             screen.window.draw(player.get_sprite());
             screen.window.draw(screen.crosshair);
+
+            screen.window.setView(view_hud);
+            screen.window.draw(sprite_ammo_icon);
+            screen.window.draw(text_ammo.get_text());
+            screen.window.draw(text_score.get_text());
+            screen.window.draw(text_high_score.get_text());
+            screen.window.draw(health_bar.get_shape());
+            screen.window.draw(text_wave_number.get_text());
+            screen.window.draw(text_zombies_remaining.get_text());
         }
 
-        if (game.level_up()) {}
-        if (game.pause()) {}
-        if (game.game_over()) {}
+        if (game.level_up()) {
+            screen.window.draw(sprite_game_over);
+            screen.window.draw(text_level_up.get_text());
+        }
+        if (game.pause()) { screen.window.draw(text_paused.get_text()); }
+        if (game.game_over()) {
+            screen.window.draw(sprite_game_over);
+            screen.window.draw(text_game_over.get_text());
+            screen.window.draw(text_score.get_text());
+            screen.window.draw(text_high_score.get_text());
+        }
         screen.window.display();
     };
     for (auto& pickup : pickups) {

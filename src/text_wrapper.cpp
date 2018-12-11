@@ -1,4 +1,4 @@
-#include "text.h"
+#include "text_wrapper.h"
 namespace game
 {
 TextWrapper::TextWrapper(const std::string& text, Font& font, int char_size, Color color) {

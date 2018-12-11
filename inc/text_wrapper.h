@@ -13,6 +13,7 @@ class TextWrapper
     void set_position(const Vector2f& position);
     void set_string(const std::string& text);
     void center();
+    sf::Text get_text() const { return text_; }
 
   private:
     sf::Text text_;

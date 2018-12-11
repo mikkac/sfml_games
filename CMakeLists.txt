@@ -16,7 +16,9 @@ set(GAME_SRC
     ${PROJECT_SOURCE_DIR}/src/pickup.cpp
     ${PROJECT_SOURCE_DIR}/src/player.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
+    ${PROJECT_SOURCE_DIR}/src/rectangle.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
+    ${PROJECT_SOURCE_DIR}/src/text_wrapper.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
     ${PROJECT_SOURCE_DIR}/src/utils.cpp
     ${PROJECT_SOURCE_DIR}/src/zombie.cpp
@@ -38,7 +40,9 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/pickup.cpp
     ${PROJECT_SOURCE_DIR}/src/player.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
+    ${PROJECT_SOURCE_DIR}/src/rectangle.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
+    ${PROJECT_SOURCE_DIR}/src/text_wrapper.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
     ${PROJECT_SOURCE_DIR}/src/utils.cpp
     ${PROJECT_SOURCE_DIR}/src/zombie.cpp
@@ -50,7 +54,9 @@ set(HDR
     ${PROJECT_SOURCE_DIR}/inc/pickup.h
     ${PROJECT_SOURCE_DIR}/inc/player.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
+    ${PROJECT_SOURCE_DIR}/inc/rectangle.h
     ${PROJECT_SOURCE_DIR}/inc/screen.h
+    ${PROJECT_SOURCE_DIR}/inc/text_wrapper.h
     ${PROJECT_SOURCE_DIR}/inc/texture_holder.h
     ${PROJECT_SOURCE_DIR}/inc/utils.h
     ${PROJECT_SOURCE_DIR}/inc/zombie.h
