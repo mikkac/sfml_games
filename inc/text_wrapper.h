@@ -9,7 +9,8 @@ using namespace sf;
 class TextWrapper
 {
   public:
-    TextWrapper(const std::string& text, Font& font, int char_size, Color color);
+    TextWrapper(const std::string& text, Font& font, int char_size, Color color,
+                const Vector2f& pos);
     void set_position(const Vector2f& position);
     void set_string(const std::string& text);
     void center();

@@ -13,6 +13,7 @@ set(game_lib "game_lib")
 set(GAME_SRC
     ${PROJECT_SOURCE_DIR}/src/bullet.cpp
     ${PROJECT_SOURCE_DIR}/src/game.cpp
+    ${PROJECT_SOURCE_DIR}/src/hud.cpp
     ${PROJECT_SOURCE_DIR}/src/pickup.cpp
     ${PROJECT_SOURCE_DIR}/src/player.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
@@ -36,6 +37,7 @@ target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-system sfml-audio sfml-
 set(SRC
     ${PROJECT_SOURCE_DIR}/src/bullet.cpp
     ${PROJECT_SOURCE_DIR}/src/game.cpp
+    ${PROJECT_SOURCE_DIR}/src/hud.cpp
     ${PROJECT_SOURCE_DIR}/src/main.cpp
     ${PROJECT_SOURCE_DIR}/src/pickup.cpp
     ${PROJECT_SOURCE_DIR}/src/player.cpp
@@ -51,6 +53,7 @@ set(SRC
 set(HDR
     ${PROJECT_SOURCE_DIR}/inc/bullet.h
     ${PROJECT_SOURCE_DIR}/inc/game.h
+    ${PROJECT_SOURCE_DIR}/inc/hud.h
     ${PROJECT_SOURCE_DIR}/inc/pickup.h
     ${PROJECT_SOURCE_DIR}/inc/player.h
     ${PROJECT_SOURCE_DIR}/inc/random.h

@@ -1,11 +1,13 @@
 #include "text_wrapper.h"
 namespace game
 {
-TextWrapper::TextWrapper(const std::string& text, Font& font, int char_size, Color color) {
+TextWrapper::TextWrapper(const std::string& text, Font& font, int char_size, Color color,
+                         const Vector2f& pos) {
     text_.setFont(font);
     text_.setString(text);
     text_.setCharacterSize(char_size);
     text_.setFillColor(color);
+    set_position(pos);
 }
 
 void TextWrapper::set_position(const Vector2f& position) {
