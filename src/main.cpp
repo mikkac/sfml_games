@@ -10,6 +10,7 @@
 #include "utils.h"
 #include "zombie.h"
 #include "zombie_arena.h"
+#include <iostream>
 
 using namespace game;
 
@@ -66,10 +67,7 @@ int main() {
             player.move_left(Keyboard::isKeyPressed(Keyboard::A));
             player.move_right(Keyboard::isKeyPressed(Keyboard::D));
 
-            if (Mouse::isButtonPressed(Mouse::Left)) {
-                weapon.shoot(player.get_center(), game.get_mouse_world_pos(),
-                             game.get_time_total());
-            }
+            if (Mouse::isButtonPressed(Mouse::Left)) { weapon.shoot(player.get_center(), game.get_mouse_world_pos(), game.get_time_total()); }
         }
 
         // Handle LEVEL_UP state
@@ -96,54 +94,55 @@ int main() {
         // Update the frame
         if (game.play()) {
             game.update(clock, screen, player, horde, weapon, pickups);
-            hud.update(game, player, weapon, horde);
+            hud.update(player, weapon, horde);
+            std::cout << "dupa\n";
         }
+
+        // Draw the scene
+        if (game.play()) {
+            screen.window.clear();
+            screen.window.setView(screen.main_view);
+            screen.window.draw(background, &texture_background);
+
+            // first draw blood stains to avoid invalid overlaping of textures
+            for (auto& zombie : horde.zombies)
+                if (zombie && not zombie->is_alive()) screen.window.draw(zombie->get_sprite());
+            // then draw alive zombies
+            for (auto& zombie : horde.zombies)
+                if (zombie && zombie->is_alive()) screen.window.draw(zombie->get_sprite());
+
+            for (auto& pickup : pickups)
+                if (pickup->is_spawned()) screen.window.draw(pickup->get_sprite());
+
+            for (auto& bullet : weapon.bullets)
+                if (bullet.is_flying()) screen.window.draw(bullet.get_shape());
+
+            screen.window.draw(player.get_sprite());
+            screen.window.draw(screen.crosshair);
+
+            screen.set_hud_view();
+            screen.window.draw(hud.get_content().sprite_ammo_icon);
+            screen.window.draw(hud.get_content().text_ammo.get_text());
+            screen.window.draw(hud.get_content().text_score.get_text());
+            screen.window.draw(hud.get_content().text_high_score.get_text());
+            screen.window.draw(hud.get_content().health_bar.get_shape());
+            screen.window.draw(hud.get_content().text_wave_number.get_text());
+            screen.window.draw(hud.get_content().text_zombies_remaining.get_text());
+        }
+
+        if (game.level_up()) {
+            screen.window.draw(hud.get_content().sprite_game_over);
+            screen.window.draw(hud.get_content().text_level_up.get_text());
+        }
+        if (game.pause()) { screen.window.draw(hud.get_content().text_paused.get_text()); }
+        if (game.game_over()) {
+            screen.window.draw(hud.get_content().sprite_game_over);
+            screen.window.draw(hud.get_content().text_game_over.get_text());
+            screen.window.draw(hud.get_content().text_score.get_text());
+            screen.window.draw(hud.get_content().text_high_score.get_text());
+        }
+        screen.window.display();
     }
-    // Draw the scene
-    if (game.play()) {
-        screen.window.clear();
-        screen.window.setView(screen.main_view);
-        screen.window.draw(background, &texture_background);
-
-        // first draw blood stains to avoid invalid overlaping of textures
-        for (auto& zombie : horde.zombies)
-            if (zombie && not zombie->is_alive()) screen.window.draw(zombie->get_sprite());
-        // then draw alive zombies
-        for (auto& zombie : horde.zombies)
-            if (zombie && zombie->is_alive()) screen.window.draw(zombie->get_sprite());
-
-        for (auto& pickup : pickups)
-            if (pickup->is_spawned()) screen.window.draw(pickup->get_sprite());
-
-        for (auto& bullet : weapon.bullets)
-            if (bullet.is_flying()) screen.window.draw(bullet.get_shape());
-
-        screen.window.draw(player.get_sprite());
-        screen.window.draw(screen.crosshair);
-
-        screen.set_hud_view();
-        screen.window.draw(hud.get_content().sprite_ammo_icon);
-        screen.window.draw(hud.get_content().text_ammo.get_text());
-        screen.window.draw(hud.get_content().text_score.get_text());
-        screen.window.draw(hud.get_content().text_high_score.get_text());
-        screen.window.draw(hud.get_content().health_bar.get_shape());
-        screen.window.draw(hud.get_content().text_wave_number.get_text());
-        screen.window.draw(hud.get_content().text_zombies_remaining.get_text());
-    }
-
-    if (game.level_up()) {
-        screen.window.draw(hud.get_content().sprite_game_over);
-        screen.window.draw(hud.get_content().text_level_up.get_text());
-    }
-    if (game.pause()) { screen.window.draw(hud.get_content().text_paused.get_text()); }
-    if (game.game_over()) {
-        screen.window.draw(hud.get_content().sprite_game_over);
-        screen.window.draw(hud.get_content().text_game_over.get_text());
-        screen.window.draw(hud.get_content().text_score.get_text());
-        screen.window.draw(hud.get_content().text_high_score.get_text());
-    }
-    screen.window.display();
-
     for (auto& pickup : pickups) {
         if (pickup) {
             delete pickup;

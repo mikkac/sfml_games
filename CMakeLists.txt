@@ -20,6 +20,7 @@ set(GAME_SRC
     ${PROJECT_SOURCE_DIR}/src/player.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/rectangle.cpp
+    ${PROJECT_SOURCE_DIR}/src/score.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
     ${PROJECT_SOURCE_DIR}/src/text_wrapper.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
@@ -45,6 +46,7 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/player.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/rectangle.cpp
+    ${PROJECT_SOURCE_DIR}/src/score.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
     ${PROJECT_SOURCE_DIR}/src/text_wrapper.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
@@ -60,6 +62,7 @@ set(HDR
     ${PROJECT_SOURCE_DIR}/inc/player.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
     ${PROJECT_SOURCE_DIR}/inc/rectangle.h
+    ${PROJECT_SOURCE_DIR}/inc/score.h
     ${PROJECT_SOURCE_DIR}/inc/screen.h
     ${PROJECT_SOURCE_DIR}/inc/text_wrapper.h
     ${PROJECT_SOURCE_DIR}/inc/texture_holder.h

@@ -1,9 +1,9 @@
 #include "game.h"
+#include "score.h"
 
 namespace game
 {
-void Game::update(Clock& clock, Screen& screen, Player& player, Horde& horde, Weapon& weapon,
-                  std::array<Pickup*, 2>& pickups) {
+void Game::update(Clock& clock, Screen& screen, Player& player, Horde& horde, Weapon& weapon, std::array<Pickup*, 2>& pickups) {
     Time dt = clock.restart();
     game_time_total_ += dt;
     mouse_screen_pos_ = Mouse::getPosition();
@@ -39,8 +39,8 @@ void Game::detect_collision(Weapon& weapon, Horde& horde) {
                 if (bullet.get_position().intersects(zombie->get_position())) {
                     bullet.stop();
                     if (zombie->hit()) {
-                        score_ += 10;
-                        if (score_ >= high_score_) high_score_ = score_;
+                        Score::get_instance().increase(10);
+                        if (Score::get_instance().get_score() >= Score::get_instance().get_high_score()) Score::get_instance().update_high_score();
                         if (--(horde.num_zombies_alive) == 0) set_state(State::LEVEL_UP);
                     }
                 }
@@ -52,8 +52,7 @@ void Game::detect_collision(Weapon& weapon, Horde& horde) {
 void Game::detect_collision(Player& player, Horde& horde) {
     // Was player touched by zombie
     for (auto& zombie : horde.zombies) {
-        if (zombie && zombie->is_alive() &&
-            player.get_position().intersects(zombie->get_position())) {
+        if (zombie && zombie->is_alive() && player.get_position().intersects(zombie->get_position())) {
             if (player.hit(game_time_total_)) { /*More here later*/
             }
             if (player.get_health() <= 0) set_state(State::GAME_OVER);
