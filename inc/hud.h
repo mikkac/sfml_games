@@ -39,17 +39,17 @@ class Hud
   public:
     Hud() = default;
     void update(const Player& player, const Weapon& weapon, const Horde& horde);
-    HudContent get_content() const { return content_; }
+    HudContent get_content() const { return content; }
+
+  public:
+    HudContent content{};
+    unsigned frames_since_last_hud_update_{};
+    unsigned fps_measurement_frame_interval_{1000};
 
   private:
     void update_scores();
     void update_health_bar(const Player& player);
     void update_ammo(const Weapon& weapon);
     void update_horde(const Horde& horde);
-
-  private:
-    HudContent content_{};
-    unsigned frames_since_last_hud_update_{};
-    unsigned fps_measurement_frame_interval_{1000};
 };
 } // namespace game

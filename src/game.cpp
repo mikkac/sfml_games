@@ -55,7 +55,11 @@ void Game::detect_collision(Player& player, Horde& horde) {
         if (zombie && zombie->is_alive() && player.get_position().intersects(zombie->get_position())) {
             if (player.hit(game_time_total_)) { /*More here later*/
             }
-            if (player.get_health() <= 0) set_state(State::GAME_OVER);
+            if (player.get_health() <= 0) {
+                set_state(State::GAME_OVER);
+                Score::get_instance().save_high_score();
+                Score::get_instance().reset();
+            }
         }
     }
 }
