@@ -1,3 +1,0 @@
-# Hashes of file build rules.
-39fdf846bcb7db122e30b577470b1d66 CMakeFiles/bob_was_alone-format
-0594d16ebb94150bb406355e4204f62f CMakeFiles/bob_was_alone-tidy
