@@ -5,12 +5,13 @@
 #include "player.h"
 #include "rectangle.h"
 #include "screen.h"
+#include "sounds.h"
 #include "text_wrapper.h"
 #include "texture_holder.h"
 #include "utils.h"
 #include "zombie.h"
 #include "zombie_arena.h"
-
+#include <SFML/Audio.hpp>
 using namespace game;
 
 using namespace sf;
@@ -26,7 +27,7 @@ int main() {
     Score::get_instance().load_high_score();
 
     VertexArray background;
-    IntRect arena{0, 0, 1000, 1000};
+    IntRect arena{0, 0, 500, 500};
     Player player;
     Weapon weapon{24, 6, 3.f};
     Horde horde;
@@ -34,6 +35,10 @@ int main() {
     std::array<Pickup*, 2> pickups;
     pickups[0] = new HealthPickup(arena);
     pickups[1] = new AmmoPickup(arena);
+
+    SoundBuffer buffer;
+    buffer.loadFromFile("res/sound/hit.wav");
+    Sound sound_hit{buffer};
 
     while (screen.window.isOpen()) // Game loop
     {
@@ -44,6 +49,9 @@ int main() {
                     game.set_state(State::PAUSE);
                 } else if (event.key.code == Keyboard::Return && game.game_over()) {
                     game.set_state(State::LEVEL_UP);
+                    Score::get_instance().reset();
+                    weapon.reset();
+                    player.reset();
                 } else if (event.key.code == Keyboard::Return && game.pause()) {
                     game.set_state(State::PLAY);
                     clock.restart();
@@ -51,7 +59,13 @@ int main() {
 
                 if (game.play()) {
                     // Reloading
-                    if (event.key.code == Keyboard::R) { weapon.reload(); }
+                    if (event.key.code == Keyboard::R) {
+                        if (weapon.reload()) {
+                            Sounds::get_instance().get_sound(AudioType::RELOAD).play();
+                        } else {
+                            Sounds::get_instance().get_sound(AudioType::RELOAD_FAILED).play();
+                        }
+                    }
                 }
             } else {
                 continue;
@@ -67,27 +81,52 @@ int main() {
             player.move_left(Keyboard::isKeyPressed(Keyboard::A));
             player.move_right(Keyboard::isKeyPressed(Keyboard::D));
 
-            if (Mouse::isButtonPressed(Mouse::Left)) { weapon.shoot(player.get_center(), game.get_mouse_world_pos(), game.get_time_total()); }
+            if (Mouse::isButtonPressed(Mouse::Left)) {
+                weapon.shoot(player.get_center(), game.get_mouse_world_pos(), game.get_time_total());
+                Sounds::get_instance().get_sound(AudioType::SHOOT).play();
+            }
         }
 
         // Handle LEVEL_UP state
         if (game.level_up()) {
-            if (event.key.code == Keyboard::Num1) game.set_state(State::PLAY);
-            if (event.key.code == Keyboard::Num2) game.set_state(State::PLAY);
-            if (event.key.code == Keyboard::Num3) game.set_state(State::PLAY);
-            if (event.key.code == Keyboard::Num4) game.set_state(State::PLAY);
-            if (event.key.code == Keyboard::Num5) game.set_state(State::PLAY);
-            if (event.key.code == Keyboard::Num6) game.set_state(State::PLAY);
+            if (event.key.code == Keyboard::Num1) {
+                weapon.increment_fire_rate();
+                game.set_state(State::PLAY);
+            }
+            if (event.key.code == Keyboard::Num2) {
+                weapon.double_clip_size();
+                game.set_state(State::PLAY);
+            }
+            if (event.key.code == Keyboard::Num3) {
+                player.upgrade_health();
+                game.set_state(State::PLAY);
+            }
+            if (event.key.code == Keyboard::Num4) {
+                player.upgrade_speed();
+                game.set_state(State::PLAY);
+            }
+            if (event.key.code == Keyboard::Num5) {
+                pickups[0]->upgrade(PickupType::AMMO);
+                game.set_state(State::PLAY);
+            }
+            if (event.key.code == Keyboard::Num6) {
+                pickups[1]->upgrade(PickupType::HEALTH);
+                game.set_state(State::PLAY);
+            }
 
             if (game.play()) {
                 // Preapre the level
+                arena.width = 500 + 500 * horde.wave_number;
+                arena.height = 500 + 500 * horde.wave_number;
                 int tile_size{create_background(background, arena)};
 
-                unsigned num_zombies = 2;
+                unsigned num_zombies = 4 + 4 * horde.wave_number;
                 horde.create_horde(num_zombies, arena);
 
                 player.spawn(resolution, arena, tile_size);
                 clock.restart();
+
+                Sounds::get_instance().get_sound(AudioType::POWERUP).play();
             }
         } // end LEVEL_UP
 

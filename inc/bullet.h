@@ -31,20 +31,26 @@ class Bullet
 class Weapon
 {
     using Bullets = std::array<Bullet, kBulletsArraySize>;
+    const int kStartBulletsSpare{24};
+    const int kStartBulletsInClip{6};
+    const int kStartClipSize{6};
+    const float kStartFireRate{3.f};
 
   public:
-    Weapon(int bullets_spare, int clip_size, float fire_rate)
-        : bullets_spare{bullets_spare}, clip_size{clip_size}, fire_rate{fire_rate} {}
-    void reload();
+    Weapon(int bullets_spare, int clip_size, float fire_rate) : bullets_spare{bullets_spare}, clip_size{clip_size}, fire_rate{fire_rate} {}
+    bool reload();
+    void reset();
     void shoot(const Vector2f& start_pos, const Vector2f& target_pos, Time game_total_time);
+    void increment_fire_rate() { ++fire_rate; }
+    void double_clip_size() { clip_size += clip_size; }
 
   public:
     Bullets bullets; // too many external functions need access to bullets to make it private
     int current_bullet{0};
-    int bullets_spare{24};
-    int bullets_in_clip{6};
-    int clip_size{6};
-    float fire_rate{3.f};
+    int bullets_spare{kStartBulletsSpare};
+    int bullets_in_clip{kStartBulletsInClip};
+    int clip_size{kStartClipSize};
+    float fire_rate{kStartFireRate};
     Time last_pressed{Time::Zero};
 };
 } // namespace game

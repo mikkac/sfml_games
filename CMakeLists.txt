@@ -22,6 +22,7 @@ set(GAME_SRC
     ${PROJECT_SOURCE_DIR}/src/rectangle.cpp
     ${PROJECT_SOURCE_DIR}/src/score.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
+    ${PROJECT_SOURCE_DIR}/src/sounds.cpp
     ${PROJECT_SOURCE_DIR}/src/text_wrapper.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
     ${PROJECT_SOURCE_DIR}/src/utils.cpp
@@ -48,6 +49,7 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/rectangle.cpp
     ${PROJECT_SOURCE_DIR}/src/score.cpp
     ${PROJECT_SOURCE_DIR}/src/screen.cpp
+    ${PROJECT_SOURCE_DIR}/src/sounds.cpp
     ${PROJECT_SOURCE_DIR}/src/text_wrapper.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
     ${PROJECT_SOURCE_DIR}/src/utils.cpp
@@ -64,6 +66,7 @@ set(HDR
     ${PROJECT_SOURCE_DIR}/inc/rectangle.h
     ${PROJECT_SOURCE_DIR}/inc/score.h
     ${PROJECT_SOURCE_DIR}/inc/screen.h
+    ${PROJECT_SOURCE_DIR}/inc/sounds.h
     ${PROJECT_SOURCE_DIR}/inc/text_wrapper.h
     ${PROJECT_SOURCE_DIR}/inc/texture_holder.h
     ${PROJECT_SOURCE_DIR}/inc/utils.h

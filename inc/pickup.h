@@ -46,24 +46,14 @@ class Pickup
 class HealthPickup : public Pickup
 {
   public:
-    HealthPickup(const IntRect& arena)
-        : Pickup("res/graphics/health_pickup.png", kHealthStartValue, arena) {
-        type_ = PickupType::HEALTH;
-    }
-    void upgrade() { Pickup::upgrade(PickupType::HEALTH); }
-
+    HealthPickup(const IntRect& arena) : Pickup("res/graphics/health_pickup.png", kHealthStartValue, arena) { type_ = PickupType::HEALTH; }
   private:
 };
 
 class AmmoPickup : public Pickup
 {
   public:
-    AmmoPickup(const IntRect& arena)
-        : Pickup("res/graphics/ammo_pickup.png", kAmmoStartValue, arena) {
-        type_ = PickupType::AMMO;
-    }
-    void upgrade() { Pickup::upgrade(PickupType::AMMO); }
-
+    AmmoPickup(const IntRect& arena) : Pickup("res/graphics/ammo_pickup.png", kAmmoStartValue, arena) { type_ = PickupType::AMMO; }
   private:
 };
 

@@ -1,5 +1,6 @@
 #include "game.h"
 #include "score.h"
+#include "sounds.h"
 
 namespace game
 {
@@ -53,14 +54,13 @@ void Game::detect_collision(Player& player, Horde& horde) {
     // Was player touched by zombie
     for (auto& zombie : horde.zombies) {
         if (zombie && zombie->is_alive() && player.get_position().intersects(zombie->get_position())) {
-            if (player.hit(game_time_total_)) { /*More here later*/
-            }
+            if (player.hit(game_time_total_)) { Sounds::get_instance().get_sound(AudioType::HIT).play(); }
             if (player.get_health() <= 0) {
                 set_state(State::GAME_OVER);
                 Score::get_instance().save_high_score();
-                Score::get_instance().reset();
             }
         }
+        Sounds::get_instance().get_sound(AudioType::SPLAT).play();
     }
 }
 
@@ -69,8 +69,14 @@ void Game::detect_collision(Player& player, Pickup* pickup, Weapon& weapon) {
     // Has the player touched the pickup
     if (pickup->is_spawned() && player.get_position().intersects(pickup->get_position())) {
         switch (pickup->get_type()) {
-            case PickupType::HEALTH: player.increase_health(pickup->got_it()); break;
-            case PickupType::AMMO: weapon.bullets_spare += pickup->got_it(); break;
+            case PickupType::HEALTH:
+                player.increase_health(pickup->got_it());
+                Sounds::get_instance().get_sound(AudioType::PICKUP).play();
+                break;
+            case PickupType::AMMO:
+                weapon.bullets_spare += pickup->got_it();
+                Sounds::get_instance().get_sound(AudioType::RELOAD).play();
+                break;
         }
     }
 }
