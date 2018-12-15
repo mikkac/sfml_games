@@ -14,6 +14,7 @@ set(game_lib "game_lib")
 
 set(GAME_SRC
    ${PROJECT_SOURCE_DIR}/src/random.cpp
+   ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
 )
  
 add_library(${game_lib} ${GAME_SRC})
@@ -27,9 +28,11 @@ target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-system sfml-audio sfml-
 set(SRC
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
 )
 set(HDR
     ${PROJECT_SOURCE_DIR}/inc/random.h
+    ${PROJECT_SOURCE_DIR}/inc/texture_holder.h
 ) 
 add_clang_tool_targets(${PROJECT_NAME} ${SRC} ${HDR})
 
