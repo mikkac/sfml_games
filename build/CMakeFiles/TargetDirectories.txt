@@ -1,0 +1,6 @@
+/home/miki/repos/bob_was_alone/build/CMakeFiles/rebuild_cache.dir
+/home/miki/repos/bob_was_alone/build/CMakeFiles/edit_cache.dir
+/home/miki/repos/bob_was_alone/build/CMakeFiles/bob_was_alone-format.dir
+/home/miki/repos/bob_was_alone/build/CMakeFiles/bob_was_alone-tidy.dir
+/home/miki/repos/bob_was_alone/build/CMakeFiles/game_lib.dir
+/home/miki/repos/bob_was_alone/build/CMakeFiles/bob_was_alone.dir
