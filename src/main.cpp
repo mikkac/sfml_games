@@ -83,7 +83,7 @@ int main() {
 
             if (Mouse::isButtonPressed(Mouse::Left)) {
                 weapon.shoot(player.get_center(), game.get_mouse_world_pos(), game.get_time_total());
-                Sounds::get_instance().get_sound(AudioType::SHOOT).play();
+                // Sounds::get_instance().get_sound(AudioType::SHOOT).play();
             }
         }
 

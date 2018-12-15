@@ -1,4 +1,5 @@
 #include "bullet.h"
+#include "sounds.h"
 #include <cmath>
 namespace game
 {
@@ -60,6 +61,7 @@ void Weapon::shoot(const Vector2f& start_pos, const Vector2f& target_pos, Time g
         if (++current_bullet > kBulletsArraySize - 1) current_bullet = 0;
         last_pressed = game_total_time;
         --bullets_in_clip;
+        Sounds::get_instance().get_sound(AudioType::SHOOT).play();
     }
 }
 } // namespace game
