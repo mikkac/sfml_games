@@ -17,6 +17,7 @@ set(GAME_SRC
    ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
    ${PROJECT_SOURCE_DIR}/src/random.cpp
    ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
+   ${PROJECT_SOURCE_DIR}/src/thomas.cpp
 )
  
 add_library(${game_lib} ${GAME_SRC})
@@ -33,12 +34,14 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
+    ${PROJECT_SOURCE_DIR}/src/thomas.cpp
 )
 set(HDR
     ${PROJECT_SOURCE_DIR}/inc/engine.h
     ${PROJECT_SOURCE_DIR}/inc/playable_character.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
     ${PROJECT_SOURCE_DIR}/inc/texture_holder.h
+    ${PROJECT_SOURCE_DIR}/inc/thomas.h
 ) 
 add_clang_tool_targets(${PROJECT_NAME} ${SRC} ${HDR})
 
