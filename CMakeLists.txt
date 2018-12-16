@@ -14,6 +14,7 @@ set(game_lib "game_lib")
 
 set(GAME_SRC
    ${PROJECT_SOURCE_DIR}/src/engine.cpp
+   ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
    ${PROJECT_SOURCE_DIR}/src/random.cpp
    ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
 )
@@ -29,11 +30,13 @@ target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-system sfml-audio sfml-
 set(SRC
     ${PROJECT_SOURCE_DIR}/src/engine.cpp
     ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
 )
 set(HDR
-    ${PROJECT_SOURCE_DIR}/inc/engine.cpp
+    ${PROJECT_SOURCE_DIR}/inc/engine.h
+    ${PROJECT_SOURCE_DIR}/inc/playable_character.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
     ${PROJECT_SOURCE_DIR}/inc/texture_holder.h
 ) 
