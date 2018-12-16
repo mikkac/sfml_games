@@ -49,13 +49,39 @@ void Engine::input() {
             // Switch between full and split screen
             if (Keyboard::isKeyPressed(Keyboard::E)) split_screen_ = !split_screen_;
         }
+        // TODO shouldn't next two if's be in if condition above?
+        if (thomas_.handle_input()) { /* play a jump sound */
+        }
+        if (bob_.handle_input()) { /* play a jump sound */
+        }
     }
 }
 
 void Engine::update(float dt_as_seconds) {
+    if (new_level_required_) { // TODO create load_level() function
+        thomas_.spawn(Vector2f(0.f, 0.f), kGravity);
+        bob_.spawn(Vector2f(100.f, 0.f), kGravity);
+
+        time_.remaining = 10.f;
+        new_level_required_ = false;
+    }
+
     if (playing_) {
+        thomas_.update(dt_as_seconds);
+        bob_.update(dt_as_seconds);
+
         time_.remaining -= dt_as_seconds;
         if (time_.remaining <= 0) new_level_required_ = true;
+    }
+
+    if (split_screen_) {
+        views_.left.setCenter(thomas_.get_center());
+        views_.right.setCenter(bob_.get_center());
+    } else {
+        if (character_one_)
+            views_.main.setCenter(thomas_.get_center());
+        else
+            views_.main.setCenter(bob_.get_center());
     }
 }
 
@@ -66,16 +92,26 @@ void Engine::draw() {
         window_.setView(views_.bg_main);
         window_.draw(background_sprite_);
         window_.setView(views_.main);
+
+        window_.draw(thomas_.get_sprite());
+        window_.draw(bob_.get_sprite());
+
     } else {
         // First draw Thomas
         window_.setView(views_.bg_left);
         window_.draw(background_sprite_);
         window_.setView(views_.left);
 
+        window_.draw(bob_.get_sprite());
+        window_.draw(thomas_.get_sprite());
+
         // Now draw Bob
         window_.setView(views_.bg_right);
         window_.draw(background_sprite_);
         window_.setView(views_.right);
+
+        window_.draw(thomas_.get_sprite());
+        window_.draw(bob_.get_sprite());
     }
 
     // Draw hud

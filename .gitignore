@@ -1,6 +1,10 @@
 # Build directory
 build
 
+# Trash
+bob_was_alone
+*.swp
+
 # Prerequisites
 *.d
 

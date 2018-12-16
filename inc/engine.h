@@ -1,5 +1,7 @@
 #pragma once
+#include "bob.h"
 #include "texture_holder.h"
+#include "thomas.h"
 #include <SFML/Graphics.hpp>
 namespace game
 {
@@ -39,6 +41,9 @@ class Engine
 
     Sprite background_sprite_;
     Texture background_texture_;
+
+    Thomas thomas_;
+    Bob bob_;
 
     bool playing_{false};
     bool character_one_{true}; // is character 1 or 2 the current focus
