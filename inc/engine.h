@@ -13,8 +13,8 @@ struct Views {
 
 struct TimeWrapper {
     Clock clock;
-    float time_remaining{10.f};
-    Time game_total_time{Time::Zero};
+    float remaining{10.f};
+    Time game_total{Time::Zero};
 };
 
 class Engine

@@ -24,12 +24,65 @@ Engine::Engine() {
 void Engine::run() {
     while (window_.isOpen()) {
         Time dt = time_.clock.restart();
-        time_.game_total_time += dt;
+        time_.game_total += dt;
 
         input();
         update(dt.asSeconds());
         draw();
     }
 }
+
+void Engine::input() {
+    Event event;
+    while (window_.pollEvent(event)) {
+        if (event.type == Event::KeyPressed) {
+            // Quit the game
+            if (Keyboard::isKeyPressed(Keyboard::Escape)) window_.close();
+
+            // Start the game
+            if (Keyboard::isKeyPressed(Keyboard::Return)) playing_ = true;
+
+            // Switch between Thomas & Bob
+            if (Keyboard::isKeyPressed(Keyboard::Q)) character_one_ = !character_one_;
+            ;
+
+            // Switch between full and split screen
+            if (Keyboard::isKeyPressed(Keyboard::E)) split_screen_ = !split_screen_;
+        }
+    }
+}
+
+void Engine::update(float dt_as_seconds) {
+    if (playing_) {
+        time_.remaining -= dt_as_seconds;
+        if (time_.remaining <= 0) new_level_required_ = true;
+    }
+}
+
+void Engine::draw() {
+    window_.clear(Color::White);
+
+    if (not split_screen_) {
+        window_.setView(views_.bg_main);
+        window_.draw(background_sprite_);
+        window_.setView(views_.main);
+    } else {
+        // First draw Thomas
+        window_.setView(views_.bg_left);
+        window_.draw(background_sprite_);
+        window_.setView(views_.left);
+
+        // Now draw Bob
+        window_.setView(views_.bg_right);
+        window_.draw(background_sprite_);
+        window_.setView(views_.right);
+    }
+
+    // Draw hud
+    window_.setView(views_.hud);
+
+    window_.display();
+}
+
 } // namespace game
 
