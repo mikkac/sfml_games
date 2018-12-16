@@ -6,9 +6,15 @@ namespace game
 using namespace sf;
 
 struct Views {
-    View main, left, right;     // main views
+    View main, left, right;          // main views
     View bg_main, bg_left, bg_right; // background views
     View hud;
+};
+
+struct TimeWrapper {
+    Clock clock;
+    float time_remaining{10.f};
+    Time game_total_time{Time::Zero};
 };
 
 class Engine
@@ -38,8 +44,7 @@ class Engine
     bool character_one_{true}; // is character 1 or 2 the current focus
     bool split_screen_{false};
 
-    float time_remaining_{10.f};
-    Time game_total_time_{Time::ZERO};
+    TimeWrapper time_;
 
     bool new_level_required_{true};
 };
