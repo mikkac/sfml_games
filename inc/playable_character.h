@@ -42,7 +42,10 @@ class PlayableCharacter
     FloatRect get_left() const { return body_.left; }
     FloatRect get_right() const { return body_.right; }
 
-    Vector2f get_center() const;
+    Vector2f get_center() const {
+        return Vector2f{position_.x + get_position().width / 2.f,
+                        position_.y + get_position().height / 2.f};
+    }
     FloatRect get_position() const { return sprite_.getGlobalBounds(); }
     Sprite get_sprite() const { return sprite_; }
 

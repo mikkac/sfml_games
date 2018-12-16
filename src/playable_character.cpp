@@ -24,8 +24,7 @@ void PlayableCharacter::update_motion(float elapsed_time) {
         if (motion_.time_of_jump < motion_.jump_duration) {
             position_.y -= motion_.gravity * 2 * elapsed_time;
         } else {
-            motion_.is_falling = true;
-            motion_.is_jumping = false;
+            stop_jump();
         }
     }
 
@@ -54,4 +53,26 @@ void PlayableCharacter::update_body(const FloatRect& position) {
     body_.left.width = 1;
     body_.left.height = position.height * 0.3f;
 }
+
+void PlayableCharacter::stop_jump() {
+    motion_.is_jumping = false;
+    motion_.is_falling = true;
+}
+
+void PlayableCharacter::stop_falling(float position) {
+    position_.y = position - get_position().height;
+    sprite_.setPosition(position_);
+    motion_.is_falling = false;
+}
+
+void PlayableCharacter::stop_right(float position) {
+    position_.x = position - get_position().width;
+    sprite_.setPosition(position_);
+}
+
+void PlayableCharacter::stop_left(float position) {
+    position_.x = position + get_position().width;
+    sprite_.setPosition(position_);
+}
+
 } // namespace game
