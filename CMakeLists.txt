@@ -15,6 +15,7 @@ set(game_lib "game_lib")
 set(GAME_SRC
    ${PROJECT_SOURCE_DIR}/src/bob.cpp
    ${PROJECT_SOURCE_DIR}/src/engine.cpp
+   ${PROJECT_SOURCE_DIR}/src/level_manager.cpp
    ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
    ${PROJECT_SOURCE_DIR}/src/random.cpp
    ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
@@ -32,6 +33,7 @@ target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-system sfml-audio sfml-
 set(SRC
     ${PROJECT_SOURCE_DIR}/src/bob.cpp
     ${PROJECT_SOURCE_DIR}/src/engine.cpp
+    ${PROJECT_SOURCE_DIR}/src/level_manager.cpp
     ${PROJECT_SOURCE_DIR}/src/main.cpp
     ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
@@ -39,8 +41,9 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/thomas.cpp
 )
 set(HDR
-    ${PROJECT_SOURCE_DIR}/inc/bob.cpp
+    ${PROJECT_SOURCE_DIR}/inc/bob.h
     ${PROJECT_SOURCE_DIR}/inc/engine.h
+    ${PROJECT_SOURCE_DIR}/inc/level_manager.h
     ${PROJECT_SOURCE_DIR}/inc/playable_character.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
     ${PROJECT_SOURCE_DIR}/inc/texture_holder.h
