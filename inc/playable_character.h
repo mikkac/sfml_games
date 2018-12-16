@@ -42,8 +42,13 @@ class PlayableCharacter
     FloatRect get_left() const { return body_.left; }
     FloatRect get_right() const { return body_.right; }
 
-    FloatRect get_center() const { return sprite_.getGlobalBounds(); }
+    Vector2f get_center() const;
+    FloatRect get_position() const { return sprite_.getGlobalBounds(); }
     Sprite get_sprite() const { return sprite_; }
+
+  private:
+    void update_motion(float elapsed_time);
+    void update_body(const FloatRect& position);
 
   protected:
     Sprite sprite_;
