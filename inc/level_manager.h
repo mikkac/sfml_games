@@ -7,38 +7,49 @@ namespace game
 {
 using namespace sf;
 
+const unsigned kTileSize{50};
+const unsigned kVertsInQuad{4};
+const unsigned kNumLevels{4};
+
 struct Level {
+    void find_out_size();
+    void create_array();
+    void delete_array();
+
     std::string path_to_file{};
     Vector2u size{};
     Vector2f start_pos{};
     float base_time_limit{};
-
-    int** load_from_file();
-
-  private:
-    Vector2u find_out_size(std::ifstream& input_file);
-    int** create_array(std::ifstream& input_file);
+    int** array_level{nullptr};
 };
-
-Level load_level(unsigned index);
 
 class LevelManager
 {
   public:
-    int** next_level(VertexArray& vert_arr);
+    LevelManager() = default;
 
+    void load_next_level();
+
+    VertexArray& get_vertex_array() const { return vert_arr; }
+    int** get_array_level() const { return level_.array_level; }
+    Texture& get_texture_tiles() const { return texture_tiles_; }
     Vector2u get_level_size() const { return level_.size; }
     Vector2f get_start_pos() const { return level_.start_pos; }
-    float get_time_limit() const { return level_.base_time_limit; }
+    float get_time_limit() const { return level_.base_time_limit * time_modifier_; }
     int get_current_level() const { return current_level_; }
 
   private:
-    const unsigned kTileSize{50};
-    const unsigned kVertsInQuad{4};
-    const unsigned kNumLevels{4};
+    void create_level(unsigned index);
+    void prepare_vertex_array();
+    void delete_current_level();
 
+  private:
     Level level_;
-    float time_modifier_{1.f};
+    VertexArray& vert_arr_;
+    Texture texture_tiles_{
+        TextureHolder::get_instance().get_texture("res/graphics/tiles_sheet.png")};
+
+    float time_modifier_{0.9f};
     unsigned current_level_{0};
 };
 } // namespace game
