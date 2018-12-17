@@ -1,6 +1,16 @@
 #include "engine.h"
 namespace game
 {
+Views::Views(const Vector2f& resolution) {
+    main.setSize(resolution);
+    hud.reset(FloatRect(0, 0, resolution.x, resolution.y));
+
+    left.setViewport(FloatRect(0.001f, 0.001f, 0.498f, 0.998f));
+    right.setViewport(FloatRect(0.5f, 0.001f, 0.499f, 0.998f));
+    bg_left.setViewport(FloatRect(0.001f, 0.001f, 0.498f, 0.998f));
+    bg_right.setViewport(FloatRect(0.5f, 0.001f, 0.499f, 0.998f));
+}
+
 Engine::Engine() {
     // Get the screen resolution
     Vector2f resolution{static_cast<float>(VideoMode::getDesktopMode().width),
@@ -9,13 +19,7 @@ Engine::Engine() {
     // Initialize window
     window_.create(VideoMode(resolution.x, resolution.y), "Bob was alone", Style::Fullscreen);
 
-    views_.main.setSize(resolution);
-    views_.hud.reset(FloatRect(0, 0, resolution.x, resolution.y));
-
-    views_.left.setViewport(FloatRect(0.001f, 0.001f, 0.498f, 0.998f));
-    views_.right.setViewport(FloatRect(0.5f, 0.001f, 0.499f, 0.998f));
-    views_.bg_left.setViewport(FloatRect(0.001f, 0.001f, 0.498f, 0.998f));
-    views_.bg_right.setViewport(FloatRect(0.5f, 0.001f, 0.499f, 0.998f));
+    views_ = Views(resolution);
 
     background_texture_ = TextureHolder::get_instance().get_texture("res/graphics/background.png");
     background_sprite_.setTexture(background_texture_);

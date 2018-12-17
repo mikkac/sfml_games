@@ -8,6 +8,9 @@ namespace game
 using namespace sf;
 
 struct Views {
+    Views() = default;
+    Views(const Vector2f& resolution);
+
     View main, left, right;          // main views
     View bg_main, bg_left, bg_right; // background views
     View hud;
