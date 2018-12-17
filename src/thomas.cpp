@@ -4,7 +4,7 @@
 namespace game
 {
 Thomas::Thomas() {
-    sprite_ = Sprite(TextureHolder::get_texture("res/graphics/thomas.png"));
+    sprite_ = Sprite(TextureHolder::get_instance().get_texture("res/graphics/thomas.png"));
     motion_.jump_duration = 0.45f;
 }
 bool Thomas::handle_input() {

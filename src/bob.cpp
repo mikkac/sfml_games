@@ -4,7 +4,7 @@
 namespace game
 {
 Bob::Bob() {
-    sprite_ = Sprite(TextureHolder::get_texture("res/graphics/bob.png"));
+    sprite_ = Sprite(TextureHolder::get_instance().get_texture("res/graphics/bob.png"));
     motion_.jump_duration = 0.25f;
 }
 bool Bob::handle_input() {

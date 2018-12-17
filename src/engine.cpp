@@ -17,7 +17,7 @@ Engine::Engine() {
     views_.bg_left.setViewport(FloatRect(0.001f, 0.001f, 0.498f, 0.998f));
     views_.bg_right.setViewport(FloatRect(0.5f, 0.001f, 0.499f, 0.998f));
 
-    background_texture_ = TextureHolder::get_texture("res/graphics/background.png");
+    background_texture_ = TextureHolder::get_instance().get_texture("res/graphics/background.png");
     background_sprite_.setTexture(background_texture_);
 }
 

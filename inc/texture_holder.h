@@ -14,7 +14,7 @@ class TextureHolder
     TextureHolder& operator=(const TextureHolder& other) = delete;
 
     static TextureHolder& get_instance();
-    static Texture& get_texture(const std::string& filename);
+    Texture& get_texture(const std::string& filename);
 
   private:
     std::map<std::string, Texture> textures_;

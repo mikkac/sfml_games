@@ -9,15 +9,10 @@ TextureHolder& TextureHolder::get_instance() {
 }
 
 Texture& TextureHolder::get_texture(const std::string& filename) {
-    auto& textures = get_instance().textures_;
+    // auto textures = get_instance().textures_;
+    if (auto iterator{textures_.find(filename)}; iterator == textures_.end())
+        textures_[filename].loadFromFile(filename);
 
-    auto iterator = textures.find(filename);
-    if (iterator != textures.end()) {
-        return iterator->second; // return existing texture
-    } else {
-        auto& new_texture = textures[filename];
-        new_texture.loadFromFile(filename);
-        return new_texture; // return new-created texture
-    }
+    return textures_[filename];
 }
 } // namespace game
