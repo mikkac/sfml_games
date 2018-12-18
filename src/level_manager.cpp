@@ -30,7 +30,8 @@ void Level::create_array() {
     int y{};
 
     while (getline(input_file, row)) {
-        for (unsigned x = 0; x < row.length(); ++x) array_level[y][x] = atoi(&(row[x]));
+        for (unsigned x = 0; x < row.length(); ++x)
+            array_level[y][x] = row[x] - '0'; // convert char to int
         ++y;
     }
     input_file.close();
@@ -47,24 +48,24 @@ void Level::delete_array() {
 void LevelManager::create_level(unsigned index) {
     switch (index) {
         case 1:
-            level_.path_to_file = "res/levels/levels1.txt";
+            level_.path_to_file = "res/levels/level1.txt";
             level_.start_pos = Vector2f(100.f, 100.f);
             level_.base_time_limit = 30.f;
             break;
         case 2:
-            level_.path_to_file = "res/levels/levels2.txt";
+            level_.path_to_file = "res/levels/level2.txt";
             level_.start_pos = Vector2f(100.f, 3600.f);
             level_.base_time_limit = 100.f;
             break;
 
         case 3:
-            level_.path_to_file = "res/levels/levels3.txt";
+            level_.path_to_file = "res/levels/level3.txt";
             level_.start_pos = Vector2f(1250.f, 0.f);
             level_.base_time_limit = 30.f;
             break;
 
         case 4:
-            level_.path_to_file = "res/levels/levels4.txt";
+            level_.path_to_file = "res/levels/level4.txt";
             level_.start_pos = Vector2f(50.f, 200.f);
             level_.base_time_limit = 50.f;
             break;

@@ -27,7 +27,9 @@ struct Level {
 class LevelManager
 {
   public:
-    LevelManager() {}
+    LevelManager()
+        : texture_tiles_{
+              TextureHolder::get_instance().get_texture("res/graphics/tiles_sheet.png")} {}
 
     void load_next_level();
     void delete_current_level();
@@ -46,9 +48,8 @@ class LevelManager
 
   private:
     Level level_{};
-    VertexArray vert_arr_{};
-    Texture& texture_tiles_{
-        TextureHolder::get_instance().get_texture("res/graphics/tiles_sheet.png")};
+    VertexArray vert_arr_;
+    Texture& texture_tiles_;
 
     float time_modifier_{0.9f};
     unsigned current_level_{0};

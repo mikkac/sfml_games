@@ -51,7 +51,7 @@ class Engine
     Views views_;
     Sprite background_sprite_;
     Texture background_texture_;
-
+        
     Thomas thomas_;
     Bob bob_;
 

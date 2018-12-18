@@ -98,7 +98,6 @@ void Engine::draw() {
         window_.setView(views_.bg_main);
         window_.draw(background_sprite_);
         window_.setView(views_.main);
-
         window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
         window_.draw(thomas_.get_sprite());
         window_.draw(bob_.get_sprite());
