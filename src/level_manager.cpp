@@ -104,16 +104,13 @@ void LevelManager::prepare_vertex_array() {
     }
 }
 
-int** LevelManager::load_next_level() {
+void LevelManager::load_next_level() {
     if (++current_level_ > kNumLevels) {
         current_level_ = 1;
         time_modifier_ -= 0.1f;
     }
-
     create_level(current_level_);
     prepare_vertex_array();
-
-    return level_.array_level;
 }
 
 void LevelManager::delete_current_level() {

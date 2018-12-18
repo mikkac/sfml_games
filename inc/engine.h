@@ -2,6 +2,7 @@
 #include "bob.h"
 #include "texture_holder.h"
 #include "thomas.h"
+#include "level_manager.h"
 #include <SFML/Graphics.hpp>
 namespace game
 {
@@ -22,6 +23,12 @@ struct TimeWrapper {
     Time game_total{Time::Zero};
 };
 
+struct Screen {
+    Views views;
+    Sprite background_sprite_;
+    Texture background_texture_;
+};
+
 class Engine
 {
   public:
@@ -32,6 +39,7 @@ class Engine
     void input();
     void update(float dt_as_seconds);
     void draw();
+    void load_level();
 
   private:
     const int kTileSize{50};
@@ -39,9 +47,8 @@ class Engine
     const int kGravity{300};
 
     RenderWindow window_;
-
+    LevelManager level_manager_;
     Views views_;
-
     Sprite background_sprite_;
     Texture background_texture_;
 

@@ -68,6 +68,8 @@ void Engine::update(float dt_as_seconds) {
 
         time_.remaining = 10.f;
         new_level_required_ = false;
+
+        level_manager_.load_next_level();
     }
 
     if (playing_) {
@@ -97,6 +99,7 @@ void Engine::draw() {
         window_.draw(background_sprite_);
         window_.setView(views_.main);
 
+        window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
         window_.draw(thomas_.get_sprite());
         window_.draw(bob_.get_sprite());
 
@@ -106,6 +109,7 @@ void Engine::draw() {
         window_.draw(background_sprite_);
         window_.setView(views_.left);
 
+        window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
         window_.draw(bob_.get_sprite());
         window_.draw(thomas_.get_sprite());
 
@@ -114,6 +118,7 @@ void Engine::draw() {
         window_.draw(background_sprite_);
         window_.setView(views_.right);
 
+        window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
         window_.draw(thomas_.get_sprite());
         window_.draw(bob_.get_sprite());
     }
@@ -124,5 +129,17 @@ void Engine::draw() {
     window_.display();
 }
 
+void Engine::load_level() {
+    playing_ = false;
+    level_manager_.delete_current_level();
+    level_manager_.load_next_level();
+
+    time_.remaining = level_manager_.get_time_limit();
+
+    thomas_.spawn(level_manager_.get_start_pos(), kGravity);
+    bob_.spawn(level_manager_.get_start_pos(), kGravity);
+
+    new_level_required_ = false;
+}
 } // namespace game
 
