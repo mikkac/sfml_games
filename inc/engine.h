@@ -25,8 +25,8 @@ struct TimeWrapper {
 
 struct Screen {
     Views views;
-    Sprite background_sprite_;
-    Texture background_texture_;
+    Sprite background_sprite;
+    Texture background_texture;
 };
 
 class Engine
@@ -47,11 +47,9 @@ class Engine
     const int kGravity{300};
 
     RenderWindow window_;
-    LevelManager level_manager_;
-    Views views_;
-    Sprite background_sprite_;
-    Texture background_texture_;
-        
+    Screen screen_;
+    LevelManager level_manager_;    
+
     Thomas thomas_;
     Bob bob_;
 

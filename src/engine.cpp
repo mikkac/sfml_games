@@ -19,10 +19,10 @@ Engine::Engine() {
     // Initialize window
     window_.create(VideoMode(resolution.x, resolution.y), "Bob was alone", Style::Fullscreen);
 
-    views_ = Views(resolution);
+    screen_.views = Views(resolution);
 
-    background_texture_ = TextureHolder::get_instance().get_texture("res/graphics/background.png");
-    background_sprite_.setTexture(background_texture_);
+    screen_.background_texture = TextureHolder::get_instance().get_texture("res/graphics/background.png");
+    screen_.background_sprite.setTexture(screen_.background_texture);
 }
 
 void Engine::run() {
@@ -81,13 +81,13 @@ void Engine::update(float dt_as_seconds) {
     }
 
     if (split_screen_) {
-        views_.left.setCenter(thomas_.get_center());
-        views_.right.setCenter(bob_.get_center());
+        screen_.views.left.setCenter(thomas_.get_center());
+        screen_.views.right.setCenter(bob_.get_center());
     } else {
         if (character_one_)
-            views_.main.setCenter(thomas_.get_center());
+            screen_.views.main.setCenter(thomas_.get_center());
         else
-            views_.main.setCenter(bob_.get_center());
+            screen_.views.main.setCenter(bob_.get_center());
     }
 }
 
@@ -95,27 +95,27 @@ void Engine::draw() {
     window_.clear(Color::White);
 
     if (not split_screen_) {
-        window_.setView(views_.bg_main);
-        window_.draw(background_sprite_);
-        window_.setView(views_.main);
+        window_.setView(screen_.views.bg_main);
+        window_.draw(screen_.background_sprite);
+        window_.setView(screen_.views.main);
         window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
         window_.draw(thomas_.get_sprite());
         window_.draw(bob_.get_sprite());
 
     } else {
         // First draw Thomas
-        window_.setView(views_.bg_left);
-        window_.draw(background_sprite_);
-        window_.setView(views_.left);
+        window_.setView(screen_.views.bg_left);
+        window_.draw(screen_.background_sprite);
+        window_.setView(screen_.views.left);
 
         window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
         window_.draw(bob_.get_sprite());
         window_.draw(thomas_.get_sprite());
 
         // Now draw Bob
-        window_.setView(views_.bg_right);
-        window_.draw(background_sprite_);
-        window_.setView(views_.right);
+        window_.setView(screen_.views.bg_right);
+        window_.draw(screen_.background_sprite);
+        window_.setView(screen_.views.right);
 
         window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
         window_.draw(thomas_.get_sprite());
@@ -123,7 +123,7 @@ void Engine::draw() {
     }
 
     // Draw hud
-    window_.setView(views_.hud);
+    window_.setView(screen_.views.hud);
 
     window_.display();
 }
