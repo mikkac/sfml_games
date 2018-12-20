@@ -1,7 +1,7 @@
 #pragma once
-#include "playable_character.h"
 #include "level_manager.h"
-#include "engine.h" //TODO move all global constats to utils.h
+#include "playable_character.h"
+#include "utils.h"
 namespace game
 {
 enum class BlockType { INVISIBLE, REGULAR, FIRE, WATER, ENDGAME };
@@ -9,7 +9,8 @@ enum class BlockType { INVISIBLE, REGULAR, FIRE, WATER, ENDGAME };
 class CollisionDetection
 {
   public:
-    bool detect(LevelManager* level_manager, PlayableCharacter* character);
+    bool detect_movement(LevelManager* level_manager, PlayableCharacter* character);
+    void detect_characters_overlaping(Thomas& thomas, Bob& bob);
 
   private:
     void create_collision_zone();

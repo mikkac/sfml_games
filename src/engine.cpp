@@ -13,8 +13,7 @@ Views::Views(const Vector2f& resolution) {
 
 Screen::Screen() {
     // Get the screen resolution
-    Vector2f resolution{static_cast<float>(VideoMode::getDesktopMode().width),
-                        static_cast<float>(VideoMode::getDesktopMode().height)};
+    Vector2f resolution{static_cast<float>(VideoMode::getDesktopMode().width), static_cast<float>(VideoMode::getDesktopMode().height)};
 
     // Initialize window
     window.create(VideoMode(resolution.x, resolution.y), "Bob was alone", Style::Fullscreen);
@@ -66,12 +65,14 @@ void Engine::update(float dt_as_seconds) {
         thomas_.update(dt_as_seconds);
         bob_.update(dt_as_seconds);
 
-        if(detect_collisions(thomas_) && detect_collisions(bob_)) {
+        if (detect_movement(&thomas_) && detect_movement(&bob_)) {
             new_level_required_ = true;
             // play the reach goal sound
         } else {
-            detect_collisions(bob_);
+            detect_movement(&bob_);
         }
+
+        detect_characters_overlaping();
 
         time_.remaining -= dt_as_seconds;
         if (time_.remaining <= 0) new_level_required_ = true;
@@ -146,68 +147,12 @@ void Engine::draw_hud() {
     screen_.window.setView(screen_.views.hud);
 }
 
-bool Engine::detect_collisions(PlayableCharacter& character) {
-    bool reached_goal{false};
-    FloatRect collision_zone{character.get_position()};
-    FloatRect block{0.f, 0.f, kTileSize, kTileSize};
-
-    // Build a zone around Thomas to detect collisions
-    Vector2i start{static_cast<int>(collision_zone.left / kTileSize) - 1,
-                   static_cast<int>(collision_zone.top / kTileSize) - 1};
-    Vector2i end{static_cast<int>(collision_zone.left / kTileSize) + 2,
-                 static_cast<int>(collision_zone.top / kTileSize) + 3};
-
-    // Make sure we don't test positions outside the screen
-    if (start.x < 0) start.x = 0;
-    if (start.y < 0) start.y = 0;
-    if (end.x >= static_cast<int>(level_manager_.get_level_size().x))
-        end.x = level_manager_.get_level_size().x;
-    if (end.y >= static_cast<int>(level_manager_.get_level_size().y))
-        end.y = level_manager_.get_level_size().y;
-
-    // Has this character fallen out of the map?
-    FloatRect level(0.f, 0.f, level_manager_.get_level_size().x * kTileSize,
-                    level_manager_.get_level_size().y * kTileSize);
-    if (not character.get_position().intersects(level))
-        character.spawn(level_manager_.get_start_pos(), kGravity);
-
-    // Iterate through all local blocks
-    for (int x = start.x; x < end.x; ++x) {
-        for (int y = start.y; y < end.y; ++y) {
-            block.left = x * kTileSize;
-            block.top = y * kTileSize;
-            unsigned type_of_block = level_manager_.get_array_level()[y][x];
-            // Check if block is fire or water
-            if (type_of_block == 2 || type_of_block == 3) {
-                if (character.get_head().intersects(block)) {
-                    character.spawn(level_manager_.get_start_pos(), kGravity);
-                    if (type_of_block == 2) {
-                        /* play sound */
-                    } // Fire
-                    else {
-                        /* play sound */
-                    } // Water
-                }
-            }
-            // Check if it's a regular block
-            if (type_of_block == 1) {
-                if (character.get_right().intersects(block))
-                    character.stop_right(block.left);
-                else if (character.get_left().intersects(block))
-                    character.stop_left(block.left);
-
-                if (character.get_feet().intersects(block))
-                    character.stop_falling(block.top);
-                else if (character.get_head().intersects(block))
-                    character.stop_jump();
-            }
-
-            // Check if it's end-game block
-            if (type_of_block == 4) reached_goal = true;
-        }
-
-    }
-    return reached_goal;
+bool Engine::detect_movement(PlayableCharacter* character) {
+    return collision_.detect_movement(&level_manager_, character);
 }
+void Engine::detect_characters_overlaping() {
+    collision_.detect_characters_overlaping(thomas_, bob_);
+}
+
 } // namespace game
 
