@@ -32,7 +32,7 @@ void Level::create_array() {
     while (getline(input_file, row)) {
         for (unsigned x = 0; x < row.length(); ++x)
             array_level[y][x] = row[x] - '0'; // convert char to int
-        ++y;
+         ++y;
     }
     input_file.close();
 }

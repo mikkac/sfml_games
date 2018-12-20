@@ -52,6 +52,6 @@ class LevelManager
     Texture& texture_tiles_;
 
     float time_modifier_{0.9f};
-    unsigned current_level_{0};
+    unsigned current_level_{};
 };
 } // namespace game

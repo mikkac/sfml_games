@@ -13,13 +13,11 @@ include_directories(${PROJECT_SOURCE_DIR}/inc)
 set(game_lib "game_lib")
 
 set(GAME_SRC
-   ${PROJECT_SOURCE_DIR}/src/bob.cpp
    ${PROJECT_SOURCE_DIR}/src/engine.cpp
    ${PROJECT_SOURCE_DIR}/src/level_manager.cpp
    ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
    ${PROJECT_SOURCE_DIR}/src/random.cpp
    ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
-   ${PROJECT_SOURCE_DIR}/src/thomas.cpp
 )
  
 add_library(${game_lib} ${GAME_SRC})
@@ -31,23 +29,19 @@ target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-system sfml-audio sfml-
 
 #Clang-tidy and clang-format
 set(SRC
-    ${PROJECT_SOURCE_DIR}/src/bob.cpp
     ${PROJECT_SOURCE_DIR}/src/engine.cpp
     ${PROJECT_SOURCE_DIR}/src/level_manager.cpp
     ${PROJECT_SOURCE_DIR}/src/main.cpp
     ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
-    ${PROJECT_SOURCE_DIR}/src/thomas.cpp
 )
 set(HDR
-    ${PROJECT_SOURCE_DIR}/inc/bob.h
     ${PROJECT_SOURCE_DIR}/inc/engine.h
     ${PROJECT_SOURCE_DIR}/inc/level_manager.h
     ${PROJECT_SOURCE_DIR}/inc/playable_character.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
     ${PROJECT_SOURCE_DIR}/inc/texture_holder.h
-    ${PROJECT_SOURCE_DIR}/inc/thomas.h
 ) 
 add_clang_tool_targets(${PROJECT_NAME} ${SRC} ${HDR})
 

@@ -11,22 +11,21 @@ Views::Views(const Vector2f& resolution) {
     bg_right.setViewport(FloatRect(0.5f, 0.001f, 0.499f, 0.998f));
 }
 
-Engine::Engine() {
+Screen::Screen() {
     // Get the screen resolution
     Vector2f resolution{static_cast<float>(VideoMode::getDesktopMode().width),
                         static_cast<float>(VideoMode::getDesktopMode().height)};
 
     // Initialize window
-    window_.create(VideoMode(resolution.x, resolution.y), "Bob was alone", Style::Fullscreen);
+    window.create(VideoMode(resolution.x, resolution.y), "Bob was alone", Style::Fullscreen);
 
-    screen_.views = Views(resolution);
-
-    screen_.background_texture = TextureHolder::get_instance().get_texture("res/graphics/background.png");
-    screen_.background_sprite.setTexture(screen_.background_texture);
+    background_texture = TextureHolder::get_instance().get_texture("res/graphics/background.png");
+    background_sprite.setTexture(background_texture);
+    views = Views(resolution);
 }
 
 void Engine::run() {
-    while (window_.isOpen()) {
+    while (screen_.window.isOpen()) {
         Time dt = time_.clock.restart();
         time_.game_total += dt;
 
@@ -38,17 +37,16 @@ void Engine::run() {
 
 void Engine::input() {
     Event event;
-    while (window_.pollEvent(event)) {
+    while (screen_.window.pollEvent(event)) {
         if (event.type == Event::KeyPressed) {
             // Quit the game
-            if (Keyboard::isKeyPressed(Keyboard::Escape)) window_.close();
+            if (Keyboard::isKeyPressed(Keyboard::Escape)) screen_.window.close();
 
             // Start the game
             if (Keyboard::isKeyPressed(Keyboard::Return)) playing_ = true;
 
             // Switch between Thomas & Bob
-            if (Keyboard::isKeyPressed(Keyboard::Q)) character_one_ = !character_one_;
-            ;
+            if (Keyboard::isKeyPressed(Keyboard::Q)) character_focus_ = !character_focus_;
 
             // Switch between full and split screen
             if (Keyboard::isKeyPressed(Keyboard::E)) split_screen_ = !split_screen_;
@@ -62,15 +60,7 @@ void Engine::input() {
 }
 
 void Engine::update(float dt_as_seconds) {
-    if (new_level_required_) { // TODO create load_level() function
-        thomas_.spawn(Vector2f(0.f, 0.f), kGravity);
-        bob_.spawn(Vector2f(100.f, 0.f), kGravity);
-
-        time_.remaining = 10.f;
-        new_level_required_ = false;
-
-        level_manager_.load_next_level();
-    }
+    if (new_level_required_) { load_level(); }
 
     if (playing_) {
         thomas_.update(dt_as_seconds);
@@ -84,7 +74,7 @@ void Engine::update(float dt_as_seconds) {
         screen_.views.left.setCenter(thomas_.get_center());
         screen_.views.right.setCenter(bob_.get_center());
     } else {
-        if (character_one_)
+        if (character_focus_)
             screen_.views.main.setCenter(thomas_.get_center());
         else
             screen_.views.main.setCenter(bob_.get_center());
@@ -92,40 +82,15 @@ void Engine::update(float dt_as_seconds) {
 }
 
 void Engine::draw() {
-    window_.clear(Color::White);
+    screen_.window.clear(Color::White);
 
     if (not split_screen_) {
-        window_.setView(screen_.views.bg_main);
-        window_.draw(screen_.background_sprite);
-        window_.setView(screen_.views.main);
-        window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
-        window_.draw(thomas_.get_sprite());
-        window_.draw(bob_.get_sprite());
-
+        draw_split_screen();
     } else {
-        // First draw Thomas
-        window_.setView(screen_.views.bg_left);
-        window_.draw(screen_.background_sprite);
-        window_.setView(screen_.views.left);
-
-        window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
-        window_.draw(bob_.get_sprite());
-        window_.draw(thomas_.get_sprite());
-
-        // Now draw Bob
-        window_.setView(screen_.views.bg_right);
-        window_.draw(screen_.background_sprite);
-        window_.setView(screen_.views.right);
-
-        window_.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
-        window_.draw(thomas_.get_sprite());
-        window_.draw(bob_.get_sprite());
+        draw_main_scrren();
     }
-
-    // Draw hud
-    window_.setView(screen_.views.hud);
-
-    window_.display();
+    draw_hud();
+    screen_.window.display();
 }
 
 void Engine::load_level() {
@@ -139,6 +104,39 @@ void Engine::load_level() {
     bob_.spawn(level_manager_.get_start_pos(), kGravity);
 
     new_level_required_ = false;
+}
+
+void Engine::draw_split_screen() {
+    screen_.window.setView(screen_.views.bg_main);
+    screen_.window.draw(screen_.background_sprite);
+    screen_.window.setView(screen_.views.main);
+    screen_.window.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
+    screen_.window.draw(thomas_.get_sprite());
+    screen_.window.draw(bob_.get_sprite());
+}
+
+void Engine::draw_main_scrren() {
+    // First draw Thomas
+    screen_.window.setView(screen_.views.bg_left);
+    screen_.window.draw(screen_.background_sprite);
+    screen_.window.setView(screen_.views.left);
+
+    screen_.window.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
+    screen_.window.draw(bob_.get_sprite());
+    screen_.window.draw(thomas_.get_sprite());
+
+    // Now draw Bob
+    screen_.window.setView(screen_.views.bg_right);
+    screen_.window.draw(screen_.background_sprite);
+    screen_.window.setView(screen_.views.right);
+
+    screen_.window.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
+    screen_.window.draw(thomas_.get_sprite());
+    screen_.window.draw(bob_.get_sprite());
+}
+
+void Engine::draw_hud() {
+    screen_.window.setView(screen_.views.hud);
 }
 } // namespace game
 

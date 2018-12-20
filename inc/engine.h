@@ -1,9 +1,9 @@
 #pragma once
-#include "bob.h"
-#include "texture_holder.h"
-#include "thomas.h"
 #include "level_manager.h"
+#include "playable_character.h"
+#include "texture_holder.h"
 #include <SFML/Graphics.hpp>
+
 namespace game
 {
 using namespace sf;
@@ -18,21 +18,24 @@ struct Views {
 };
 
 struct TimeWrapper {
-    Clock clock;
+    Clock clock{};
     float remaining{10.f};
     Time game_total{Time::Zero};
 };
 
 struct Screen {
-    Views views;
-    Sprite background_sprite;
+    Screen();
+
+    RenderWindow window{};
+    Views views{};
+    Sprite background_sprite{};
     Texture background_texture;
 };
 
 class Engine
 {
   public:
-    Engine();
+    Engine() = default;
     void run();
 
   private:
@@ -41,24 +44,25 @@ class Engine
     void draw();
     void load_level();
 
+    void draw_split_screen();
+    void draw_main_scrren();
+    void draw_hud();
+
   private:
     const int kTileSize{50};
     const int kVertsInQuad{4};
     const int kGravity{300};
 
-    RenderWindow window_;
     Screen screen_;
-    LevelManager level_manager_;    
+    TimeWrapper time_;
+    LevelManager level_manager_;
 
     Thomas thomas_;
     Bob bob_;
 
     bool playing_{false};
-    bool character_one_{true}; // is character 1 or 2 the current focus
+    bool character_focus_{true}; // main view foucs- TRUE: Thomas, FALSE: Bob
     bool split_screen_{false};
-
-    TimeWrapper time_;
-
     bool new_level_required_{true};
 };
 } // namespace game

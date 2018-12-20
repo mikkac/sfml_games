@@ -62,4 +62,18 @@ class PlayableCharacter
     Body body_;
     Texture texture_;
 };
+
+class Thomas : public PlayableCharacter
+{
+  public:
+    Thomas();
+    virtual bool handle_input() override;
+};
+
+class Bob : public PlayableCharacter
+{
+  public:
+    Bob();
+    virtual bool handle_input() override;
+};
 } // namespace game
