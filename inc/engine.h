@@ -1,7 +1,9 @@
 #pragma once
+#include "collision_detection.h"
 #include "level_manager.h"
 #include "playable_character.h"
 #include "texture_holder.h"
+#include "utils.h"
 #include <SFML/Graphics.hpp>
 
 namespace game
@@ -48,14 +50,14 @@ class Engine
     void draw_main_scrren();
     void draw_hud();
 
-    bool detect_collisions(PlayableCharacter& character);
+    bool detect_movement(PlayableCharacter* character);
+    void detect_characters_overlaping();
 
   private:
-    const int kGravity{300};
-
     Screen screen_;
     TimeWrapper time_;
     LevelManager level_manager_;
+    CollisionDetection collision_;
 
     Thomas thomas_;
     Bob bob_;

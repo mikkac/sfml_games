@@ -19,7 +19,6 @@ set(GAME_SRC
    ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
    ${PROJECT_SOURCE_DIR}/src/random.cpp
    ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
-   ${PROJECT_SOURCE_DIR}/src/utils.cpp
 )
  
 add_library(${game_lib} ${GAME_SRC})
@@ -38,7 +37,6 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
-    ${PROJECT_SOURCE_DIR}/src/utils.cpp
 )
 set(HDR
     ${PROJECT_SOURCE_DIR}/inc/collision_detection.h

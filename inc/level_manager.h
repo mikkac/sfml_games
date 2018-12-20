@@ -1,5 +1,6 @@
 #pragma once
 #include "texture_holder.h"
+#include "utils.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
@@ -7,10 +8,6 @@
 namespace game
 {
 using namespace sf;
-
-const unsigned kTileSize{50};
-const unsigned kVertsInQuad{4};
-const unsigned kNumLevels{4};
 
 struct Level {
     void find_out_size();
@@ -27,9 +24,7 @@ struct Level {
 class LevelManager
 {
   public:
-    LevelManager()
-        : texture_tiles_{
-              TextureHolder::get_instance().get_texture("res/graphics/tiles_sheet.png")} {}
+    LevelManager() : texture_tiles_{TextureHolder::get_instance().get_texture("res/graphics/tiles_sheet.png")} {}
 
     void load_next_level();
     void delete_current_level();
