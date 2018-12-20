@@ -48,9 +48,9 @@ class Engine
     void draw_main_scrren();
     void draw_hud();
 
+    bool detect_collisions(PlayableCharacter& character);
+
   private:
-    const int kTileSize{50};
-    const int kVertsInQuad{4};
     const int kGravity{300};
 
     Screen screen_;
