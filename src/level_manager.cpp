@@ -42,6 +42,7 @@ void Level::delete_array() {
         for (unsigned idx = 0; idx < kNumLevels; ++idx) delete[] array_level[idx];
         delete[] array_level;
         array_level = nullptr;
+        size = Vector2u{0,0};
     }
 }
 
