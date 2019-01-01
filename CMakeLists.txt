@@ -18,6 +18,7 @@ set(GAME_SRC
    ${PROJECT_SOURCE_DIR}/src/level_manager.cpp
    ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
    ${PROJECT_SOURCE_DIR}/src/random.cpp
+   ${PROJECT_SOURCE_DIR}/src/sound_manager.cpp
    ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
 )
  
@@ -36,6 +37,7 @@ set(SRC
     ${PROJECT_SOURCE_DIR}/src/main.cpp
     ${PROJECT_SOURCE_DIR}/src/playable_character.cpp
     ${PROJECT_SOURCE_DIR}/src/random.cpp
+    ${PROJECT_SOURCE_DIR}/src/sound_manager.cpp
     ${PROJECT_SOURCE_DIR}/src/texture_holder.cpp
 )
 set(HDR
@@ -44,6 +46,7 @@ set(HDR
     ${PROJECT_SOURCE_DIR}/inc/level_manager.h
     ${PROJECT_SOURCE_DIR}/inc/playable_character.h
     ${PROJECT_SOURCE_DIR}/inc/random.h
+    ${PROJECT_SOURCE_DIR}/inc/sound_manager.cpp
     ${PROJECT_SOURCE_DIR}/inc/texture_holder.h
     ${PROJECT_SOURCE_DIR}/inc/utils.h
 ) 

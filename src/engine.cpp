@@ -50,7 +50,6 @@ void Engine::input() {
             // Switch between full and split screen
             if (Keyboard::isKeyPressed(Keyboard::E)) split_screen_ = !split_screen_;
         }
-        // TODO shouldn't next two if's be in if condition above?
         if (thomas_.handle_input()) { /* play a jump sound */
         }
         if (bob_.handle_input()) { /* play a jump sound */
