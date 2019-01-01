@@ -18,13 +18,7 @@ class SoundManager
     bool is_buffer_loaded(SoundType type) const;
 
   private:
-    Sound sounds_[5]{
-        create_sound("res/sound/fire1.wav", SoundType::FIRE),
-        create_sound("res/sound/fallinfire.wav", SoundType::FALL_IN_FIRE),
-        create_sound("res/sound/fallinwater.wav", SoundType::FALL_IN_WATER),
-        create_sound("res/sound/jump.wav", SoundType::JUMP),
-        create_sound("res/sound/reachgoal.wav", SoundType::REACH_GOAL),
-    };
+    Sound sounds_[5]{};
     SoundBuffer buffers_[5]{};
 };
 

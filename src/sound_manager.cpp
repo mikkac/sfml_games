@@ -3,6 +3,12 @@
 namespace game
 {
 SoundManager::SoundManager() {
+    sounds_[0] = create_sound("res/sound/fire1.wav", SoundType::FIRE);
+    sounds_[1] = create_sound("res/sound/fallinfire.wav", SoundType::FALL_IN_FIRE);
+    sounds_[2] = create_sound("res/sound/fallinwater.wav", SoundType::FALL_IN_WATER);
+    sounds_[3] = create_sound("res/sound/jump.wav", SoundType::JUMP);
+    sounds_[4] = create_sound("res/sound/reachgoal.wav", SoundType::REACH_GOAL);
+
     float min_distance{150.f};
     float attenuation{15.f};
     for (unsigned idx = 0; idx < 3; ++idx) {
