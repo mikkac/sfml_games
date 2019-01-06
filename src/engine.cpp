@@ -50,10 +50,8 @@ void Engine::input() {
             // Switch between full and split screen
             if (Keyboard::isKeyPressed(Keyboard::E)) split_screen_ = !split_screen_;
         }
-        if (thomas_.handle_input()) { /* play a jump sound */
-        }
-        if (bob_.handle_input()) { /* play a jump sound */
-        }
+        if (thomas_.handle_input()) { sound_manager_.play_sound(SoundType::JUMP); }
+        if (bob_.handle_input()) { sound_manager_.play_sound(SoundType::JUMP); }
     }
 }
 
@@ -66,7 +64,7 @@ void Engine::update(float dt_as_seconds) {
 
         if (detect_movement(&thomas_) && detect_movement(&bob_)) {
             new_level_required_ = true;
-            // play the reach goal sound
+            sound_manager_.play_sound(SoundType::REACH_GOAL);
         } else {
             detect_movement(&bob_);
         }
@@ -75,6 +73,16 @@ void Engine::update(float dt_as_seconds) {
 
         time_.remaining -= dt_as_seconds;
         if (time_.remaining <= 0) new_level_required_ = true;
+    }
+
+    // Check if a fire sound needs to be played
+    for (auto& emitter : fire_emitters_) {
+        // Create sound rectangle around the emitter
+        constexpr float sound_rect_size{500.f};
+        FloatRect sound_rect(emitter.x - sound_rect_size / 2.f, emitter.y - sound_rect_size / 2.f, sound_rect_size, sound_rect_size);
+
+        // Check if Thomas is inside sound_rect
+        if (thomas_.get_position().intersects(sound_rect)) sound_manager_.play_fire(Vector2f{emitter.x, emitter.y}, thomas_.get_center());
     }
 
     if (split_screen_) {
@@ -104,6 +112,8 @@ void Engine::load_level() {
     playing_ = false;
     level_manager_.delete_current_level();
     level_manager_.load_next_level();
+
+    populate_emitters();
 
     time_.remaining = level_manager_.get_time_limit();
 
@@ -151,6 +161,26 @@ bool Engine::detect_movement(PlayableCharacter* character) {
 }
 void Engine::detect_characters_overlaping() {
     collision_.detect_characters_overlaping(thomas_, bob_);
+}
+
+void Engine::populate_emitters() {
+    fire_emitters_.empty();
+    FloatRect previous_emitter{}; // keep track of previous emitter
+    int** array_level = level_manager_.get_array_level();
+
+    // Iterate over whole array level
+    for (unsigned x = 0; x < level_manager_.get_level_size().x; ++x) {
+        for (unsigned y = 0; y < level_manager_.get_level_size().y; ++y) {
+            if (array_level[y][x] == static_cast<int>(BlockType::FIRE)) {
+                // Skip tiles too close to the previous emitter
+                if (not FloatRect(x * kTileSize, y * kTileSize, kTileSize, kTileSize).intersects(previous_emitter)) {
+                    fire_emitters_.push_back(Vector2f(x * kTileSize, y * kTileSize));
+                    // Make a rectangle 6x6 so we don't make any emitter too close to the previous one
+                    previous_emitter = FloatRect(x * kTileSize, y * kTileSize, kTileSize * 6, kTileSize * 6);
+                }
+            }
+        }
+    }
 }
 
 } // namespace game

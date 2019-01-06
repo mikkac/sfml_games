@@ -2,6 +2,7 @@
 #include "collision_detection.h"
 #include "level_manager.h"
 #include "playable_character.h"
+#include "sound_manager.h"
 #include "texture_holder.h"
 #include "utils.h"
 #include <SFML/Graphics.hpp>
@@ -53,14 +54,19 @@ class Engine
     bool detect_movement(PlayableCharacter* character);
     void detect_characters_overlaping();
 
+    void populate_emitters();
+
   private:
     Screen screen_;
     TimeWrapper time_;
     LevelManager level_manager_;
+    SoundManager sound_manager_;
     CollisionDetection collision_;
 
     Thomas thomas_;
     Bob bob_;
+
+    std::vector<Vector2f> fire_emitters_{};
 
     bool playing_{false};
     bool character_focus_{true}; // main view foucs- TRUE: Thomas, FALSE: Bob

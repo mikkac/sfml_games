@@ -38,6 +38,9 @@ Sound SoundManager::create_sound(const std::string& path, SoundType type) {
 }
 
 bool SoundManager::is_buffer_loaded(SoundType type) const {
-    if (buffers_[static_cast<int>(type)].getDuration() == Time::Zero) return false;
+    if (buffers_[static_cast<int>(type)].getDuration() == Time::Zero)
+        return false;
+    else
+        return true;
 }
 } // namespace game
