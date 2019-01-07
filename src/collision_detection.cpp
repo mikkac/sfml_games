@@ -84,7 +84,6 @@ void CollisionDetection::fire_and_water_block() {
                 buffer.loadFromFile("res/sound/fallinfire.wav");
                 Sound sound{buffer};
                 sound.play();
-                std::cout << "dupa" << std::endl;
             } else
                 SoundManager::get_instance().play_sound(SoundType::FALL_IN_FIRE);
         }
