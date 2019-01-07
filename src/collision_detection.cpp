@@ -1,4 +1,5 @@
 #include "collision_detection.h"
+#include "sound_manager.h"
 #include <iostream>
 namespace game
 {
@@ -78,10 +79,14 @@ void CollisionDetection::fire_and_water_block() {
         if (character_->get_head().intersects(current_block_)) {
             character_->spawn(level_manager_->get_start_pos(), kGravity);
             if (current_block_type_ == BlockType::FIRE) {
-                /* play sound */ // TODO SoundManager is member of Engine-> fix this
-            } else {
-                /* play sound */
-            }
+                SoundManager::get_instance().play_sound(SoundType::FALL_IN_FIRE);
+                SoundBuffer buffer;
+                buffer.loadFromFile("res/sound/fallinfire.wav");
+                Sound sound{buffer};
+                sound.play();
+                std::cout << "dupa" << std::endl;
+            } else
+                SoundManager::get_instance().play_sound(SoundType::FALL_IN_FIRE);
         }
     }
 }

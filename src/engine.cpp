@@ -50,8 +50,8 @@ void Engine::input() {
             // Switch between full and split screen
             if (Keyboard::isKeyPressed(Keyboard::E)) split_screen_ = !split_screen_;
         }
-        if (thomas_.handle_input()) { sound_manager_.play_sound(SoundType::JUMP); }
-        if (bob_.handle_input()) { sound_manager_.play_sound(SoundType::JUMP); }
+        if (thomas_.handle_input()) { SoundManager::get_instance().play_sound(SoundType::JUMP); }
+        if (bob_.handle_input()) { SoundManager::get_instance().play_sound(SoundType::JUMP); }
     }
 }
 
@@ -64,7 +64,7 @@ void Engine::update(float dt_as_seconds) {
 
         if (detect_movement(&thomas_) && detect_movement(&bob_)) {
             new_level_required_ = true;
-            sound_manager_.play_sound(SoundType::REACH_GOAL);
+            SoundManager::get_instance().play_sound(SoundType::REACH_GOAL);
         } else {
             detect_movement(&bob_);
         }
@@ -82,7 +82,7 @@ void Engine::update(float dt_as_seconds) {
         FloatRect sound_rect(emitter.x - sound_rect_size / 2.f, emitter.y - sound_rect_size / 2.f, sound_rect_size, sound_rect_size);
 
         // Check if Thomas is inside sound_rect
-        if (thomas_.get_position().intersects(sound_rect)) sound_manager_.play_fire(Vector2f{emitter.x, emitter.y}, thomas_.get_center());
+        if (thomas_.get_position().intersects(sound_rect)) SoundManager::get_instance().play_fire(Vector2f{emitter.x, emitter.y}, thomas_.get_center());
     }
 
     if (split_screen_) {

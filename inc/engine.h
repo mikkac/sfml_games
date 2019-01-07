@@ -60,7 +60,6 @@ class Engine
     Screen screen_;
     TimeWrapper time_;
     LevelManager level_manager_;
-    SoundManager sound_manager_;
     CollisionDetection collision_;
 
     Thomas thomas_;

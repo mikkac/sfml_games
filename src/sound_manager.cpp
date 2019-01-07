@@ -1,4 +1,5 @@
 #include "sound_manager.h"
+#include <iostream>
 
 namespace game
 {
@@ -11,11 +12,14 @@ SoundManager::SoundManager() {
 
     float min_distance{150.f};
     float attenuation{15.f};
-    for (unsigned idx = 0; idx < 3; ++idx) {
-        sounds_[idx].setAttenuation(attenuation);
-        sounds_[idx].setMinDistance(min_distance);
-        sounds_[idx].setLoop(true);
-    }
+    sounds_[0].setAttenuation(attenuation);
+    sounds_[0].setMinDistance(min_distance);
+    sounds_[0].setLoop(true);
+}
+
+SoundManager& SoundManager::get_instance() {
+    static SoundManager instance{};
+    return instance;
 }
 
 void SoundManager::play_fire(const Vector2f& emitter_pos, const Vector2f& listener_pos) {
