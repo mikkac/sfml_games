@@ -21,10 +21,18 @@ Screen::Screen() {
     background_texture = TextureHolder::get_instance().get_texture("res/graphics/background.png");
     background_sprite.setTexture(background_texture);
     views = Views(resolution);
+
+    if (not Shader::isAvailable())
+        window.close();
+    else
+        ripple_shader.loadFromFile("res/shaders/vert_shader.vert", "res/shaders/ripple_shader.frag");
+}
+
+Engine::Engine() {
+    particle_system_.init(1000);
 }
 
 void Engine::run() {
-    particle_system_.init(1000);
     while (screen_.window.isOpen()) {
         Time dt = time_.clock.restart();
         time_.game_total += dt;
@@ -103,6 +111,7 @@ void Engine::update(float dt_as_seconds) {
 
 void Engine::draw() {
     screen_.window.clear(Color::White);
+    screen_.ripple_shader.setUniform("uTime", time_.game_total.asSeconds());
 
     if (not split_screen_) {
         draw_split_screen();
@@ -130,7 +139,7 @@ void Engine::load_level() {
 
 void Engine::draw_split_screen() {
     screen_.window.setView(screen_.views.bg_main);
-    screen_.window.draw(screen_.background_sprite);
+    screen_.window.draw(screen_.background_sprite, &screen_.ripple_shader);
     screen_.window.setView(screen_.views.main);
     screen_.window.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
     screen_.window.draw(thomas_.get_sprite());
@@ -141,7 +150,7 @@ void Engine::draw_split_screen() {
 void Engine::draw_main_scrren() {
     // First draw Thomas
     screen_.window.setView(screen_.views.bg_left);
-    screen_.window.draw(screen_.background_sprite);
+    screen_.window.draw(screen_.background_sprite, &screen_.ripple_shader);
     screen_.window.setView(screen_.views.left);
 
     screen_.window.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
@@ -152,7 +161,7 @@ void Engine::draw_main_scrren() {
 
     // Now draw Bob
     screen_.window.setView(screen_.views.bg_right);
-    screen_.window.draw(screen_.background_sprite);
+    screen_.window.draw(screen_.background_sprite, &screen_.ripple_shader);
     screen_.window.setView(screen_.views.right);
 
     screen_.window.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());

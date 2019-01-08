@@ -35,12 +35,13 @@ struct Screen {
     Views views{};
     Sprite background_sprite{};
     Texture background_texture;
+    Shader ripple_shader;
 };
 
 class Engine
 {
   public:
-    Engine() = default;
+    Engine();
     void run();
 
   private:
