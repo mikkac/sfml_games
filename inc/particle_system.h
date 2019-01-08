@@ -12,11 +12,11 @@ class ParticleSystem : public Drawable
 
   public:
     ParticleSystem() = default;
-    virtual void draw(RenderTarget& target, RenderStates states) const override;
-    void init(int count);
-    void emit_particles(const Vector2f& position);
+    void init(unsigned num_particles);
     void update(float dt_as_seconds);
-    bool running();
+    void emit_particles(const Vector2f& start_pos);
+    virtual void draw(RenderTarget& target, RenderStates states) const override { target.draw(vertices_, states); }
+    bool running() { return is_running_; }
 
   private:
     Particles particles_;
