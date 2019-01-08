@@ -24,6 +24,7 @@ Screen::Screen() {
 }
 
 void Engine::run() {
+    particle_system_.init(1000);
     while (screen_.window.isOpen()) {
         Time dt = time_.clock.restart();
         time_.game_total += dt;
@@ -96,6 +97,8 @@ void Engine::update(float dt_as_seconds) {
     }
 
     hud_.update(time_.remaining, level_manager_.get_current_level());
+
+    if (particle_system_.running()) particle_system_.update(dt_as_seconds);
 }
 
 void Engine::draw() {
@@ -132,6 +135,7 @@ void Engine::draw_split_screen() {
     screen_.window.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
     screen_.window.draw(thomas_.get_sprite());
     screen_.window.draw(bob_.get_sprite());
+    if (particle_system_.running()) screen_.window.draw(particle_system_);
 }
 
 void Engine::draw_main_scrren() {
@@ -144,6 +148,8 @@ void Engine::draw_main_scrren() {
     screen_.window.draw(bob_.get_sprite());
     screen_.window.draw(thomas_.get_sprite());
 
+    if (particle_system_.running()) screen_.window.draw(particle_system_);
+
     // Now draw Bob
     screen_.window.setView(screen_.views.bg_right);
     screen_.window.draw(screen_.background_sprite);
@@ -152,6 +158,8 @@ void Engine::draw_main_scrren() {
     screen_.window.draw(level_manager_.get_vertex_array(), &level_manager_.get_texture_tiles());
     screen_.window.draw(thomas_.get_sprite());
     screen_.window.draw(bob_.get_sprite());
+
+    if (particle_system_.running()) screen_.window.draw(particle_system_);
 }
 
 void Engine::draw_hud() {
@@ -162,7 +170,7 @@ void Engine::draw_hud() {
 }
 
 bool Engine::detect_movement(PlayableCharacter* character) {
-    return collision_.detect_movement(&level_manager_, character);
+    return collision_.detect_movement(&level_manager_, character, &particle_system_);
 }
 void Engine::detect_characters_overlaping() {
     collision_.detect_characters_overlaping(thomas_, bob_);

@@ -2,6 +2,7 @@
 #include "collision_detection.h"
 #include "hud.h"
 #include "level_manager.h"
+#include "particle_system.h"
 #include "playable_character.h"
 #include "sound_manager.h"
 #include "texture_holder.h"
@@ -63,6 +64,7 @@ class Engine
     TimeWrapper time_;
     LevelManager level_manager_;
     CollisionDetection collision_;
+    ParticleSystem particle_system_;
 
     Thomas thomas_;
     Bob bob_;

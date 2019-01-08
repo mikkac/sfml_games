@@ -3,11 +3,12 @@
 #include <iostream>
 namespace game
 {
-bool CollisionDetection::detect_movement(LevelManager* level_manager, PlayableCharacter* character) {
+bool CollisionDetection::detect_movement(LevelManager* level_manager, PlayableCharacter* character, ParticleSystem* part_system) {
     level_manager_ = level_manager;
     character_ = character;
+    part_system_ = part_system;
     bool reached_goal{false};
-    if (level_manager_ && character_) {
+    if (level_manager_ && character_ && part_system_) {
         create_collision_zone();
         handle_leaving_level();
 
@@ -77,6 +78,7 @@ void CollisionDetection::fire_and_water_block() {
     // Check if block is fire or water
     if (current_block_type_ == BlockType::FIRE || current_block_type_ == BlockType::WATER) {
         if (character_->get_head().intersects(current_block_)) {
+            if (not part_system_->running()) part_system_->emit_particles(character_->get_center());
             character_->spawn(level_manager_->get_start_pos(), kGravity);
             if (current_block_type_ == BlockType::FIRE) {
                 SoundManager::get_instance().play_sound(SoundType::FALL_IN_FIRE);
