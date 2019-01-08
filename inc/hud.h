@@ -1,6 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "text_wrapper.h"
+#include <SFML/Graphics.hpp>
 
 namespace game
 {
@@ -10,8 +10,7 @@ class Hud
   public:
     Hud();
 
-    void set_time(const std::string& text) { time_.set_string(text); }
-    void set_level(const std::string& text) { level_.set_string(text); }
+    void update(float time_remaining, int current_level);
 
     Text get_message() const { return start_.get_text(); }
     Text get_time() const { return time_.get_text(); }
@@ -22,6 +21,9 @@ class Hud
     TextWrapper start_;
     TextWrapper time_;
     TextWrapper level_;
+
+    static constexpr int frames_per_update{500};
+    int frames_since_last_update{};
 };
 
 } // namespace game

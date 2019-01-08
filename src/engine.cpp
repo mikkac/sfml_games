@@ -94,6 +94,8 @@ void Engine::update(float dt_as_seconds) {
         else
             screen_.views.main.setCenter(bob_.get_center());
     }
+
+    hud_.update(time_.remaining, level_manager_.get_current_level());
 }
 
 void Engine::draw() {
@@ -154,6 +156,9 @@ void Engine::draw_main_scrren() {
 
 void Engine::draw_hud() {
     screen_.window.setView(screen_.views.hud);
+    screen_.window.draw(hud_.get_level());
+    screen_.window.draw(hud_.get_time());
+    if (not playing_) screen_.window.draw(hud_.get_message());
 }
 
 bool Engine::detect_movement(PlayableCharacter* character) {

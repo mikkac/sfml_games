@@ -1,5 +1,6 @@
 #pragma once
 #include "collision_detection.h"
+#include "hud.h"
 #include "level_manager.h"
 #include "playable_character.h"
 #include "sound_manager.h"
@@ -58,6 +59,7 @@ class Engine
 
   private:
     Screen screen_;
+    Hud hud_;
     TimeWrapper time_;
     LevelManager level_manager_;
     CollisionDetection collision_;
